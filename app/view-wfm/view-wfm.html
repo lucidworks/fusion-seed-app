@@ -1,0 +1,99 @@
+
+
+
+
+<div class="row">
+
+	<!-- left col div -->
+	<div class="col-md-3" style="padding-left:40px;">
+		
+		<!-- category nav -->
+		<accordion close-others="oneAtATime">
+		    <accordion-group is-open="isCatFilterOpen">
+		    	<accordion-heading>
+		            Categories <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isCatFilterOpen, 'glyphicon-chevron-right': !isCatFilterOpen}"></i>
+		        </accordion-heading>
+
+		    	<!-- Category Navigation -->
+				<div ng-repeat="(cat, count) in taxonomy" style="padding-left:20px">
+			  		<div style="padding-left:{{cat.split('/').length*10}}px">
+			  		<!--a ng-href="#/c/{{cat.replace('/','-')}}">{{cat.split('/')[cat.split('/').length-1]}}</a> ({{count}})-->
+			  		<a ng-href="#/ex1/{{encodePath(cat)}}?q={{$routeParams.q}}">{{cat.split('/')[cat.split('/').length-1].replace("&amp;","&")}}</a> ({{count}})
+			  		</div>
+				</div>
+		    </accordion-group>
+		</accordion>
+
+
+
+		<!-- Facets -->
+		<accordion ng-repeat="(facet, values) in facet_fields" close-others="oneAtATime" ng-if="facet !='category_group_desc'">
+			<accordion-group is-open="isFacetFilterOpen">
+				<accordion-heading>
+			    	<span ng-if="solr_params[facet+'.label']">
+			       		{{solr_params[facet+'.label']}}
+			   		</span>
+			   		<!-- if the facet doesn't have a label being passed, use parseFacetLabel -->
+			   		<span ng-if="!solr_params[facet+'.label']">
+			   			{{parseFacetLabel(facet)}}
+			   		</span>
+			        <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isFacetFilterOpen, 'glyphicon-chevron-right': !isFacetFilterOpen}"></i>
+			    </accordion-heading>
+				<div ng-repeat="(val, count) in values" style="padding-left:20px">
+					<!--a ng-click="clickFacet(facet,val,$routeParams)">{{val}}</a> ({{count}}) -->
+					<input ng-click="clickFacet(facet,val,$routeParams,filter_separator)" ng-checked="checkCheckbox(facet,val,$routeParams)" type="checkbox" /> 
+					<span ng-if="val == ''"><i>N/A</i></span> 
+					<span ng-if="val != ''">{{val}}</span> 
+					({{count}})
+
+				</div>
+		    </accordion-group>
+		</accordion>
+
+
+	</div>
+	<!-- /left col -->
+
+	<!-- middle col -->
+	<div class="col-md-9" style="padding-left:20px;padding-top:10px">
+		<div class="col-md-12" align="center">
+			<form class="form-inline" role="form" style="padding-bottom:10px">
+					<input ng-model="query" name="Search" class="form-control input-lg" placeholder=""></input>
+					<button type="button" ng-click="clickSearch(query)" class="btn btn-danger btn-lg">Search</button>
+			</form>
+		</div>
+		<div class="col-md-12">
+			<a class="small" ng-click="showParams = !showParams" href="javascript:void(0);">View Query Parameters</a>,
+			<a class="small" ng-click="showData = !showData" href="javascript:void(0);">View JSON Response</a>
+			<blockquote ng-show="showParams">
+				<div ng-repeat="(key, data) in solr_params">
+					{{key}}={{data}} <br />
+				</div>
+			</blockquote>
+			<blockquote ng-show="showData">
+			
+				<pre>{{data | json}}</pre>
+			
+			</blockquote>
+		</div>
+
+
+		<div class="col-md-12">
+
+			Found {{data.response.numFound}} results.
+
+			<div ng-repeat="doc in docs">
+				<div>
+					<h3>{{doc.title[0]}}</h3> <br/>
+					{{doc.description}}
+				</div>
+			</div>
+
+
+
+
+		</div>
+	<!-- /middle -->
+	</div>
+</div>
+
