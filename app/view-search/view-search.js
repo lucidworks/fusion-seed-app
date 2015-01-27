@@ -2,6 +2,18 @@
 
 angular.module('myApp.viewSearch', ['ngRoute'])
 
+.constant("SEARCH_DEFAULTS", {
+	"proxy_url": "http://localhost:9292/",
+	"fusion_url": "localhost:8764",
+	"pipeline_id": "products-demo",
+	"collection_id": "products",
+	"request_handler": "select",
+	"taxonomy_field": "cpath",
+	"filter_separator": "~",
+	"controller_path": "search",
+	"multi_select_facets": false,
+	"collapse_field": "name_exact_s"
+})
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.
   	when('/search', {
@@ -22,15 +34,28 @@ angular.module('myApp.viewSearch', ['ngRoute'])
 
 }]);*/
 
-.controller('ViewSearchCtrl', function ($scope, $http, $routeParams, $location, $route, $sce) {
+.controller('ViewSearchCtrl', function (SEARCH_DEFAULTS, $scope, $http, $routeParams, $location, $route, $sce) {
 
 
+	var proxy_base = SEARCH_DEFAULTS.proxy_url; 
+	var fusion_url = SEARCH_DEFAULTS.fusion_url
 
-	var filter_separator = '~';
-	var multi_select_facets = false;
-	var cat_facet_field = 'cpath';
-	var collapse = '{!collapse field=name_exact_s}';
+	var pipeline_id = SEARCH_DEFAULTS.pipeline_id;
+	var collection_id = SEARCH_DEFAULTS.collection_id;
 
+	//override default if passed to URL
+	if ($routeParams.collection_id) collection_id = $routeParams.collection_id;
+	if ($routeParams.pipeline_id) pipeline_id = $routeParams.pipeline_id;
+
+	var request_handler = SEARCH_DEFAULTS.request_handler;
+	var url = proxy_base+fusion_url+'/api/apollo/query-pipelines/'+pipeline_id+'/collections/'+collection_id+'/'+request_handler;
+	//var url = "http://localhost:9292/ec2-54-160-96-32.compute-1.amazonaws.com:8764/api/apollo/query-pipelines/test1-default/collections/test1/select?json.nl=arrarr&q=*:*&rows=100&wt=json"
+	//var url = "http://ec2-54-160-96-32.compute-1.amazonaws.com:8983/solr/test1/select?q=*:*";
+
+	var filter_separator = SEARCH_DEFAULTS.filter_separator;
+	var multi_select_facets = SEARCH_DEFAULTS.multi_select_facets;
+	var cat_facet_field = SEARCH_DEFAULTS.taxonomy_field;
+	var collapse = "{!collapse field="+SEARCH_DEFAULTS.collapse_field+"}";
 
 	$scope.filter_separator = filter_separator;
 	$scope.multi_select_facets = multi_select_facets;
@@ -95,27 +120,7 @@ angular.module('myApp.viewSearch', ['ngRoute'])
 		fqs.push(collapse);
 	}
 
-
-	var proxy_base = 'http://localhost:9292/';
-	var fusion_url = 'localhost:8764';
-	//var pipeline_id = 'test1-default';
-	var pipeline_id = 'products-demo';
-	if ($routeParams.pipeline_id) pipeline_id = $routeParams.pipeline_id;
-
-	var collection_id = 'products';
-	if ($routeParams.collection_id) collection_id = $routeParams.collection_id;
-
-	var request_handler = 'select';
-	var url = proxy_base+fusion_url+'/api/apollo/query-pipelines/'+pipeline_id+'/collections/'+collection_id+'/'+request_handler;
-	//var url = "http://localhost:9292/ec2-54-160-96-32.compute-1.amazonaws.com:8764/api/apollo/query-pipelines/test1-default/collections/test1/select?json.nl=arrarr&q=*:*&rows=100&wt=json"
-	//var url = "http://ec2-54-160-96-32.compute-1.amazonaws.com:8983/solr/test1/select?q=*:*";
-
-
-	//console.log("TEST AUTH: " + btoa('admin:password123'));
-	//$http.defaults.headers.common = {"Access-Control-Request-Headers": "accept, origin, authorization"}
-
 	//To use JSONP and avoid using a proxy, change method to JSONP, and add 'json.wrf': 'JSON_CALLBACK' to the params.
-
 
  	$http.defaults.headers.common['Authorization'] = 'Basic ' + btoa('admin:password123');
 	$http(
