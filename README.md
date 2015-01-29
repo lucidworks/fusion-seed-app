@@ -1,6 +1,6 @@
 
 
-The idea of this repository is to provide a "barebones" or blank "canvas" UI for PoCs where the built-in Fusion UI is not enough (or too much). It can also be used as a tool to demonstrate how to integrate Solr/Fusion with client-side UIs.
+The idea of this repository is to provide a "barebones" or blank "canvas" UI for PoCs where the built-in Fusion Search UI is not enough (or too much). It can also be used as a tool to demonstrate how to integrate Solr/Fusion with client-side UIs.
 
 ## Installation Requirements
 * Node
@@ -8,7 +8,7 @@ The idea of this repository is to provide a "barebones" or blank "canvas" UI for
 
 ## Sample Setup
 1. Create a collection called "products". Add the contents of "1-schema-add.txt" to the example schema and reload the core.
-2. Add the sample documents from "2-sample-documents.xml". They're in SolrXml format. Perhaps the quickest way to load them is to go to http://localhost:8983/solr/#/products_shard1_replica1/documents, select "XML", paste the sample documents, and click "Submit Document".
+2. Index the sample documents from "2-sample-documents.xml". They're in SolrXml format. Perhaps the quickest way to load them is to go to http://localhost:8983/solr/#/products_shard1_replica1/documents, select "XML", paste the sample documents, and click "Submit Document".
 3. Run 3-create-pipeline.sh 
 
 ## UI Installation
@@ -69,6 +69,9 @@ view-search.html handles the rendering
 			</div>
 ~~~
 
+## Features
+* Auto-renders facet fields (TODO: make longer value lists a scrollable div).
+* Supports hierchichal facet / taxonomy navigation.
 
 ## Roadmap
 * Build out the Query Pipeline
