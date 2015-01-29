@@ -20,14 +20,24 @@ npm install
 npm install corsproxy
 npm start
 ~~~
-This will start an HTTP server on (localhost:8000)
+This will start an HTTP server on http://localhost:8000
 
 Open a new terminal window and start the CORS proxy:
 ~~~  
 corsproxy
 ~~~
-A proxy server is required because CORS is not enabled in Fusion by default. CORS is required in order to be able to do cross-domain scripting from a browser. You could work around this by using JSONP which Solr supports but, JSONP does not work with Basic Auth which Fusion requires.
 
 * Go to http://localhost:8000/app/#/search/*
-* To see an example of the Query Pipeline adding facets based on the category, click on [Men's -> Blazers](http://localhost:8000/app/#/search/Men~Blazers?q=)
+* To see an example of the Query Pipeline adding facets based on the category, click on Men's -> Blazers (or go to http://localhost:8000/app/#/search/Men~Blazers?q=)
+
+## Roadmap
+* Build out the Query Pipeline
+* Auto-complete
+* Spell-checking
+* Multi-select faceting
+* Signal API integration and demonstration
+
+ 
+
+
 
