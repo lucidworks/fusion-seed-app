@@ -19,7 +19,7 @@ npm install
 npm install corsproxy
 npm start
 ~~~
-This will start an HTTP server on (http://localhost:8000)
+This will start an HTTP server on (localhost:8000)
 
 * Open a new terminal window and start the CORS proxy:
 ~~~  
