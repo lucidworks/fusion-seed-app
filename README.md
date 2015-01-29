@@ -30,6 +30,46 @@ corsproxy
 * Go to http://localhost:8000/app/#/search/*
 * To see an example of the Query Pipeline adding facets based on the category, click on Men's -> Blazers (or go to http://localhost:8000/app/#/search/Men~Blazers?q=)
 
+## Customizing The View and Controller
+The most important pieces of code are the View and the Controller found in app/view-search. 
+
+view-search.js begins by setting some defaults of interest if customizing:
+
+~~~
+'use strict';
+
+angular.module('myApp.viewSearch', ['ngRoute'])
+
+.constant("SEARCH_DEFAULTS", {
+	"proxy_url": "http://localhost:9292/",
+	"fusion_url": "localhost:8764",
+	"pipeline_id": "products-demo",
+	"collection_id": "products",
+	"request_handler": "select",
+	"taxonomy_field": "cpath",
+	"filter_separator": "~",
+	"controller_path": "search",
+	"multi_select_facets": false,
+	"collapse_field": "name_exact_s"
+})
+~~~
+
+view-search.html handles the rendering
+
+~~~
+			Found {{data.response.numFound}} results.
+
+			<div ng-repeat="doc in docs">
+				<div>
+					<h3>{{doc.name}}</h3> <br/>
+					{{doc.short_description}} <br/>
+					<strong>${{doc.price}}</strong>
+
+				</div>
+			</div>
+~~~
+
+
 ## Roadmap
 * Build out the Query Pipeline
 * Auto-complete
