@@ -8,7 +8,7 @@ The idea of this repository is to provide a "barebones" or blank "canvas" UI for
 
 ## Sample Setup
 1. Create a collection called "products". Add the contents of "1-schema-add.txt" to the example schema and reload the core.
-2. Index the sample documents from "2-sample-documents.xml". They're in SolrXml format. Perhaps the quickest way to load them is to go to http://localhost:8983/solr/#/products_shard1_replica1/documents, select "XML", paste the sample documents, and click "Submit Document".
+2. Index the sample documents from "2-sample-documents.xml". They're in SolrXml format. Perhaps the quickest way to index them is to go to http://localhost:8983/solr/#/products_shard1_replica1/documents, select "XML", paste the sample documents, and click "Submit Document".
 3. Run 3-create-pipeline.sh 
 
 ## UI Installation
