@@ -19,7 +19,7 @@ npm install
 npm install corsproxy
 npm start
 ~~~
-This will start an HTTP server on http://localhost:8000
+This will start an HTTP server on (http://localhost:8000)
 
 * Open a new terminal window and start the CORS proxy:
 ~~~  
@@ -29,6 +29,3 @@ A proxy server is required because CORS is not enabled in Fusion by default. COR
 
 * Go to http://localhost:8000/app/#/search/*
 
-
-This code is based off of the angular seed app.
-https://github.com/angular/angular-seed
