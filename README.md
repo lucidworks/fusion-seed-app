@@ -56,7 +56,7 @@ angular.module('myApp.viewSearch', ['ngRoute'])
 
 view-search.html handles the rendering
 
-~~~
+~~~javascript
 			Found {{data.response.numFound}} results.
 
 			<div ng-repeat="doc in docs">
@@ -67,7 +67,7 @@ view-search.html handles the rendering
 
 				</div>
 			</div>
-~~~
+~~~javascript
 
 
 ## Roadmap
@@ -76,8 +76,7 @@ view-search.html handles the rendering
 * Spell-checking
 * Multi-select faceting
 * Signal API integration and demonstration
-
- 
+* Recommendations
 
 
 
