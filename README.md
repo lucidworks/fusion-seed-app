@@ -35,7 +35,7 @@ The most important pieces of code are the View and the Controller found in app/v
 
 view-search.js begins by setting some defaults of interest if customizing:
 
-~~~
+~~~javascript
 'use strict';
 
 angular.module('myApp.viewSearch', ['ngRoute'])
@@ -56,7 +56,7 @@ angular.module('myApp.viewSearch', ['ngRoute'])
 
 view-search.html handles the rendering
 
-~~~javascript
+~~~html
 			Found {{data.response.numFound}} results.
 
 			<div ng-repeat="doc in docs">
@@ -67,7 +67,7 @@ view-search.html handles the rendering
 
 				</div>
 			</div>
-~~~javascript
+~~~
 
 
 ## Roadmap
