@@ -27,7 +27,7 @@ corsproxy
 ~~~
 A proxy server is required because CORS is not enabled in Fusion by default. CORS is required in order to be able to do cross-domain scripting from a browser. You could work around this by using JSONP which Solr supports but, JSONP does not work with Basic Auth which Fusion requires.
 
-* Go to (http://localhost:8000/app/#/search/*)
+* Go to http://localhost:8000/app/#/search/*
 
 
 This code is based off of the angular seed app.
