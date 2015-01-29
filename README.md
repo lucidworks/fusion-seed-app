@@ -12,7 +12,7 @@ The idea of this repository is to provide a "barebones" or blank "canvas" UI for
 3. Run 3-create-pipeline.sh 
 
 ## UI Installation
-1. After cloning this repository:
+* After cloning this repository:
 ~~~
 cd fusion-seed-ui
 npm install
@@ -21,7 +21,7 @@ npm start
 ~~~
 This will start an HTTP server on http://localhost:8000
 
-2. Open a new terminal window and start the CORS proxy:
+* Open a new terminal window and start the CORS proxy:
 ~~~  
 corsproxy
 ~~~
