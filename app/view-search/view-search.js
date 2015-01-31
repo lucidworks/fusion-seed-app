@@ -1,7 +1,5 @@
 'use strict';
 
-//test, commit from webstorm
-
 angular.module('myApp.viewSearch', ['ngRoute'])
 
 .constant("SEARCH_DEFAULTS", {
@@ -37,7 +35,6 @@ angular.module('myApp.viewSearch', ['ngRoute'])
 }]);*/
 
 .controller('ViewSearchCtrl', function (SEARCH_DEFAULTS, $scope, $http, $routeParams, $location, $route, $sce) {
-
 
 	var proxy_base = SEARCH_DEFAULTS.proxy_url; 
 	var fusion_url = SEARCH_DEFAULTS.fusion_url
@@ -123,7 +120,6 @@ angular.module('myApp.viewSearch', ['ngRoute'])
 	}
 
 	//To use JSONP and avoid using a proxy, change method to JSONP, and add 'json.wrf': 'JSON_CALLBACK' to the params.
-
  	$http.defaults.headers.common['Authorization'] = 'Basic ' + btoa('admin:password123');
 	$http(
 		{method: 'GET',

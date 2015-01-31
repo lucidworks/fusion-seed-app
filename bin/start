@@ -1,0 +1,6 @@
+#!/bin/bash
+
+corsproxy > ./logs/proxy.log 2>&1 &
+#echo $! > ./var/proxy.pid
+npm start > ./logs/server.log 2>&1 &
+#echo $! > ./var/server.pid
