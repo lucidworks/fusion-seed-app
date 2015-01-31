@@ -108,7 +108,7 @@ angular.module('myApp.viewWfm', ['ngRoute'])
 	//var url = "http://ec2-54-160-96-32.compute-1.amazonaws.com:8983/solr/test1/select?q=*:*";
 
 
-	//console.log("TEST AUTH: " + btoa('admin:password123'));
+	//console.logs("TEST AUTH: " + btoa('admin:password123'));
 	//$http.defaults.headers.common = {"Access-Control-Request-Headers": "accept, origin, authorization"}
 
 	//To use JSONP and avoid using a proxy, change method to JSONP, and add 'json.wrf': 'JSON_CALLBACK' to the params.
@@ -136,13 +136,13 @@ angular.module('myApp.viewWfm', ['ngRoute'])
 		  
 		  //using groups, pass groups instead of docs
 		  //var grouped_field = data.grouped[group_field];
-		  //console.log(groups);
+		  //console.logs(groups);
 
 		  var facet_fields = data.facet_counts.facet_fields;
 		  var facet_queries = data.facet_counts.facet_queries;
 		  var taxonomy = facet_fields[cat_facet_field];
 
-		  //console.log('solr_params:'+JSON.stringify(solr_params));
+		  //console.logs('solr_params:'+JSON.stringify(solr_params));
 
 		  $scope.solr_params = solr_params;
 		  $scope.showParams = false;
@@ -157,9 +157,9 @@ angular.module('myApp.viewWfm', ['ngRoute'])
 		  //FIELD COLLAPSING DISPLAY
 		  var docs = data.response.docs;
 		  $scope.docs = docs;
-		  //console.log('grouped:'+JSON.stringify(data.grouped));
+		  //console.logs('grouped:'+JSON.stringify(data.grouped));
 
-		  //console.log('expanded:' + JSON.stringify(data.expanded));
+		  //console.logs('expanded:' + JSON.stringify(data.expanded));
 		  // /FIELD COLLAPSING
 
 

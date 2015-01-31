@@ -91,11 +91,11 @@ angular.module('myApp.viewSearch', ['ngRoute'])
 	if (multi_select_facets) {
 		var new_fqs = [];
 		for (var i=0;i<fqs.length;i++) {
-			//console.log('old fq:' + fqs[i]);
+			//console.logs('old fq:' + fqs[i]);
 			//&fq={!tag=colortag}color:red
 			var fname = fqs[i].split(':')[0];
 			var new_fq = '{!tag='+fname+'_tag}'+fqs[i];
-			//console.log('new fq:' + new_fq);
+			//console.logs('new fq:' + new_fq);
 			new_fqs.push(new_fq);
 		}
 		fqs = new_fqs;
@@ -142,13 +142,13 @@ angular.module('myApp.viewSearch', ['ngRoute'])
 		  
 		  //using groups, pass groups instead of docs
 		  //var grouped_field = data.grouped[group_field];
-		  //console.log(groups);
+		  //console.logs(groups);
 
 		  var facet_fields = data.facet_counts.facet_fields;
 		  var facet_queries = data.facet_counts.facet_queries;
 		  var taxonomy = facet_fields[cat_facet_field];
 
-		  //console.log('solr_params:'+JSON.stringify(solr_params));
+		  //console.logs('solr_params:'+JSON.stringify(solr_params));
 
 		  $scope.solr_params = solr_params;
 		  $scope.showParams = false;
@@ -163,9 +163,9 @@ angular.module('myApp.viewSearch', ['ngRoute'])
 		  //FIELD COLLAPSING DISPLAY
 		  var docs = data.response.docs;
 		  $scope.docs = docs;
-		  //console.log('grouped:'+JSON.stringify(data.grouped));
+		  //console.logs('grouped:'+JSON.stringify(data.grouped));
 
-		  //console.log('expanded:' + JSON.stringify(data.expanded));
+		  //console.logs('expanded:' + JSON.stringify(data.expanded));
 		  // /FIELD COLLAPSING
 
 
