@@ -1,5 +1,7 @@
 'use strict';
 
+//test, commit from webstorm
+
 angular.module('myApp.viewSearch', ['ngRoute'])
 
 .constant("SEARCH_DEFAULTS", {
