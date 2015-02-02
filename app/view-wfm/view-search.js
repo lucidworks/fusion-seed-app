@@ -1,20 +1,32 @@
 'use strict';
 
-angular.module('myApp.viewWfm', ['ngRoute'])
+angular.module('fusionSeed.viewWfmSearch', ['ngRoute'])
 
+.constant("SEARCH_DEFAULTS", {
+	"proxy_url": "http://localhost:9292/",
+	"fusion_url": "ec2-54-160-96-32.compute-1.amazonaws.com:8764",
+	"pipeline_id": "wfm_poc1-default",
+	"collection_id": "wfm_poc1",
+	"request_handler": "select",
+	"taxonomy_field": "cat_tree",
+	"filter_separator": "~",
+	"controller_path": "wfm",
+	"multi_select_facets": false,
+	"collapse_field": "attr_identifier_"
+})
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.
   	when('/wfm', {
-    	templateUrl: 'view-wfm/view-wfm.html',
-    	controller: 'ViewWfmCtrl'
+    	templateUrl: 'view-wfm/view-search.html',
+    	controller: 'ViewWfmSearchCtrl'
   	}).
   	when('/wfm/:category/:filter', {
-    	templateUrl: 'view-wfm/view-wfm.html',
-    	controller: 'ViewWfmCtrl'
+    	templateUrl: 'view-wfm/view-search.html',
+    	controller: 'ViewWfmSearchCtrl'
   	}).
   	when('/wfm/:category', {
-    	templateUrl: 'view-wfm/view-wfm.html',
-    	controller: 'ViewWfmCtrl'
+    	templateUrl: 'view-wfm/view-search.html',
+    	controller: 'ViewWfmSearchCtrl'
   	});
 }])
 
@@ -22,15 +34,30 @@ angular.module('myApp.viewWfm', ['ngRoute'])
 
 }]);*/
 
-.controller('ViewWfmCtrl', function ($scope, $http, $routeParams, $location, $route, $sce) {
+.controller('ViewWfmSearchCtrl', function (SEARCH_DEFAULTS, $scope, $http, $routeParams, $location, $route, $sce) {
+
+	var proxy_base = SEARCH_DEFAULTS.proxy_url; 
+	var fusion_url = SEARCH_DEFAULTS.fusion_url
+
+	var pipeline_id = SEARCH_DEFAULTS.pipeline_id;
+	var collection_id = SEARCH_DEFAULTS.collection_id;
+
+	//override default if passed to URL
+	if ($routeParams.collection_id) collection_id = $routeParams.collection_id;
+	if ($routeParams.pipeline_id) pipeline_id = $routeParams.pipeline_id;
+
+	var request_handler = SEARCH_DEFAULTS.request_handler;
+	var url = proxy_base+fusion_url+'/api/apollo/query-pipelines/'+pipeline_id+'/collections/'+collection_id+'/'+request_handler;
+	//var url = "http://localhost:9292/ec2-54-160-96-32.compute-1.amazonaws.com:8764/api/apollo/query-pipelines/test1-default/collections/test1/select?json.nl=arrarr&q=*:*&rows=100&wt=json"
+	//var url = "http://ec2-54-160-96-32.compute-1.amazonaws.com:8983/solr/test1/select?q=*:*";
+
+	var filter_separator = SEARCH_DEFAULTS.filter_separator;
+	var multi_select_facets = SEARCH_DEFAULTS.multi_select_facets;
+	var cat_facet_field = SEARCH_DEFAULTS.taxonomy_field;
+	var collapse = "{!collapse field="+SEARCH_DEFAULTS.collapse_field+"}";
 
 
-
-	var filter_separator = '~';
-	var multi_select_facets = false;
-	var group_field = 'suppliername_s';
-	var cat_facet_field = 'category_group_desc';
-
+    $scope.taxonomy_field = SEARCH_DEFAULTS.taxonomy_field;
 	$scope.filter_separator = filter_separator;
 	$scope.multi_select_facets = multi_select_facets;
 	$scope.$route = $route;
@@ -51,10 +78,10 @@ angular.module('myApp.viewWfm', ['ngRoute'])
 	//use lucene term qparser unless it is a * query
 	var cpath_fq;
 	cpath_fq = "*:*"; //temp until we have a proper category facet
-	//if (category == '*')
-	// 	cpath_fq = cat_facet_field+':'+category; //'cpath:'+category;
-	 //else
-	// 	cpath_fq = '{!term f='+cat_facet_field+'}'+category;
+	if (category == '*')
+	 	cpath_fq = cat_facet_field+':'+category; //'cpath:'+category;
+	else
+	 	cpath_fq = '{!term f='+cat_facet_field+'}'+category;
 
 
 	var filter = $routeParams.filter;
@@ -66,11 +93,11 @@ angular.module('myApp.viewWfm', ['ngRoute'])
 	if (multi_select_facets) {
 		var new_fqs = [];
 		for (var i=0;i<fqs.length;i++) {
-			console.log('old fq:' + fqs[i]);
+			//console.logs('old fq:' + fqs[i]);
 			//&fq={!tag=colortag}color:red
 			var fname = fqs[i].split(':')[0];
 			var new_fq = '{!tag='+fname+'_tag}'+fqs[i];
-			console.log('new fq:' + new_fq);
+			//console.logs('new fq:' + new_fq);
 			new_fqs.push(new_fq);
 		}
 		fqs = new_fqs;
@@ -85,35 +112,16 @@ angular.module('myApp.viewWfm', ['ngRoute'])
 		new_fqs.push(new_fq);		
 	}
 	fqs = new_fqs;
+
 	//add category as a filter
 	fqs.push(cpath_fq);
 	//field collapsing
 	//fqs.push('{!collapse field='+group_field+'}');
-
-	var proxy_base = 'http://localhost:9292/';
-	var fusion_url = 'ec2-54-160-96-32.compute-1.amazonaws.com:8764';
-	//var pipeline_id = 'test1-default';
-	var pipeline_id = 'products';
-	if ($routeParams.pipeline_id) pipeline_id = $routeParams.pipeline_id;
-
-	var collection_id = 'test1';
-	if ($routeParams.collection_id) {
-		console.log(collection_id);
-		collection_id = $routeParams.collection_id;
+	if (collapse) {
+		fqs.push(collapse);
 	}
 
-	var request_handler = 'select';
-	var url = proxy_base+fusion_url+'/api/apollo/query-pipelines/'+pipeline_id+'/collections/'+collection_id+'/'+request_handler;
-	//var url = "http://localhost:9292/ec2-54-160-96-32.compute-1.amazonaws.com:8764/api/apollo/query-pipelines/test1-default/collections/test1/select?json.nl=arrarr&q=*:*&rows=100&wt=json"
-	//var url = "http://ec2-54-160-96-32.compute-1.amazonaws.com:8983/solr/test1/select?q=*:*";
-
-
-	//console.logs("TEST AUTH: " + btoa('admin:password123'));
-	//$http.defaults.headers.common = {"Access-Control-Request-Headers": "accept, origin, authorization"}
-
 	//To use JSONP and avoid using a proxy, change method to JSONP, and add 'json.wrf': 'JSON_CALLBACK' to the params.
-
-
  	$http.defaults.headers.common['Authorization'] = 'Basic ' + btoa('admin:password123');
 	$http(
 		{method: 'GET',
@@ -122,7 +130,7 @@ angular.module('myApp.viewWfm', ['ngRoute'])
 		 		'q': q,
 		 		'fq': fqs,
 		 		'wt': 'json',
-		 		'rows' : 100,
+		 		'rows' : 10,
 		 		'json.nl': 'map'
 		 		}
 		})
@@ -219,8 +227,7 @@ angular.module('myApp.viewWfm', ['ngRoute'])
 		//$location.path('test');
 
 
-
-		var new_url = '/ex1/'+routeParams.category+'/'+routeParams.filter;
+		var new_url = '/search/'+routeParams.category+'/'+routeParams.filter;
 		if (routeParams.q) new_url+= '?q='+routeParams.q
 		$location.url(new_url);
 

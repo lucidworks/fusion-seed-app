@@ -1,8 +1,8 @@
 'use strict';
 
-describe('myApp.viewSearch module', function() {
+describe('fusionSeed.viewSearch module', function() {
 
-  beforeEach(module('myApp.viewSearch'));
+  beforeEach(module('fusionSeed.viewSearch'));
 
   describe('view-search controller', function(){
 

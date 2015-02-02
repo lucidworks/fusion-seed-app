@@ -1,7 +1,5 @@
 
 
-
-
 <div class="row">
 
 	<!-- left col div -->
@@ -18,17 +16,15 @@
 				<div ng-repeat="(cat, count) in taxonomy" style="padding-left:20px">
 			  		<div style="padding-left:{{cat.split('/').length*10}}px">
 			  		<!--a ng-href="#/c/{{cat.replace('/','-')}}">{{cat.split('/')[cat.split('/').length-1]}}</a> ({{count}})-->
-			  		<a ng-href="#/ex1/{{encodePath(cat)}}?q={{$routeParams.q}}">{{cat.split('/')[cat.split('/').length-1].replace("&amp;","&")}}</a> ({{count}})
+			  		<a ng-href="#/search/{{encodePath(cat)}}?q={{$routeParams.q}}">{{cat.split('/')[cat.split('/').length-1].replace("&amp;","&")}}</a> ({{count}})
 			  		</div>
 				</div>
 		    </accordion-group>
 		</accordion>
 
-
-
 		<!-- Facets -->
-		<accordion ng-repeat="(facet, values) in facet_fields" close-others="oneAtATime" ng-if="facet !='category_group_desc'">
-			<accordion-group is-open="isFacetFilterOpen">
+		<accordion ng-repeat="(facet, values) in facet_fields" close-others="oneAtATime" ng-if="facet !=taxonomy_field">
+			<accordion-group is-open="isFacetFilterOpen"  >
 				<accordion-heading>
 			    	<span ng-if="solr_params[facet+'.label']">
 			       		{{solr_params[facet+'.label']}}
@@ -39,14 +35,15 @@
 			   		</span>
 			        <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isFacetFilterOpen, 'glyphicon-chevron-right': !isFacetFilterOpen}"></i>
 			    </accordion-heading>
-				<div ng-repeat="(val, count) in values" style="padding-left:20px">
-					<!--a ng-click="clickFacet(facet,val,$routeParams)">{{val}}</a> ({{count}}) -->
-					<input ng-click="clickFacet(facet,val,$routeParams,filter_separator)" ng-checked="checkCheckbox(facet,val,$routeParams)" type="checkbox" /> 
-					<span ng-if="val == ''"><i>N/A</i></span> 
-					<span ng-if="val != ''">{{val}}</span> 
-					({{count}})
-
-				</div>
+                <div class="scroll-div">
+                    <div ng-repeat="(val, count) in values" style="padding-left:20px">
+                        <!--a ng-click="clickFacet(facet,val,$routeParams)">{{val}}</a> ({{count}}) -->
+                        <input ng-click="clickFacet(facet,val,$routeParams,filter_separator)" ng-checked="checkCheckbox(facet,val,$routeParams)" type="checkbox" />
+                        <span ng-if="val == ''"><i>N/A</i></span>
+                        <span ng-if="val != ''">{{val}}</span>
+                        ({{count}})
+                    </div>
+                </div>
 		    </accordion-group>
 		</accordion>
 
@@ -84,8 +81,10 @@
 
 			<div ng-repeat="doc in docs">
 				<div>
-					<h3>{{doc.title[0]}}</h3> <br/>
-					{{doc.description}}
+					<h3>{{doc.name}}</h3> <br/>
+					{{doc.short_description}} <br/>
+					<strong>${{doc.price}}</strong>
+
 				</div>
 			</div>
 

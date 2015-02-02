@@ -25,7 +25,7 @@
 
 
 		<!-- Facets -->
-		<accordion ng-repeat="(facet, values) in facet_fields" close-others="oneAtATime" ng-if="facet !='cpath'">
+        <accordion ng-repeat="(facet, values) in facet_fields" close-others="oneAtATime" ng-if="facet !=taxonomy_field">
 			<accordion-group is-open="isFacetFilterOpen">
 				<accordion-heading>
 			    	<span ng-if="solr_params[facet+'.label']">

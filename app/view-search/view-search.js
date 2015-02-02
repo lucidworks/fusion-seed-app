@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('myApp.viewSearch', ['ngRoute'])
+angular.module('fusionSeed.viewSearch', ['ngRoute'])
 
 .constant("SEARCH_DEFAULTS", {
 	"proxy_url": "http://localhost:9292/",
@@ -56,6 +56,7 @@ angular.module('myApp.viewSearch', ['ngRoute'])
 	var cat_facet_field = SEARCH_DEFAULTS.taxonomy_field;
 	var collapse = "{!collapse field="+SEARCH_DEFAULTS.collapse_field+"}";
 
+    $scope.taxonomy_field = SEARCH_DEFAULTS.taxonomy_field;
 	$scope.filter_separator = filter_separator;
 	$scope.multi_select_facets = multi_select_facets;
 	$scope.$route = $route;

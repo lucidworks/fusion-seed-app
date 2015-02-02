@@ -1,6 +1,10 @@
 #!/bin/bash
 
+
+echo Starting CORS proxy on localhost:9292
 corsproxy > ./logs/proxy.log 2>&1 &
 #echo $! > ./var/proxy.pid
+
+echo Starting HTTP Server on localhost:8000
 npm start > ./logs/server.log 2>&1 &
 #echo $! > ./var/server.pid

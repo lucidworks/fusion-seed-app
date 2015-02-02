@@ -38,7 +38,7 @@ view-search.js begins by setting some defaults of interest if customizing:
 ~~~javascript
 'use strict';
 
-angular.module('myApp.viewSearch', ['ngRoute'])
+angular.module('fusionSeed.viewSearch', ['ngRoute'])
 
 .constant("SEARCH_DEFAULTS", {
 	"proxy_url": "http://localhost:9292/",
