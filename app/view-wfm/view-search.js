@@ -2,7 +2,7 @@
 
 angular.module('fusionSeed.viewWfmSearch', ['ngRoute'])
 
-.constant("SEARCH_DEFAULTS", {
+.constant("WFM_DEFAULTS", {
 	"proxy_url": "http://localhost:9292/",
 	"fusion_url": "ec2-54-160-96-32.compute-1.amazonaws.com:8764",
 	"pipeline_id": "wfm_poc1-default",
@@ -30,34 +30,38 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute'])
   	});
 }])
 
-/*.controller('ViewSearchCtrl', [function() {
+/*.controller('ViewWfmSearchCtrl', [function() {
 
 }]);*/
 
-.controller('ViewWfmSearchCtrl', function (SEARCH_DEFAULTS, $scope, $http, $routeParams, $location, $route, $sce) {
+.controller('ViewWfmSearchCtrl', function (WFM_DEFAULTS, $scope, $http, $routeParams, $location, $route, $sce) {
 
-	var proxy_base = SEARCH_DEFAULTS.proxy_url; 
-	var fusion_url = SEARCH_DEFAULTS.fusion_url
+	$scope.config = {
 
-	var pipeline_id = SEARCH_DEFAULTS.pipeline_id;
-	var collection_id = SEARCH_DEFAULTS.collection_id;
+    }
+
+    var proxy_base = WFM_DEFAULTS.proxy_url;
+	var fusion_url = WFM_DEFAULTS.fusion_url
+
+	var pipeline_id = WFM_DEFAULTS.pipeline_id;
+	var collection_id = WFM_DEFAULTS.collection_id;
 
 	//override default if passed to URL
 	if ($routeParams.collection_id) collection_id = $routeParams.collection_id;
 	if ($routeParams.pipeline_id) pipeline_id = $routeParams.pipeline_id;
 
-	var request_handler = SEARCH_DEFAULTS.request_handler;
+	var request_handler = WFM_DEFAULTS.request_handler;
 	var url = proxy_base+fusion_url+'/api/apollo/query-pipelines/'+pipeline_id+'/collections/'+collection_id+'/'+request_handler;
 	//var url = "http://localhost:9292/ec2-54-160-96-32.compute-1.amazonaws.com:8764/api/apollo/query-pipelines/test1-default/collections/test1/select?json.nl=arrarr&q=*:*&rows=100&wt=json"
 	//var url = "http://ec2-54-160-96-32.compute-1.amazonaws.com:8983/solr/test1/select?q=*:*";
 
-	var filter_separator = SEARCH_DEFAULTS.filter_separator;
-	var multi_select_facets = SEARCH_DEFAULTS.multi_select_facets;
-	var cat_facet_field = SEARCH_DEFAULTS.taxonomy_field;
-	var collapse = "{!collapse field="+SEARCH_DEFAULTS.collapse_field+"}";
+	var filter_separator = WFM_DEFAULTS.filter_separator;
+	var multi_select_facets = WFM_DEFAULTS.multi_select_facets;
+	var cat_facet_field = WFM_DEFAULTS.taxonomy_field;
+	var collapse = "{!collapse field="+WFM_DEFAULTS.collapse_field+"}";
 
 
-    $scope.taxonomy_field = SEARCH_DEFAULTS.taxonomy_field;
+    $scope.taxonomy_field = WFM_DEFAULTS.taxonomy_field;
 	$scope.filter_separator = filter_separator;
 	$scope.multi_select_facets = multi_select_facets;
 	$scope.$route = $route;

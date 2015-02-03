@@ -35,17 +35,16 @@
 			   		</span>
 			        <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isFacetFilterOpen, 'glyphicon-chevron-right': !isFacetFilterOpen}"></i>
 			    </accordion-heading>
-                <div class="scroll-div">
-                    <div ng-repeat="(val, count) in values" style="padding-left:20px">
-                        <!--a ng-click="clickFacet(facet,val,$routeParams)">{{val}}</a> ({{count}}) -->
-                        <input ng-click="clickFacet(facet,val,$routeParams,filter_separator)" ng-checked="checkCheckbox(facet,val,$routeParams)" type="checkbox" />
-                        <span ng-if="val == ''"><i>N/A</i></span>
-                        <span ng-if="val != ''">{{val}}</span>
-                        ({{count}})
-                    </div>
+                <div ng-repeat="(val, count) in values" style="padding-left:20px">
+                    <!--a ng-click="clickFacet(facet,val,$routeParams)">{{val}}</a> ({{count}}) -->
+                    <input ng-click="clickFacet(facet,val,$routeParams,filter_separator)" ng-checked="checkCheckbox(facet,val,$routeParams)" type="checkbox" />
+                    <span ng-if="val == ''"><i>N/A</i></span>
+                    <span ng-if="val != ''">{{val}}</span>
+                    ({{count}})
                 </div>
 		    </accordion-group>
 		</accordion>
+
 
 
 	</div>

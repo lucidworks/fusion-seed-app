@@ -5,7 +5,7 @@ angular.module('fusionSeed', [
   'ngRoute',
   'ui.bootstrap',
   'fusionSeed.viewSearch',
-    'fusionSeed.viewWfmSearch',
+  'fusionSeed.viewWfmSearch',
   'fusionSeed.view1',
   'fusionSeed.view2',
   'fusionSeed.version'
