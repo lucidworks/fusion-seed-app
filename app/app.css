@@ -30,9 +30,6 @@
 }
 
 .scroll-div {
-    overflow: scroll;
-    height: 300px;
-    border: 0px;
-    padding:0px;
-    margin: 0px;
+    overflow-y: scroll;
+    height: 250px;
 }

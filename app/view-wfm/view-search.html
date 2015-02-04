@@ -5,45 +5,50 @@
 	<!-- left col div -->
 	<div class="col-md-3" style="padding-left:40px;">
 		
-		<!-- category nav -->
-		<accordion close-others="oneAtATime">
-		    <accordion-group is-open="isCatFilterOpen">
-		    	<accordion-heading>
-		            Categories <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isCatFilterOpen, 'glyphicon-chevron-right': !isCatFilterOpen}"></i>
-		        </accordion-heading>
 
-		    	<!-- Category Navigation -->
-				<div ng-repeat="(cat, count) in taxonomy" style="padding-left:20px">
-			  		<div style="padding-left:{{cat.split('/').length*10}}px">
-			  		<!--a ng-href="#/c/{{cat.replace('/','-')}}">{{cat.split('/')[cat.split('/').length-1]}}</a> ({{count}})-->
-			  		<a ng-href="#/search/{{encodePath(cat)}}?q={{$routeParams.q}}">{{cat.split('/')[cat.split('/').length-1].replace("&amp;","&")}}</a> ({{count}})
-			  		</div>
-				</div>
-		    </accordion-group>
-		</accordion>
+        <!-- category nav -->
+        <accordion close-others="oneAtATime">
+            <accordion-group is-open="isCatFilterOpen">
+                <accordion-heading>
+                    Categories <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isCatFilterOpen, 'glyphicon-chevron-right': !isCatFilterOpen}"></i>
+                </accordion-heading>
 
-		<!-- Facets -->
-		<accordion ng-repeat="(facet, values) in facet_fields" close-others="oneAtATime" ng-if="facet !=taxonomy_field">
-			<accordion-group is-open="isFacetFilterOpen"  >
-				<accordion-heading>
+                <!-- Category Navigation -->
+                <div ng-repeat="cat in taxonomy" style="padding-left:20px">
+                    <div style="padding-left:{{cat[0].split('/').length*10}}px">
+                        <!--a ng-href="#/c/{{cat.replace('/','-')}}">{{cat.split('/')[cat.split('/').length-1]}}</a> ({{count}})-->
+                        <a ng-href="#/{{controller_path}}/{{encodePath(cat[0])}}?q={{$routeParams.q}}">{{cat[0].split('/')[cat[0].split('/').length-1].replace("&amp;","&")}}</a> ({{cat[1]}})
+                    </div>
+                </div>
+            </accordion-group>
+        </accordion>
+
+
+
+
+
+        <!-- Facets -->
+        <accordion ng-repeat="(facet, values) in facet_fields" close-others="oneAtATime" ng-if="facet !=taxonomy_field">
+            <accordion-group is-open="isFacetFilterOpen"  >
+                <accordion-heading>
 			    	<span ng-if="solr_params[facet+'.label']">
 			       		{{solr_params[facet+'.label']}}
 			   		</span>
-			   		<!-- if the facet doesn't have a label being passed, use parseFacetLabel -->
 			   		<span ng-if="!solr_params[facet+'.label']">
 			   			{{parseFacetLabel(facet)}}
 			   		</span>
-			        <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isFacetFilterOpen, 'glyphicon-chevron-right': !isFacetFilterOpen}"></i>
-			    </accordion-heading>
-                <div ng-repeat="(val, count) in values" style="padding-left:20px">
-                    <!--a ng-click="clickFacet(facet,val,$routeParams)">{{val}}</a> ({{count}}) -->
-                    <input ng-click="clickFacet(facet,val,$routeParams,filter_separator)" ng-checked="checkCheckbox(facet,val,$routeParams)" type="checkbox" />
-                    <span ng-if="val == ''"><i>N/A</i></span>
-                    <span ng-if="val != ''">{{val}}</span>
-                    ({{count}})
+                    <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isFacetFilterOpen, 'glyphicon-chevron-right': !isFacetFilterOpen}"></i>
+                </accordion-heading>
+                <div class="scroll-div">
+                <div ng-repeat="value in values" style="padding-left:20px">
+                    <input ng-click="clickFacet(facet,value[0],$routeParams,filter_separator)" ng-checked="checkCheckbox(facet,value[0],$routeParams)" type="checkbox" />
+                    <span ng-if="value[0] == ''"><i>N/A</i></span>
+                    <span ng-if="value[0] != ''">{{value[0]}}</span>
+                    ({{value[1]}})
                 </div>
-		    </accordion-group>
-		</accordion>
+                </div>
+            </accordion-group>
+        </accordion>
 
 
 
@@ -81,8 +86,13 @@
 			<div ng-repeat="doc in docs">
 				<div>
 					<h3>{{doc.name}}</h3> <br/>
-					{{doc.short_description}} <br/>
+					{{doc.description}} by <strong>{{doc.brand_s}}</strong><br/>
 					<strong>${{doc.price}}</strong>
+                    <blockquote>
+                        Family: {{doc['attr_merchandiseHierarchy.family_'][0]}}<br />
+                        Tax Class: {{doc.attr_taxClass_[0]}} <br />
+                        Brick: {{doc.product_type}}
+                    </blockquote>
 
 				</div>
 			</div>

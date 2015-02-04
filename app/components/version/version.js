@@ -5,4 +5,5 @@ angular.module('fusionSeed.version', [
   'fusionSeed.version.version-directive'
 ])
 
-.value('version', '0.1');
+//first cut of product demo
+.value('version', '0.3');

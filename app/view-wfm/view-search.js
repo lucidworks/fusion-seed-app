@@ -4,7 +4,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute'])
 
 .constant("WFM_DEFAULTS", {
 	"proxy_url": "http://localhost:9292/",
-	"fusion_url": "ec2-54-160-96-32.compute-1.amazonaws.com:8764",
+	"fusion_url": "ec2-54-90-28-84.compute-1.amazonaws.com:8764",
 	"pipeline_id": "wfm_poc1-default",
 	"collection_id": "wfm_poc1",
 	"request_handler": "select",
@@ -36,10 +36,6 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute'])
 
 .controller('ViewWfmSearchCtrl', function (WFM_DEFAULTS, $scope, $http, $routeParams, $location, $route, $sce) {
 
-	$scope.config = {
-
-    }
-
     var proxy_base = WFM_DEFAULTS.proxy_url;
 	var fusion_url = WFM_DEFAULTS.fusion_url
 
@@ -61,6 +57,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute'])
 	var collapse = "{!collapse field="+WFM_DEFAULTS.collapse_field+"}";
 
 
+    $scope.controller_path = WFM_DEFAULTS.controller_path;
     $scope.taxonomy_field = WFM_DEFAULTS.taxonomy_field;
 	$scope.filter_separator = filter_separator;
 	$scope.multi_select_facets = multi_select_facets;
@@ -73,11 +70,11 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute'])
 
 	var q = '*:*';
 	if ($routeParams.q) q = $routeParams.q;
-	console.log('q = '+$routeParams.q);
+	//console.log('q = '+$routeParams.q);
 	
 	var category = '*';
 	if ($routeParams.category) category = decodePath($routeParams.category);
-	console.log('category =' + category);
+	//console.log('category =' + category);
 
 	//use lucene term qparser unless it is a * query
 	var cpath_fq;
@@ -135,7 +132,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute'])
 		 		'fq': fqs,
 		 		'wt': 'json',
 		 		'rows' : 10,
-		 		'json.nl': 'map'
+		 		'json.nl': 'arrarr'
 		 		}
 		})
 		.success(function(data, status, headers, config) {
@@ -231,7 +228,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute'])
 		//$location.path('test');
 
 
-		var new_url = '/search/'+routeParams.category+'/'+routeParams.filter;
+		var new_url = '/'+WFM_DEFAULTS.controller_path+'/'+routeParams.category+'/'+routeParams.filter;
 		if (routeParams.q) new_url+= '?q='+routeParams.q
 		$location.url(new_url);
 
