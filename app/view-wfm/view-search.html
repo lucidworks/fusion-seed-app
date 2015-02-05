@@ -4,7 +4,7 @@
 
 	<!-- left col div -->
 	<div class="col-md-3" style="padding-left:40px;">
-		
+
 
         <!-- category nav -->
         <accordion close-others="oneAtATime">
@@ -22,9 +22,6 @@
                 </div>
             </accordion-group>
         </accordion>
-
-
-
 
 
         <!-- Facets -->
@@ -58,7 +55,7 @@
 	<!-- middle col -->
 	<div class="col-md-9" style="padding-left:20px;padding-top:10px">
 		<div class="col-md-12" align="center">
-			<form class="form-inline" role="form" style="padding-bottom:10px">
+            <form class="form-inline" role="form" style="padding-bottom:10px">
 					<input ng-model="query" name="Search" class="form-control input-lg" placeholder=""></input>
 					<button type="button" ng-click="clickSearch(query)" class="btn btn-danger btn-lg">Search</button>
 			</form>
@@ -81,7 +78,12 @@
 
 		<div class="col-md-12">
 
-			Found {{data.response.numFound}} results.
+            <div style="padding:20px;">
+                Select Store:
+                <select style="width:200px;" ng-model="current_store" ng-options="value[0] for (key, value) in facet_fields.store_code_s" ng-change="selectStore($routeParams,filter_separator)">
+                </select>
+            </div>
+            Found {{data.response.numFound}} results.
 
 			<div ng-repeat="doc in docs">
 				<div>

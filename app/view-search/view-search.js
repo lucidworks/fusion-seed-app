@@ -230,7 +230,7 @@ angular.module('fusionSeed.viewSearch', ['ngRoute'])
 
 
 		var new_url = '/search/'+routeParams.category+'/'+routeParams.filter;
-		if (routeParams.q) new_url+= '?q='+routeParams.q
+		if (routeParams.q) new_url+= '?q='+routeParams.q;
 		$location.url(new_url);
 
 	}

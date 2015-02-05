@@ -200,6 +200,15 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute'])
 		$location.search('q', query);
 	}
 
+    $scope.current_store;
+    $scope.selectStore = function(routeParams,filter_separator) {
+        console.log("Chose store code: " + $scope.current_store[0]);
+        //reset filters
+        routeParams.filter = '';
+        $scope.clickFacet('store_code_s', $scope.current_store[0],routeParams,filter_separator);
+
+    }
+
 	$scope.clickFacet = function(fname, fvalue, routeParams, filter_separator) {
 
 		console.log('clicked on ' + fname + ':' + fvalue);
@@ -229,7 +238,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute'])
 
 
 		var new_url = '/'+WFM_DEFAULTS.controller_path+'/'+routeParams.category+'/'+routeParams.filter;
-		if (routeParams.q) new_url+= '?q='+routeParams.q
+		if (routeParams.q) new_url+= '?q='+routeParams.q;
 		$location.url(new_url);
 
 	}
