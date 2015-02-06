@@ -18,14 +18,14 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute'])
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.
   	when('/wfm', {
+    	templateUrl: 'view-wfm/view-store-select.html',
+    	controller: 'ViewWfmSearchCtrl'
+  	}).
+  	when('/wfm/:store/:category/:filter', {
     	templateUrl: 'view-wfm/view-search.html',
     	controller: 'ViewWfmSearchCtrl'
   	}).
-  	when('/wfm/:category/:filter', {
-    	templateUrl: 'view-wfm/view-search.html',
-    	controller: 'ViewWfmSearchCtrl'
-  	}).
-  	when('/wfm/:category', {
+  	when('/wfm/:store/:category', {
     	templateUrl: 'view-wfm/view-search.html',
     	controller: 'ViewWfmSearchCtrl'
   	});
@@ -75,7 +75,10 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute'])
 	//console.log('q = '+$routeParams.q);
 	
 	var category = '*';
-	if ($routeParams.category) category = decodePath($routeParams.category);
+	if ($routeParams.category) {
+        category = decodePath($routeParams.category);
+        $scope.breadcrumb = category.split($scope.taxonomy_separator);
+    }
 	//console.log('category =' + category);
 
 	//use lucene term qparser unless it is a * query
@@ -118,8 +121,12 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute'])
 
 	//add category as a filter
 	fqs.push(cpath_fq);
-	//field collapsing
-	//fqs.push('{!collapse field='+group_field+'}');
+
+    //WFM only - filter on current store
+    if ($routeParams.store)
+        fqs.push("store_code_s:"+$routeParams.store);
+
+    //field collapsing
 	if (collapse) {
 		fqs.push(collapse);
 	}
@@ -205,12 +212,9 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute'])
 	}
 
     $scope.current_store;
-    $scope.selectStore = function(routeParams,filter_separator) {
+    $scope.selectStore = function() {
         console.log("Chose store code: " + $scope.current_store[0]);
-        //reset filters
-        routeParams.filter = '';
-        $scope.clickFacet('store_code_s', $scope.current_store[0],routeParams,filter_separator);
-
+        $location.path(WFM_DEFAULTS.controller_path +'/'+$scope.current_store[0]+'/*');
     }
 
 	$scope.clickFacet = function(fname, fvalue, routeParams, filter_separator) {
@@ -241,7 +245,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute'])
 		//$location.path('test');
 
 
-		var new_url = '/'+WFM_DEFAULTS.controller_path+'/'+routeParams.category+'/'+routeParams.filter;
+		var new_url = '/'+WFM_DEFAULTS.controller_path+'/'+routeParams.store+'/'+routeParams.category+'/'+routeParams.filter;
 		if (routeParams.q) new_url+= '?q='+routeParams.q;
 		$location.url(new_url);
 

@@ -17,7 +17,7 @@
                 <div ng-repeat="cat in taxonomy" style="padding-left:20px">
                     <div style="padding-left:{{cat[0].split(taxonomy_separator).length*10}}px">
                         <!--a ng-href="#/c/{{cat.replace('/','-')}}">{{cat.split('/')[cat.split('/').length-1]}}</a> ({{count}})-->
-                        <a ng-href="#/{{controller_path}}/{{encodePath(cat[0])}}/{{$routeParams.filter}}?q={{$routeParams.q}}">{{cat[0].split(taxonomy_separator)[cat[0].split(taxonomy_separator).length-1].replace("&amp;","&")}}</a> ({{cat[1]}})
+                        <a ng-href="#/{{controller_path}}/{{$routeParams.store}}/{{encodePath(cat[0])}}/{{$routeParams.filter}}?q={{$routeParams.q}}">{{cat[0].split(taxonomy_separator)[cat[0].split(taxonomy_separator).length-1].replace("&amp;","&")}}</a> ({{cat[1]}})
                     </div>
                 </div>
             </accordion-group>
@@ -78,15 +78,13 @@
 
 		<div class="col-md-12">
 
-            <div style="padding:20px;">
-                Select Store:
-                <select style="width:200px;" ng-model="current_store" ng-options="value[0] for (key, value) in facet_fields.store_code_s" ng-change="selectStore($routeParams,filter_separator)">
-                </select>
-            </div>
-            Found {{data.response.numFound}} results.
+            <div id="breadcrumb" ng-if="breadcrumb">
+                <a href="#/{{controller_path}}/{{$routeParams.store}}/*/{{$routeParams.filter}}">Home</a> <span ng-repeat="crumb in breadcrumb"> > {{crumb}}</span>
+            </div><br />
 
+
+            Found {{data.response.numFound}} results.
 			<div ng-repeat="doc in docs">
-				<div>
 					<h3>{{doc.name}}</h3> <br/>
 					{{doc.description}} by <strong>{{doc.brand_s}}</strong><br/>
 					<strong>${{doc.price}}</strong>
@@ -99,9 +97,7 @@
                         <blockquote ng-show="showDoc">
                             <pre>{{doc | json}}</pre>
                         </blockquote>
-
                     </blockquote>
-				</div>
 			</div>
 
 
