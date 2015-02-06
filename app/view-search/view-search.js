@@ -12,6 +12,7 @@ angular.module('fusionSeed.viewSearch', ['ngRoute'])
 	"request_handler": "select",
 	"taxonomy_field": "cpath",
 	"filter_separator": "~",
+    "taxonomy_separator": "/",
 	"controller_path": "search",
 	"multi_select_facets": false,
 	"collapse_field": "name_exact_s"
@@ -60,6 +61,7 @@ angular.module('fusionSeed.viewSearch', ['ngRoute'])
 
     $scope.controller_path = SEARCH_DEFAULTS.controller_path;
     $scope.taxonomy_field = SEARCH_DEFAULTS.taxonomy_field;
+    $scope.taxonomy_separator = SEARCH_DEFAULTS.taxonomy_separator;
 	$scope.filter_separator = filter_separator;
 	$scope.multi_select_facets = multi_select_facets;
 	$scope.$route = $route;
@@ -140,6 +142,7 @@ angular.module('fusionSeed.viewSearch', ['ngRoute'])
 
           $scope.data = data;
           $scope.showData = false;
+          $scope.showDoc = false;
 
 
 		  var solr_params = data.responseHeader.params;

@@ -9,6 +9,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute'])
 	"collection_id": "wfm_poc1",
 	"request_handler": "select",
 	"taxonomy_field": "cat_tree",
+    "taxonomy_separator": "|",
 	"filter_separator": "~",
 	"controller_path": "wfm",
 	"multi_select_facets": false,
@@ -59,6 +60,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute'])
 
     $scope.controller_path = WFM_DEFAULTS.controller_path;
     $scope.taxonomy_field = WFM_DEFAULTS.taxonomy_field;
+    $scope.taxonomy_separator = WFM_DEFAULTS.taxonomy_separator;
 	$scope.filter_separator = filter_separator;
 	$scope.multi_select_facets = multi_select_facets;
 	$scope.$route = $route;
@@ -139,6 +141,8 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute'])
 
           $scope.data = data;
           $scope.showData = false;
+
+          $scope.showDoc = false;
 
 
 		  var solr_params = data.responseHeader.params;

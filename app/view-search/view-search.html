@@ -16,7 +16,7 @@
 				<div ng-repeat="(cat, count) in taxonomy" style="padding-left:20px">
 			  		<div style="padding-left:{{cat.split('/').length*10}}px">
 			  		<!--a ng-href="#/c/{{cat.replace('/','-')}}">{{cat.split('/')[cat.split('/').length-1]}}</a> ({{count}})-->
-			  		<a ng-href="#/{{controller_path}}/{{encodePath(cat)}}?q={{$routeParams.q}}">{{cat.split('/')[cat.split('/').length-1].replace("&amp;","&")}}</a> ({{count}})
+			  		<a ng-href="#/{{controller_path}}/{{encodePath(cat)}}/{{$routeParams.filter}}?q={{$routeParams.q}}">{{cat.split(taxonomy_separator)[cat.split(taxonomy_separator).length-1].replace("&amp;","&")}}</a> ({{count}})
 			  		</div>
 				</div>
 		    </accordion-group>
@@ -85,7 +85,10 @@
 					<h3>{{doc.name}}</h3> <br/>
 					{{doc.short_description}} <br/>
 					<strong>${{doc.price}}</strong>
-
+                    <a class="small" ng-click="showDoc = !showDoc" href="javascript:void(0);">View Document</a>
+                    <blockquote ng-show="showDoc">
+                        <pre>{{doc | json}}</pre>
+                    </blockquote>
 				</div>
 			</div>
 

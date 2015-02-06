@@ -15,9 +15,9 @@
 
                 <!-- Category Navigation -->
                 <div ng-repeat="cat in taxonomy" style="padding-left:20px">
-                    <div style="padding-left:{{cat[0].split('/').length*10}}px">
+                    <div style="padding-left:{{cat[0].split(taxonomy_separator).length*10}}px">
                         <!--a ng-href="#/c/{{cat.replace('/','-')}}">{{cat.split('/')[cat.split('/').length-1]}}</a> ({{count}})-->
-                        <a ng-href="#/{{controller_path}}/{{encodePath(cat[0])}}?q={{$routeParams.q}}">{{cat[0].split('/')[cat[0].split('/').length-1].replace("&amp;","&")}}</a> ({{cat[1]}})
+                        <a ng-href="#/{{controller_path}}/{{encodePath(cat[0])}}/{{$routeParams.filter}}?q={{$routeParams.q}}">{{cat[0].split(taxonomy_separator)[cat[0].split(taxonomy_separator).length-1].replace("&amp;","&")}}</a> ({{cat[1]}})
                     </div>
                 </div>
             </accordion-group>
@@ -94,8 +94,13 @@
                         Family: {{doc['attr_merchandiseHierarchy.family_'][0]}}<br />
                         Tax Class: {{doc.attr_taxClass_[0]}} <br />
                         Brick: {{doc.product_type}}
-                    </blockquote>
 
+                        <a class="small" ng-click="showDoc = !showDoc" href="javascript:void(0);">View Document</a>
+                        <blockquote ng-show="showDoc">
+                            <pre>{{doc | json}}</pre>
+                        </blockquote>
+
+                    </blockquote>
 				</div>
 			</div>
 
