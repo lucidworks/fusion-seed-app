@@ -15,6 +15,7 @@ The idea of this repository is to provide a "barebones" or blank "canvas" UI for
 After cloning this repository:
 
 ~~~
+cd fusion-seed-ui
 bin/start
 ~~~
 This script will ensure all dependencies are installed. Then start an HTTP server on http://localhost:8000 and a CORS-enabled proxy server on http://localhost:9292. To change the hostname and ports, modify bin/start.
