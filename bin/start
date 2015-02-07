@@ -1,10 +1,15 @@
 #!/bin/bash
 
 
+echo Installing dependencies
+npm install -g corsproxy
+npm install -g http-server
+npm install
+
 echo Starting CORS proxy on localhost:9292
 corsproxy > ./logs/proxy.log 2>&1 &
-#echo $! > ./var/proxy.pid
+echo $! > ./var/proxy.pid
 
 echo Starting HTTP Server on localhost:8000
-npm start > ./logs/server.log 2>&1 &
-#echo $! > ./var/server.pid
+http-server -a localhost -p 8000 -c-1 > ./logs/server.log 2>&1 &
+echo $! > ./var/server.pid

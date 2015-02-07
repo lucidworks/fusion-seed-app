@@ -16,16 +16,12 @@ After cloning this repository:
 
 ~~~
 cd fusion-seed-ui
+npm install -g corsproxy
+npm install -g http-server
 npm install
-npm install corsproxy
-npm start
+bin/start
 ~~~
-This will start an HTTP server on http://localhost:8000
-
-Open a new terminal window and start the CORS proxy:
-~~~  
-corsproxy
-~~~
+This will start an HTTP server on http://localhost:8000 and a CORS-enabled proxy server on http://localhost:9292. To change the hostname and ports, modify bin/start.
 
 * Go to http://localhost:8000/app/#/search/*
 * To see an example of the Query Pipeline adding facets based on the category, click on Men's -> Blazers (or go to http://localhost:8000/app/#/search/Men~Blazers?q=)

@@ -1,9 +1,10 @@
 #!/bin/bash
 
-echo Starting CORS proxy on localhost:9292
-./node_modules/corsproxy/bin/index.js ec2-54-90-28-84.compute-1.amazonaws.com 9292 > ./logs/proxy.log 2>&1 &
-#echo $! > ./var/proxy.pid
+echo Starting corsproxy on localhost:9292
+#./node_modules/corsproxy/bin/index.js ec2-54-90-28-84.compute-1.amazonaws.com 9292 > ./logs/proxy.log 2>&1 &
+corsproxy ec2-54-90-28-84.compute-1.amazonaws.com 9292 > ./logs/proxy.log 2>&1 &
+echo $! > ./var/proxy.pid
 
-echo Starting HTTP Server on localhost:8000
-npm start > ./logs/server.log 2>&1 &
-#echo $! > ./var/server.pid
+echo Starting http-server on localhost:8000
+http-server -a ec2-54-90-28-84.compute-1.amazonaws.com -p 8000 -c-1 > ./logs/server.log 2>&1 &
+echo $! > ./var/server.pid
