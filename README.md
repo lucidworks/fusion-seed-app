@@ -31,7 +31,7 @@ view-search.js begins by setting some defaults of interest if customizing:
 ~~~javascript
 'use strict';
 
-angular.module('fusionSeed.viewSearch', ['ngRoute'])
+angular.module('fusionSeed.viewSearch', ['ngRoute','solr.Directives'])
 
 .constant("SEARCH_DEFAULTS", {
 	"proxy_url": "http://localhost:9292/",
@@ -63,11 +63,11 @@ view-search.html handles the rendering
 ~~~
 
 ## Features
-* Auto-renders facet fields (TODO: make longer value lists a scrollable div).
+* Auto-renders facet fields.
 * Supports hierchichal facet / taxonomy navigation.
+* Url Rewrite (taxonomy in URL for SEO)
 
 ## Roadmap
-* Build out the Query Pipeline
 * Auto-complete
 * Spell-checking
 * Multi-select faceting
