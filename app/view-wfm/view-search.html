@@ -25,7 +25,23 @@
 
 
         <!-- Facets -->
-        <accordion ng-repeat="(facet, values) in facet_fields" close-others="oneAtATime" ng-if="facet !=taxonomy_field">
+        <accordion ng-repeat="(facet, values) in facet_fields" close-others="oneAtATime" ng-if="facet !=taxonomyField">
+        <solr-facet-field
+                facet="facet"
+                values="values"
+                solr-params="solr_params"
+                is-facet-filter-open="isFacetFilterOpen"
+                filter-separator="filter_separator"
+                route-params="$routeParams"
+                click-facet="clickFacet"
+                is-selected="isSelected"
+                parse-facet-label="parseFacetLabel"
+                ></solr-facet-field>
+        </accordion>
+
+
+
+        <!--accordion ng-repeat="(facet, values) in facet_fields" close-others="oneAtATime" ng-if="facet !=taxonomy_field">
             <accordion-group is-open="isFacetFilterOpen"  >
                 <accordion-heading>
 			    	<span ng-if="solr_params[facet+'.label']">
@@ -45,7 +61,7 @@
                 </div>
                 </div>
             </accordion-group>
-        </accordion>
+        </accordion-->
 
 
 
@@ -53,6 +69,7 @@
 	<!-- /left col -->
 
 	<!-- middle col -->
+
 	<div class="col-md-9" style="padding-left:20px;padding-top:10px">
 		<div class="col-md-12" align="center">
             <form class="form-inline" role="form" style="padding-bottom:10px">

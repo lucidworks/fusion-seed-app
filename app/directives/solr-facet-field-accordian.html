@@ -1,0 +1,24 @@
+
+
+<!-- Facets -->
+
+
+    <accordion-group is-open="isFacetFilterOpen"  >
+        <accordion-heading>
+			    	<span ng-if="solrParams[facet+'.label']">
+			       		{{solrParams[facet+'.label']}}
+			   		</span>
+			   		<span ng-if="!solrParams[facet+'.label']">
+			   			{{parseFacetLabel(facet)}}
+			   		</span>
+            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isFacetFilterOpen, 'glyphicon-chevron-right': !isFacetFilterOpen}"></i>
+        </accordion-heading>
+        <div class="scroll-div">
+            <div ng-repeat="value in values" style="padding-left:20px">
+                <input ng-click="clickFacet(facet,value[0],routeParams,filterSeparator)" ng-checked="isSelected(facet,value[0],routeParams)" type="checkbox" />
+                <span ng-if="value[0] == ''"><i>N/A</i></span>
+                <span ng-if="value[0] != ''">{{value[0]}}</span>
+                ({{value[1]}})
+            </div>
+        </div>
+    </accordion-group>

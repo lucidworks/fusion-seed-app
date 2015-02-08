@@ -15,6 +15,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute'])
 	"multi_select_facets": false,
 	"collapse_field": "attr_identifier_"
 })
+
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.
   	when('/wfm', {
@@ -56,7 +57,6 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute'])
 	var multi_select_facets = WFM_DEFAULTS.multi_select_facets;
 	var cat_facet_field = WFM_DEFAULTS.taxonomy_field;
 	var collapse = "{!collapse field="+WFM_DEFAULTS.collapse_field+"}";
-
 
     $scope.controller_path = WFM_DEFAULTS.controller_path;
     $scope.taxonomy_field = WFM_DEFAULTS.taxonomy_field;
@@ -204,7 +204,13 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute'])
 	};*/
 
 	$scope.encodePath =  function(path) { return encodePath(path) };
-	$scope.parseFacetLabel = function(field) { return parseFacetLabel(field)};
+	$scope.parseFacetLabel = function(field) {
+        //console.log("in parse facet label");
+        field = field.replace('_ss', '');
+        field = field.replace('_s','');
+        field = field.replace('_', ' ');
+        return field.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+    };
 
 
 	$scope.clickSearch = function(query) {
@@ -219,7 +225,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute'])
 
 	$scope.clickFacet = function(fname, fvalue, routeParams, filter_separator) {
 
-		console.log('clicked on ' + fname + ':' + fvalue);
+		//console.log('clicked on ' + fname + ':' + fvalue);
 		if (routeParams.filter) {
 			if (routeParams.filter.indexOf(fname+":"+fvalue) > -1) {
 				console.log("FACET ALREADY CLICKED!");
@@ -234,7 +240,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute'])
 						arr_filter.push(newf[i]);
 					}
 				}
-				console.log('NEW FILTER STRING:' + filterConcat(arr_filter,filter_separator));
+				//console.log('NEW FILTER STRING:' + filterConcat(arr_filter,filter_separator));
 				routeParams.filter = filterConcat(arr_filter,filter_separator);
 			} else {
 				routeParams.filter+=filter_separator+fname+':'+fvalue;
@@ -266,7 +272,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute'])
 		return filter;
 	}
 
-	$scope.checkCheckbox = function(fname, fvalue, routeParams) {
+	$scope.isSelected = function(fname, fvalue, routeParams) {
 		if (routeParams.filter) {
 			if (routeParams.filter.indexOf(fname+':'+fvalue) > -1) return true;
 			else return false;
@@ -279,15 +285,6 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute'])
 	    return $sce.trustAsHtml(html_code);
 	};
 
-
-	//Only used when a facet label is not passed through the pipeline (<facet field name>.label) in favor of passing a label through the pipeline as an arbitrary parameter.
-	function parseFacetLabel(field) {
-
-		field = field.replace('_ss', '');
-		field = field.replace('_s','');
-		field = field.replace('_', ' ');
-		return field.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-	}
 
 	function encodePath(path) {
 		return path.
