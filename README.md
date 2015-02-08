@@ -63,9 +63,9 @@ view-search.html handles the rendering
 ~~~
 
 ## Features
+* Stateful, SEO friendly URLs
 * Auto-renders facet fields.
 * Supports hierchichal facet / taxonomy navigation.
-* Url Rewrite (taxonomy in URL for SEO)
 
 ## Roadmap
 * Auto-complete
