@@ -4,50 +4,40 @@
 
 	<!-- left col div -->
 	<div class="col-md-3" style="padding-left:40px;">
-		
-		<!-- category nav -->
-		<accordion close-others="oneAtATime">
-		    <accordion-group is-open="isCatFilterOpen">
-		    	<accordion-heading>
-		            Categories <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isCatFilterOpen, 'glyphicon-chevron-right': !isCatFilterOpen}"></i>
-		        </accordion-heading>
 
-		    	<!-- Category Navigation -->
-				<div ng-repeat="(cat, count) in taxonomy" style="padding-left:20px">
-			  		<div style="padding-left:{{cat.split('/').length*10}}px">
-			  		<!--a ng-href="#/c/{{cat.replace('/','-')}}">{{cat.split('/')[cat.split('/').length-1]}}</a> ({{count}})-->
-			  		<a ng-href="#/{{controller_path}}/{{encodePath(cat)}}/{{$routeParams.filter}}?q={{$routeParams.q}}">{{cat.split(taxonomy_separator)[cat.split(taxonomy_separator).length-1].replace("&amp;","&")}}</a> ({{count}})
-			  		</div>
-				</div>
-		    </accordion-group>
-		</accordion>
+        <!-- category nav -->
+        <accordion close-others="oneAtATime">
+            <accordion-group is-open="isCatFilterOpen">
+                <accordion-heading>
+                    Categories <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isCatFilterOpen, 'glyphicon-chevron-right': !isCatFilterOpen}"></i>
+                </accordion-heading>
 
-
-
-		<!-- Facets -->
-        <accordion ng-repeat="(facet, values) in facet_fields" close-others="oneAtATime" ng-if="facet !=taxonomy_field">
-			<accordion-group is-open="isFacetFilterOpen">
-				<accordion-heading>
-			    	<span ng-if="solr_params[facet+'.label']">
-			       		{{solr_params[facet+'.label']}}
-			   		</span>
-			   		<!-- if the facet doesn't have a label being passed, use parseFacetLabel -->
-			   		<span ng-if="!solr_params[facet+'.label']">
-			   			{{parseFacetLabel(facet)}}
-			   		</span>
-			        <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isFacetFilterOpen, 'glyphicon-chevron-right': !isFacetFilterOpen}"></i>
-			    </accordion-heading>
-                <div class="scroll-div">
-                    <div ng-repeat="(val, count) in values" style="padding-left:20px">
-                        <!--a ng-click="clickFacet(facet,val,$routeParams)">{{val}}</a> ({{count}}) -->
-                        <input ng-click="clickFacet(facet,val,$routeParams,filter_separator)" ng-checked="checkCheckbox(facet,val,$routeParams)" type="checkbox" />
-                        <span ng-if="val == ''"><i>N/A</i></span>
-                        <span ng-if="val != ''">{{val}}</span>
-                        ({{count}})
+                <!-- Category Navigation -->
+                <div ng-repeat="cat in taxonomy" style="padding-left:20px">
+                    <div style="padding-left:{{cat[0].split(taxonomy_separator).length*10}}px">
+                        <!--a ng-href="#/c/{{cat.replace('/','-')}}">{{cat.split('/')[cat.split('/').length-1]}}</a> ({{count}})-->
+                        <a ng-href="#/{{controller_path}}/{{encodePath(cat[0])}}/{{$routeParams.filter}}?q={{$routeParams.q}}">{{cat[0].split(taxonomy_separator)[cat[0].split(taxonomy_separator).length-1].replace("&amp;","&")}}</a> ({{cat[1]}})
                     </div>
                 </div>
-		    </accordion-group>
-		</accordion>
+            </accordion-group>
+        </accordion>
+
+
+
+        <!-- Facets -->
+        <accordion ng-repeat="(facet, values) in facet_fields" close-others="oneAtATime" ng-if="facet !=taxonomy_field">
+            <solr-facet-field
+                    facet="facet"
+                    values="values"
+                    solr-params="solr_params"
+                    is-facet-filter-open="isFacetFilterOpen"
+                    filter-separator="filter_separator"
+                    route-params="$routeParams"
+                    click-facet="clickFacet"
+                    is-selected="isSelected"
+                    parse-facet-label="parseFacetLabel"
+                    ></solr-facet-field>
+        </accordion>
 
 	</div>
 	<!-- /left col -->

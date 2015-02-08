@@ -2,10 +2,8 @@
  * Created by evanpease on 2/7/15.
  */
 
-var module_name = 'fusionSeed.viewWfmSearch';
-
-angular.module(module_name)
-    .directive('solrFacetField', function() {
+angular.module('solr.Directives', [])
+   .directive('solrFacetField', function() {
         return {
             restrict: 'E',
             scope: {

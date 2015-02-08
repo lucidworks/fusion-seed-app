@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('fusionSeed.viewSearch', ['ngRoute'])
+angular.module('fusionSeed.viewSearch', ['ngRoute','solr.Directives'])
 
 
 
@@ -135,7 +135,7 @@ angular.module('fusionSeed.viewSearch', ['ngRoute'])
 		 		'fq': fqs,
 		 		'wt': 'json',
 		 		'rows' : 10,
-		 		'json.nl': 'map'
+		 		'json.nl': 'arrarr'
 		 		}
 		})
 		.success(function(data, status, headers, config) {
@@ -197,7 +197,12 @@ angular.module('fusionSeed.viewSearch', ['ngRoute'])
 	};*/
 
 	$scope.encodePath =  function(path) { return encodePath(path) };
-	$scope.parseFacetLabel = function(field) { return parseFacetLabel(field)};
+	$scope.parseFacetLabel = function(field) {
+        field = field.replace('_ss', '');
+        field = field.replace('_s','');
+        field = field.replace('_', ' ');
+        return field.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+    };
 
 
 	$scope.clickSearch = function(query) {
@@ -253,7 +258,7 @@ angular.module('fusionSeed.viewSearch', ['ngRoute'])
 		return filter;
 	}
 
-	$scope.checkCheckbox = function(fname, fvalue, routeParams) {
+	$scope.isSelected = function(fname, fvalue, routeParams) {
 		if (routeParams.filter) {
 			if (routeParams.filter.indexOf(fname+':'+fvalue) > -1) return true;
 			else return false;
@@ -266,15 +271,6 @@ angular.module('fusionSeed.viewSearch', ['ngRoute'])
 	    return $sce.trustAsHtml(html_code);
 	};
 
-
-	//Only used when a facet label is not passed through the pipeline (<facet field name>.label) in favor of passing a label through the pipeline as an arbitrary parameter.
-	function parseFacetLabel(field) {
-
-		field = field.replace('_ss', '');
-		field = field.replace('_s','');
-		field = field.replace('_', ' ');
-		return field.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-	}
 
 	function encodePath(path) {
 		return path.

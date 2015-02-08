@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('fusionSeed.viewWfmSearch', ['ngRoute'])
+angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives'])
 
 .constant("WFM_DEFAULTS", {
 	"proxy_url": "http://localhost:9292/",
