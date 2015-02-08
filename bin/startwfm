@@ -1,5 +1,14 @@
 #!/bin/bash
 
+mkdir -p var
+mkdir -p logs
+
+echo Installing dependencies
+npm install -g corsproxy
+npm install -g http-server
+npm install
+
+
 echo Starting corsproxy on localhost:9292
 #./node_modules/corsproxy/bin/index.js ec2-54-90-28-84.compute-1.amazonaws.com 9292 > ./logs/proxy.log 2>&1 &
 corsproxy ec2-54-90-28-84.compute-1.amazonaws.com 9292 > ./logs/proxy.log 2>&1 &
