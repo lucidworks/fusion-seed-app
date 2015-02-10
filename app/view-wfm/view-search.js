@@ -4,7 +4,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives'])
 
 .constant("WFM_DEFAULTS", {
 	"proxy_url": "http://localhost:9292/",
-	"fusion_url": "ec2-54-90-28-84.compute-1.amazonaws.com:8764",
+	"fusion_url": "ec2-54-90-6-131.compute-1.amazonaws.com:8764",
 	"pipeline_id": "wfm_poc1-default",
 	"collection_id": "wfm_poc1",
 	"request_handler": "select",
@@ -41,7 +41,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives'])
 }]);*/
 
 .controller('ViewWfmSearchCtrl', function (WFM_DEFAULTS, $scope, $http, $routeParams, $location, $route, $sce) {
-        
+
 
     var proxy_base = WFM_DEFAULTS.proxy_url;
 	var fusion_url = WFM_DEFAULTS.fusion_url
@@ -95,11 +95,12 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives'])
 	 	cpath_fq = '{!term f='+cat_facet_field+'}'+category;
 
 
-	var filter = $routeParams.filter;
+	//var filter = $routeParams.filter;
+    var filter = $routeParams.f;
 	//parse filter queries into an array so they can be passed.
 	var fqs = [];
-	if (filter) fqs = filter.split(filter_separator);
-
+	//if (filter) fqs = filter.split(filter_separator);
+    if (filter) fqs = $routeParams.f;
 	//if we're using multi_select_facets, change the syntax of the fqs
 	if (multi_select_facets) {
 		var new_fqs = [];
@@ -257,18 +258,61 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives'])
 
 	$scope.clickFacet = function(fname, fvalue, routeParams, filter_separator) {
 
+        var search = $location.search();
+
+        //was the filter already clicked on?
+        var filters = search['f'];
+        var already_clicked = false;
+        if (filters) {
+            if (Array.isArray(filters)) {
+                for (var i=0;i<filters.length;i++) {
+                    if (filters[i] == fname+":"+fvalue) {
+                        console.log("ALREADY CLICKED (multi filter)");
+                        already_clicked = true;
+                        filters.splice(i,1);
+                        search['f'] = filters;
+                    }
+                }
+            } else {
+                if (filters == fname+":"+fvalue) {
+                    console.log ("ALREADY CLICKED (single filter)");
+                    already_clicked = true;
+                    console.log("search f before: "+ search['f'])
+                    delete search['f'];
+                    console.log("search f after: "+ search['f'])
+                }
+            }
+        }
+
+        if (already_clicked == false) {
+            var f = []; //array of filters
+            if (search['f']) {
+                //if there is already multiple "f"s then it is already array
+                if (Array.isArray(search['f'])) f = search['f']
+                //if there is a single value (not an array), add it to our array
+                else f.push(search['f']);
+            }
+            //add the new filter to our array
+            f.push(fname + ":" + fvalue);
+            //add our new array of filters to the search object
+            search['f'] = f;
+        }
+        $location.search(search);
+        $location.replace();
+
+
 		//console.log('clicked on ' + fname + ':' + fvalue);
-		if (routeParams.filter) {
+		/*if (routeParams.filter) {
 			if (routeParams.filter.indexOf(fname+":"+fvalue) > -1) {
-				console.log("FACET ALREADY CLICKED!");
+				//console.log("FACET ALREADY CLICKED!");
 				//remove the fname:fvalue from the filter
 				var newf = splitFilter(routeParams.filter, filter_separator);
 				var arr_filter = []
 				for (var i=0;i<newf.length;i++) {
 					if (fname+":"+fvalue == newf[i]) {
-						console.log("FACET UNSELECT:" + newf[i]); //don't add it
+						//console.log("FACET UNSELECT:" + newf[i]); //don't add it
 					} else {
-						console.log("FACET SELECTION:" + newf[i]);
+						//console.log("FACET SELECTION:" + newf[i]);
 						arr_filter.push(newf[i]);
 					}
 				}
@@ -282,7 +326,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives'])
 
 		var new_url = '/'+WFM_DEFAULTS.controller_path+'/'+routeParams.store+'/'+routeParams.category+'/'+routeParams.filter;
 		if (routeParams.q) new_url+= '?q='+routeParams.q;
-		$location.url(new_url);
+		$location.url(new_url).search(search);*/
 
 	}
 
@@ -303,8 +347,8 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives'])
 
 	$scope.isSelected = function(fname, fvalue, routeParams) {
 
-		if (routeParams.filter) {
-			if (routeParams.filter.indexOf(fname+':'+fvalue) > -1) return true;
+		if (routeParams.f) {
+			if (routeParams.f.indexOf(fname+':'+fvalue) > -1) return true;
 			else return false;
 		}
 		return false;
