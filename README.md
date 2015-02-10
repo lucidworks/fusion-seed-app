@@ -64,10 +64,11 @@ view-search.html handles the rendering
 
 ## Features
 * Stateful, SEO friendly URLs
-* Auto-renders facet fields.
+* Auto-renders / filters on facet fields.
 * Supports hierchichal facet / taxonomy navigation.
 
 ## Roadmap
+* Facet Query display and filtering
 * Auto-complete
 * Spell-checking
 * Multi-select faceting

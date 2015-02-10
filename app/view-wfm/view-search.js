@@ -22,14 +22,18 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives'])
     	templateUrl: 'view-wfm/view-store-select.html',
     	controller: 'ViewWfmSearchCtrl'
   	}).
-  	when('/wfm/:store/:category/:filter', {
-    	templateUrl: 'view-wfm/view-search.html',
-    	controller: 'ViewWfmSearchCtrl'
-  	}).
-  	when('/wfm/:store/:category', {
-    	templateUrl: 'view-wfm/view-search.html',
-    	controller: 'ViewWfmSearchCtrl'
-  	});
+  	//when('/wfm/:store/:category/:filter', {
+    	//templateUrl: 'view-wfm/view-search.html',
+    	//controller: 'ViewWfmSearchCtrl'
+  	//}).
+  	//when('/wfm/:store/:category', {
+    //	templateUrl: 'view-wfm/view-search.html',
+    //	controller: 'ViewWfmSearchCtrl'
+  	//}).
+    when('/wfm/:store?/:category?/:filter?', {
+        templateUrl: 'view-wfm/view-search.html',
+        controller: 'ViewWfmSearchCtrl'
+    });
 }])
 
 /*.controller('ViewWfmSearchCtrl', [function() {
@@ -37,6 +41,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives'])
 }]);*/
 
 .controller('ViewWfmSearchCtrl', function (WFM_DEFAULTS, $scope, $http, $routeParams, $location, $route, $sce) {
+        
 
     var proxy_base = WFM_DEFAULTS.proxy_url;
 	var fusion_url = WFM_DEFAULTS.fusion_url
@@ -126,6 +131,11 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives'])
     if ($routeParams.store)
         fqs.push("store_code_s:"+$routeParams.store);
 
+    //WFM only - sale filter
+    if ($routeParams.sale) {
+        fqs.push("saleStart_tdt:[* TO NOW] AND saleEnd_tdt:[NOW TO *]");
+    }
+
     //field collapsing
 	if (collapse) {
 		fqs.push(collapse);
@@ -148,7 +158,6 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives'])
 
           $scope.data = data;
           $scope.showData = false;
-
           $scope.showDoc = false;
 
 
@@ -223,6 +232,29 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives'])
         $location.path(WFM_DEFAULTS.controller_path +'/'+$scope.current_store[0]+'/*');
     }
 
+
+    $scope.clickSaleFilter = function() {
+
+        if ($location.search()['sale'] == 'true') {
+            //already filtered, un-filter
+            var search = $location.search();
+            delete search['sale'];
+            $location.search(search);
+
+        } else {
+            $location.search('sale', 'true');
+        }
+
+    }
+
+    $scope.isSalesFilterChecked = function () {
+
+        if ($location.search()['sale'] == 'true') {
+            return true;
+        }
+
+    }
+
 	$scope.clickFacet = function(fname, fvalue, routeParams, filter_separator) {
 
 		//console.log('clicked on ' + fname + ':' + fvalue);
@@ -248,9 +280,6 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives'])
 		} else routeParams.filter = fname+":"+fvalue;
 
 
-		//$location.path('test');
-
-
 		var new_url = '/'+WFM_DEFAULTS.controller_path+'/'+routeParams.store+'/'+routeParams.category+'/'+routeParams.filter;
 		if (routeParams.q) new_url+= '?q='+routeParams.q;
 		$location.url(new_url);
@@ -273,6 +302,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives'])
 	}
 
 	$scope.isSelected = function(fname, fvalue, routeParams) {
+
 		if (routeParams.filter) {
 			if (routeParams.filter.indexOf(fname+':'+fvalue) > -1) return true;
 			else return false;
