@@ -4,26 +4,16 @@
 
 	<!-- left col div -->
 	<div class="col-md-3" style="padding-left:40px;">
-
+        
         <!-- category nav -->
-        <accordion close-others="oneAtATime">
-            <accordion-group is-open="isCatFilterOpen">
-                <accordion-heading>
-                    Categories <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isCatFilterOpen, 'glyphicon-chevron-right': !isCatFilterOpen}"></i>
-                </accordion-heading>
-
-                <!-- Category Navigation -->
-                <div ng-repeat="cat in taxonomy" style="padding-left:20px">
-                    <div style="padding-left:{{cat[0].split(taxonomy_separator).length*10}}px">
-                        <!--a ng-href="#/c/{{cat.replace('/','-')}}">{{cat.split('/')[cat.split('/').length-1]}}</a> ({{count}})-->
-                        <a ng-href="#/{{controller_path}}/{{encodePath(cat[0])}}/{{$routeParams.filter}}?q={{$routeParams.q}}">{{cat[0].split(taxonomy_separator)[cat[0].split(taxonomy_separator).length-1].replace("&amp;","&")}}</a> ({{cat[1]}})
-                    </div>
-                </div>
-            </accordion-group>
-        </accordion>
-
-
-
+        <solr-path-hierarchy-facet-field
+                label="Categories"
+                facet-data="taxonomy"
+                facet-name="cpath"
+                is-facet-filter-open="isCatFilterOpen"
+                path-separator="taxonomy_separator"
+                create-link="createCatLink">
+        </solr-path-hierarchy-facet-field>
 
 
         <solr-facet-field ng-repeat="(facet, values) in facet_fields" close-others="oneAtATime" ng-if="facet !=taxonomy_field"

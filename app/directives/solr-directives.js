@@ -3,23 +3,6 @@
  */
 
 angular.module('solr.Directives', [])
-   .directive('zzzsolrFacetField', function() {
-        return {
-            restrict: 'E',
-            scope: {
-                facet: '=',
-                values: '=',
-                isFacetFilterOpen: '=',
-                solrParams: '=',
-                filterSeparator: '=',
-                routeParams: '=',
-                clickFacet: '=',
-                parseFacetLabel: '=',
-                isSelected: '='
-            },
-            templateUrl: 'directives/solr-facet-field-accordian.html'
-        };
-    })
     .directive('solrFacetField', function() {
         return {
             restrict: 'E',
@@ -31,7 +14,21 @@ angular.module('solr.Directives', [])
                 clickFacet: '=',
                 isSelected: '='
             },
-            templateUrl: 'directives/solr-facet-field-accordian2.html'
+            templateUrl: 'directives/solr-facet-field-accordian.html'
+        };
+    })
+    .directive('solrPathHierarchyFacetField', function() {
+        return {
+            restrict: 'E',
+            scope: {
+                facetData: '=',
+                facetName: '@',
+                label: '@',
+                isFacetFilterOpen: '=',
+                pathSeparator: '=',
+                createLink: '='
+            },
+            templateUrl: 'directives/solr-path-hierarchy-facet-field-accordian.html'
         };
     })
 ;

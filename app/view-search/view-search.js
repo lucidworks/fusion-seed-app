@@ -210,6 +210,15 @@ angular.module('fusionSeed.viewSearch', ['ngRoute','solr.Directives'])
 		$location.search('q', query);
 	}
 
+
+    $scope.createCatLink = function(cat) {
+
+        var q = "";
+        if ($routeParams.q) q = $routeParams.q;
+        return "#/"+SEARCH_DEFAULTS.controller_path+"/"+encodePath(cat)+"?q="+q;
+    }
+
+
 	$scope.clickFacet = function(fname, fvalue) {
 
 

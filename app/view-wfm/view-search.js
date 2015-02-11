@@ -257,6 +257,18 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives'])
 
     }
 
+
+
+    $scope.createCatLink = function(cat) {
+        //console.log('clickCategory test, here are the routeParams: '+ routeParams);
+        //"#/{{controller_path}}/{{$routeParams.store}}/{{encodePath(cat[0])}}/{{$routeParams.filter}}?q={{$routeParams.q}}"
+        //return "myfakelink"+ cat;
+        var q = "";
+        if ($routeParams.q) q = $routeParams.q;
+
+        return "#/"+WFM_DEFAULTS.controller_path+"/"+$routeParams.store+"/"+encodePath(cat)+"?q="+q;
+    }
+
 	$scope.clickFacet = function(fname, fvalue) {
 
         var search = $location.search();
