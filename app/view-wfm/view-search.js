@@ -143,6 +143,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives'])
 	}
 
 	//To use JSONP and avoid using a proxy, change method to JSONP, and add 'json.wrf': 'JSON_CALLBACK' to the params.
+    $scope.loading = true;
  	$http.defaults.headers.common['Authorization'] = 'Basic ' + btoa('admin:password123');
 	$http(
 		{method: 'GET',
@@ -156,7 +157,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives'])
 		 		}
 		})
 		.success(function(data, status, headers, config) {
-
+          $scope.loading = false;
           $scope.data = data;
           $scope.showData = false;
           $scope.showDoc = false;
@@ -256,7 +257,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives'])
 
     }
 
-	$scope.clickFacet = function(fname, fvalue, routeParams, filter_separator) {
+	$scope.clickFacet = function(fname, fvalue) {
 
         var search = $location.search();
 
@@ -345,10 +346,11 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives'])
 		return filter;
 	}
 
-	$scope.isSelected = function(fname, fvalue, routeParams) {
+	$scope.isSelected = function(fname, fvalue) {
 
-		if (routeParams.f) {
-			if (routeParams.f.indexOf(fname+':'+fvalue) > -1) return true;
+        var search = $location.search();
+		if (search.f) {
+			if (search.f.indexOf(fname+':'+fvalue) > -1) return true;
 			else return false;
 		}
 		return false;

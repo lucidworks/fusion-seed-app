@@ -3,7 +3,7 @@
  */
 
 angular.module('solr.Directives', [])
-   .directive('solrFacetField', function() {
+   .directive('zzzsolrFacetField', function() {
         return {
             restrict: 'E',
             scope: {
@@ -19,4 +19,19 @@ angular.module('solr.Directives', [])
             },
             templateUrl: 'directives/solr-facet-field-accordian.html'
         };
-    });
+    })
+    .directive('solrFacetField', function() {
+        return {
+            restrict: 'E',
+            scope: {
+                facetData: '=',
+                facetName: '@',
+                label: '@',
+                isFacetFilterOpen: '=',
+                clickFacet: '=',
+                isSelected: '='
+            },
+            templateUrl: 'directives/solr-facet-field-accordian2.html'
+        };
+    })
+;
