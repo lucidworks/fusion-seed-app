@@ -100,7 +100,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives'])
 	//parse filter queries into an array so they can be passed.
 	var fqs = [];
 	//if (filter) fqs = filter.split(filter_separator);
-    if (filter) fqs = $routeParams.f;
+    if (filter) fqs = filter //$routeParams.f;
 	//if we're using multi_select_facets, change the syntax of the fqs
 	if (multi_select_facets) {
 		var new_fqs = [];
@@ -267,7 +267,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives'])
             if (Array.isArray(filters)) {
                 for (var i=0;i<filters.length;i++) {
                     if (filters[i] == fname+":"+fvalue) {
-                        console.log("ALREADY CLICKED (multi filter)");
+                        //console.log("ALREADY CLICKED (multi filter)");
                         already_clicked = true;
                         filters.splice(i,1);
                         search['f'] = filters;
@@ -275,11 +275,11 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives'])
                 }
             } else {
                 if (filters == fname+":"+fvalue) {
-                    console.log ("ALREADY CLICKED (single filter)");
+                    //console.log ("ALREADY CLICKED (single filter)");
                     already_clicked = true;
-                    console.log("search f before: "+ search['f'])
+                    //console.log("search f before: "+ search['f'])
                     delete search['f'];
-                    console.log("search f after: "+ search['f'])
+                    //console.log("search f after: "+ search['f'])
                 }
             }
         }
