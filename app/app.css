@@ -33,3 +33,9 @@
     overflow-y: scroll;
     height: 250px;
 }
+
+.search-link {
+    color: green;
+    text-decoration: none;
+    cursor: pointer;
+}

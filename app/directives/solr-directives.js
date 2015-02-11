@@ -31,4 +31,13 @@ angular.module('solr.Directives', [])
             templateUrl: 'directives/solr-path-hierarchy-facet-field-accordian.html'
         };
     })
+    .directive('solrAutoComplete',['$http'],function($http) {
+        return {
+            restrict: 'E',
+            scope: {
+               states: '='
+            },
+            templateUrl: 'directives/solr-auto-complete.html'
+        }
+    })
 ;

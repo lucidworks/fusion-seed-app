@@ -75,11 +75,19 @@
 	<!-- middle col -->
 
 	<div class="col-md-9" style="padding-left:20px;padding-top:10px">
+
 		<div class="col-md-12" align="center">
-            <form class="form-inline" role="form" style="padding-bottom:10px">
+
+
+            <div class="input-group has-success col-md-5">
+                <input type="text" ng-model="asyncSelected" placeholder="Recipes, Online Ordering and More!" typeahead-on-select="$location.search('q',asyncSelected)" typeahead="description_s for description_s in typeAheadSearch($viewValue)" typeahead-loading="loadingLocations" class="form-control">
+                <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+                <span class="input-group-addon"><a class="search-link" ng-click="$location.search('q',asyncSelected)">Search</a></span>
+            </div>
+            <!--form class="form-inline" role="form" style="padding-bottom:10px">
 					<input ng-model="query" name="Search" class="form-control input-lg" placeholder=""></input>
 					<button type="button" ng-click="clickSearch(query)" class="btn btn-success btn-lg">Search</button>
-			</form>
+			</form-->
 		</div>
 		<div class="col-md-12">
 			<a class="small" ng-click="showParams = !showParams" href="javascript:void(0);">View Query Parameters</a>,
