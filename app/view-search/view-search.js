@@ -210,7 +210,7 @@ angular.module('fusionSeed.viewSearch', ['ngRoute','solr.Directives'])
 		$location.search('q', query);
 	}
 
-	$scope.clickFacet = function(fname, fvalue, routeParams, filter_separator) {
+	$scope.clickFacet = function(fname, fvalue) {
 
 
         var search = $location.search();
@@ -310,14 +310,15 @@ angular.module('fusionSeed.viewSearch', ['ngRoute','solr.Directives'])
 		}
 		return false;
 	}*/
-    $scope.isSelected = function(fname, fvalue, routeParams) {
+    $scope.isSelected = function(fname, fvalue) {
 
-        if (routeParams.f) {
-            if (routeParams.f.indexOf(fname+':'+fvalue) > -1) return true;
-            else return false;
+            var search = $location.search();
+            if (search.f) {
+                if (search.f.indexOf(fname+':'+fvalue) > -1) return true;
+                else return false;
+            }
+            return false;
         }
-        return false;
-    }
 
 	$scope.renderHtml = function(html_code)
 	{

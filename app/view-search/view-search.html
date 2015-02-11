@@ -24,17 +24,15 @@
 
 
 
-        <!-- Facets -->
+
+
         <solr-facet-field ng-repeat="(facet, values) in facet_fields" close-others="oneAtATime" ng-if="facet !=taxonomy_field"
-                          facet="facet"
-                          values="values"
-                          solr-params="solr_params"
+                          label="{{parseFacetLabel(facet)}}"
+                          facet-name="{{facet}}"
+                          facet-data="values"
                           is-facet-filter-open="isFacetFilterOpen"
-                          filter-separator="filter_separator"
-                          route-params="$routeParams"
                           click-facet="clickFacet"
                           is-selected="isSelected"
-                          parse-facet-label="parseFacetLabel"
                 ></solr-facet-field>
 
 	</div>
