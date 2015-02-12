@@ -238,21 +238,22 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives'])
     $scope.typeAheadSearch = function(val) {
         //return $http.get('http://localhost:9292/maps.googleapis.com/maps/api/geocode/json', {
         //console.log("typeahead: " + val);
-        return $http.get(WFM_DEFAULTS.proxy_url+'ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/wfm_poc1/select', {
+        //var url = WFM_DEFAULTS.proxy_url+'ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/wfm_poc1/suggest';
+        var url =  WFM_DEFAULTS.proxy_url+WFM_DEFAULTS.fusion_url+'/api/apollo/query-pipelines/type-ahead/collections/'+collection_id+'/suggest';
+        return $http.get(url, {
             params: {
-                q: val+'*',
-                wt: 'json',
-                fl: 'description_s',
-                fq: '{!collapse field=description}'
+                q: val,
+                fq: 'store_code_s:'+$routeParams.store
             }
 
         }).then(function(response){
+            //console.log(response);
             var d = response.data.response.docs;
 
             var ta = [];
             for (var i=0;i<d.length;i++) {
                 //console.log(d[i].description_s)
-                ta.push(d[i].description_s);
+                ta.push(d[i].description);
             }
             return ta;
         })
