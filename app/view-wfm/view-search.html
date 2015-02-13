@@ -17,21 +17,7 @@
 
 
         <!-- Sale items -->
-        <accordion close-others="oneAtATime">
-            <accordion-group is-open="true">
-                <accordion-heading>
-                    Special Pricing
-                </accordion-heading>
-
-                <div style="padding-left:20px">
-                    <div>
-                        <!--a ng-href="#/c/{{cat.replace('/','-')}}">{{cat.split('/')[cat.split('/').length-1]}}</a> ({{count}})-->
-                        <input ng-click="clickSaleFilter()" ng-checked="isSalesFilterChecked()" type="checkbox" /> On Sale ({{facet_queries["{!label='On Sale'}saleStart_tdt:[* TO NOW] AND saleEnd_tdt:[NOW TO *]"]}})
-                    </div>
-                </div>
-            </accordion-group>
-        </accordion>
-
+        <wfm-sale-filter></wfm-sale-filter>
 
         <!-- Brand -->
         <solr-facet-field
@@ -77,42 +63,22 @@
 	<div class="col-md-9" style="padding-left:20px;padding-top:10px">
 
 		<div class="col-md-12" align="center">
-
-
-            <div class="input-group has-success col-md-5">
-                <span class="input-group-addon">
-                    <span ng-show="loading" class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
-                    <span ng-show="!loading" class="glyphicon glyphicon-cutlery"></span>
-                </span>
-                <!--span class="input-group-addon"><i ng-show="loadingTypeAhead" class="glyphicon glyphicon-refresh"></i></span-->
-                <input type="text" ng-model="asyncSelected" placeholder="Recipes, Online Ordering and More!" typeahead-on-select="$location.search('q',asyncSelected)" typeahead="description_s for description_s in typeAheadSearch($viewValue)" typeahead-loading="loadingTypeAhead" class="form-control">
-                <span class="input-group-addon"><a class="search-link" ng-click="$location.search('q',asyncSelected)">Search</a></span>
+            <div class="col-md-2"></div>
+            <div class="col-md-6">
+                <solr-auto-complete></solr-auto-complete>
             </div>
-            <!--form class="form-inline" role="form" style="padding-bottom:10px">
-					<input ng-model="query" name="Search" class="form-control input-lg" placeholder=""></input>
-					<button type="button" ng-click="clickSearch(query)" class="btn btn-success btn-lg">Search</button>
-			</form-->
 		</div>
-		<div class="col-md-12">
-			<a class="small" ng-click="showParams = !showParams" href="javascript:void(0);">View Query Parameters</a>,
-			<a class="small" ng-click="showData = !showData" href="javascript:void(0);">View JSON Response</a>
-			<blockquote ng-show="showParams">
-				<div ng-repeat="(key, data) in solr_params">
-					{{key}}={{data}} <br />
-				</div>
-			</blockquote>
-			<blockquote ng-show="showData">
-			
-				<pre>{{data | json}}</pre>
-			
-			</blockquote>
+		<div class="col-md-12" style="padding-top:20px">
+
+            <solr-api-helper></solr-api-helper>
+
 		</div>
 
-		<div class="col-md-12">
-
-            <div id="breadcrumb" ng-if="breadcrumb">
-                <a href="#/{{controller_path}}/{{$routeParams.store}}/*/{{$routeParams.filter}}">Home</a> <span ng-repeat="crumb in breadcrumb"> > {{crumb}}</span>
-            </div><br />
+		<div class="col-md-12" style="padding-top:20px">
+            <solr-path-breadcrumb
+                    path="#/{{controller_path}}/{{$routeParams.store}}/*/{{$routeParams.filter}}"
+                    breadcrumb="breadcrumb"></solr-path-breadcrumb>
+            <br />
 
 
             Found {{data.response.numFound}} results.

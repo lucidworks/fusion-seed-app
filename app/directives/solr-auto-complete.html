@@ -1,0 +1,14 @@
+<div class="input-group has-success">
+<span class="input-group-addon">
+    <span ng-show="loading" class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+    <span ng-show="!loading" class="glyphicon glyphicon-cutlery"></span>
+</span>
+<input type="text"
+       ng-model="asyncSelected"
+       placeholder="{{placeholder}}"
+       typeahead-on-select="$location.search('q',asyncSelected)"
+       typeahead="val for val in typeAheadSearch($viewValue)"
+       typeahead-loading="loadingTypeAhead"
+       class="form-control">
+ <span class="input-group-addon"><a class="search-link" ng-click="$location.search('q',asyncSelected)">Search</a></span>
+</div>

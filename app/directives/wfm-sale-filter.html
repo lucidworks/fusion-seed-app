@@ -1,0 +1,14 @@
+<accordion close-others="oneAtATime">
+    <accordion-group is-open="true">
+        <accordion-heading>
+            Special Pricing
+        </accordion-heading>
+
+        <div style="padding-left:20px">
+            <div>
+                <!--a ng-href="#/c/{{cat.replace('/','-')}}">{{cat.split('/')[cat.split('/').length-1]}}</a> ({{count}})-->
+                <input ng-click="clickSaleFilter()" ng-checked="isSalesFilterChecked()" type="checkbox" /> On Sale ({{facet_queries["{!label='On Sale'}saleStart_tdt:[* TO NOW] AND saleEnd_tdt:[NOW TO *]"]}})
+            </div>
+        </div>
+    </accordion-group>
+</accordion>

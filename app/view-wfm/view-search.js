@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives'])
+angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Directives'])
 
 .constant("WFM_DEFAULTS", {
 	"proxy_url": "http://localhost:9292/",
@@ -235,7 +235,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives'])
         $location.path(WFM_DEFAULTS.controller_path +'/'+$scope.current_store[0]+'/*');
     }
 
-    $scope.typeAheadSearch = function(val) {
+    $scope.typeAheadSearch2 = function(val) {
         //return $http.get('http://localhost:9292/maps.googleapis.com/maps/api/geocode/json', {
         //console.log("typeahead: " + val);
         //var url = WFM_DEFAULTS.proxy_url+'ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/wfm_poc1/suggest';
@@ -258,9 +258,38 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives'])
             return ta;
         })
     };
-    //end Type ahead tests
+
+    //an alternate type ahead using our previous search history and facet.prefix
+    //http://ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/wfm_search_history/select?q=query_t:chi*&facet=true&facet.field=query_t&rows=0&facet.sort=count&facet.mincount=1&facet.prefix=chi
+    $scope.typeAheadSearch = function(val) {
 
 
+        //return $http.get('http://localhost:9292/maps.googleapis.com/maps/api/geocode/json', {
+        //console.log("typeahead: " + val);
+        //var url = WFM_DEFAULTS.proxy_url+'ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/wfm_poc1/suggest';
+        //var url = WFM_DEFAULTS.proxy_url + "ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/wfm_search_history/select?q=query_t:" + val + "*&facet=true&facet.field=query_t&rows=0&facet.sort=count&facet.mincount=1&facet.prefix=" + val;
+        //http://ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/wfm_search_history/suggest?suggest=true&suggest.build=true&suggest.dictionary=wfmSuggester&wt=json&suggest.q=chick&indent=true
+        var url = WFM_DEFAULTS.proxy_url + "ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/wfm_search_history/suggest?suggest=true&suggest.build=true&suggest.dictionary=wfmSuggester&suggest.q="+val;
+
+        return $http.get(url, {
+            params: {
+                wt: 'json'
+            }
+
+        }).then(function (response) {
+            //console.log(response);
+            var d = response.data.suggest.wfmSuggester[val].suggestions;
+            //console.log(d.term);
+            var ta = [];
+            for (var i = 0; i < d.length; i++) {
+                //console.log("pushing:");
+                //console.log(d[i].term);
+                ta.push(d[i].term);
+            }
+            return ta;
+        })
+
+    };
 
 
     $scope.clickSaleFilter = function() {

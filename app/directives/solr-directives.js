@@ -3,6 +3,12 @@
  */
 
 angular.module('solr.Directives', [])
+
+    /*
+    RE-USEABLE DIRECTIVES
+    These directives have their own scope which makes them easier to re-use.
+    They don't depend on any parent scope.
+     */
     .directive('solrFacetField', function() {
         return {
             restrict: 'E',
@@ -31,13 +37,33 @@ angular.module('solr.Directives', [])
             templateUrl: 'directives/solr-path-hierarchy-facet-field-accordian.html'
         };
     })
-    .directive('solrAutoComplete',['$http'],function($http) {
+    .directive('solrPathBreadcrumb', function() {
         return {
             restrict: 'E',
             scope: {
-               states: '='
+                breadcrumb: '=',
+                path: '@',
             },
+            templateUrl: 'directives/solr-path-breadcrumb.html'
+        };
+    })
+    /*
+    PARENT SCOPE DIRECTIVES
+    These directives depend on certain objects/function being present in the
+    parent scope.
+     */
+    .directive('solrAutoComplete',function() {
+        return {
+            restrict: 'E',
+            scope: true,
             templateUrl: 'directives/solr-auto-complete.html'
-        }
+        };
+    })
+    .directive('solrApiHelper',function() {
+        return {
+            restrict: 'E',
+            scope: true,
+            templateUrl: 'directives/solr-api-helper.html'
+        };
     })
 ;
