@@ -5,10 +5,10 @@
 </span>
 <input type="text"
        ng-model="asyncSelected"
-       placeholder="{{placeholder}}"
-       typeahead-on-select="$location.search('q',asyncSelected)"
+       placeholder="Products, Recipes and More!"
+       typeahead-on-select="$location.path(controller_path+'/'+$routeParams.store).search('q',asyncSelected)"
        typeahead="val for val in typeAheadSearch($viewValue)"
        typeahead-loading="loadingTypeAhead"
        class="form-control">
- <span class="input-group-addon"><a class="search-link" ng-click="$location.search('q',asyncSelected)">Search</a></span>
+ <span class="input-group-addon"><a class="search-link" ng-click="$location.path(controller_path+'/'+$routeParams.store).search('q',asyncSelected)">Search</a></span>
 </div>

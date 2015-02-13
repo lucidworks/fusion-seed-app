@@ -235,9 +235,10 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
         $location.path(WFM_DEFAULTS.controller_path +'/'+$scope.current_store[0]+'/*');
     }
 
+
+
+    //Not being used - uses an Ngram approach for suggestions.
     $scope.typeAheadSearch2 = function(val) {
-        //return $http.get('http://localhost:9292/maps.googleapis.com/maps/api/geocode/json', {
-        //console.log("typeahead: " + val);
         //var url = WFM_DEFAULTS.proxy_url+'ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/wfm_poc1/suggest';
         var url =  WFM_DEFAULTS.proxy_url+WFM_DEFAULTS.fusion_url+'/api/apollo/query-pipelines/type-ahead/collections/'+collection_id+'/suggest';
         return $http.get(url, {
@@ -259,16 +260,12 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
         })
     };
 
-    //an alternate type ahead using our previous search history and facet.prefix
-    //http://ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/wfm_search_history/select?q=query_t:chi*&facet=true&facet.field=query_t&rows=0&facet.sort=count&facet.mincount=1&facet.prefix=chi
+    //TODO: integrate http://ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/wfm_search_history/suggest2?q=chi
+    //It uses the spellcheck component and performs well on the search history index.
+
+    //an alternate type ahead using the search history collection and the suggester component
     $scope.typeAheadSearch = function(val) {
 
-
-        //return $http.get('http://localhost:9292/maps.googleapis.com/maps/api/geocode/json', {
-        //console.log("typeahead: " + val);
-        //var url = WFM_DEFAULTS.proxy_url+'ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/wfm_poc1/suggest';
-        //var url = WFM_DEFAULTS.proxy_url + "ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/wfm_search_history/select?q=query_t:" + val + "*&facet=true&facet.field=query_t&rows=0&facet.sort=count&facet.mincount=1&facet.prefix=" + val;
-        //http://ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/wfm_search_history/suggest?suggest=true&suggest.build=true&suggest.dictionary=wfmSuggester&wt=json&suggest.q=chick&indent=true
         var url = WFM_DEFAULTS.proxy_url + "ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/wfm_search_history/suggest?suggest=true&suggest.build=true&suggest.dictionary=wfmSuggester&suggest.q="+val;
 
         return $http.get(url, {

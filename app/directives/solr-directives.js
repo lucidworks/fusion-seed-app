@@ -47,6 +47,15 @@ angular.module('solr.Directives', [])
             templateUrl: 'directives/solr-path-breadcrumb.html'
         };
     })
+    .directive('solrApiHelper',function() {
+        return {
+            restrict: 'E',
+            scope: {
+                solrResponse: '='
+            },
+            templateUrl: 'directives/solr-api-helper.html'
+        };
+    })
     /*
     PARENT SCOPE DIRECTIVES
     These directives depend on certain objects/function being present in the
@@ -55,15 +64,8 @@ angular.module('solr.Directives', [])
     .directive('solrAutoComplete',function() {
         return {
             restrict: 'E',
-            scope: true,
+            scope: false,
             templateUrl: 'directives/solr-auto-complete.html'
-        };
-    })
-    .directive('solrApiHelper',function() {
-        return {
-            restrict: 'E',
-            scope: true,
-            templateUrl: 'directives/solr-api-helper.html'
         };
     })
 ;

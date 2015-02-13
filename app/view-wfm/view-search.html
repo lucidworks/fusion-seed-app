@@ -65,12 +65,15 @@
 		<div class="col-md-12" align="center">
             <div class="col-md-2"></div>
             <div class="col-md-6">
-                <solr-auto-complete></solr-auto-complete>
+                <solr-auto-complete
+                        placeholder="Product, Recipes and More!"
+                        on-search="$location.search('test')"></solr-auto-complete>
             </div>
 		</div>
 		<div class="col-md-12" style="padding-top:20px">
 
-            <solr-api-helper></solr-api-helper>
+            <solr-api-helper solr-response="data">
+            </solr-api-helper>
 
 		</div>
 
