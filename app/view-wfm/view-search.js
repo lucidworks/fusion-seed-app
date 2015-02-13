@@ -238,7 +238,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
 
 
     //Not being used - uses an Ngram approach for suggestions.
-    $scope.typeAheadSearch2 = function(val) {
+    $scope.typeAheadSearch3 = function(val) {
         //var url = WFM_DEFAULTS.proxy_url+'ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/wfm_poc1/suggest';
         var url =  WFM_DEFAULTS.proxy_url+WFM_DEFAULTS.fusion_url+'/api/apollo/query-pipelines/type-ahead/collections/'+collection_id+'/suggest';
         return $http.get(url, {
@@ -260,8 +260,44 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
         })
     };
 
-    //TODO: integrate http://ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/wfm_search_history/suggest2?q=chi
+    //TODO: integrate http://ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/wfm_poc1/suggest2?q=chi
     //It uses the spellcheck component and performs well on the search history index.
+    $scope.typeAheadSearch2 = function(val) {
+
+        var url = WFM_DEFAULTS.proxy_url + "ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/wfm_poc1/suggest2?q="+val;
+
+        return $http.get(url, {
+            params: {
+                wt: 'json'
+            }
+
+        }).then(function (response) {
+            var ta = [];
+       
+            if (val.split(' ').length == 1) {
+                var d = response.data.spellcheck.suggestions[1].suggestion;
+                //console.log(d);
+                for (var i = 0; i < d.length; i++) {
+                    //console.log(d);
+                    //console.log("pushing:");
+                    //console.log(d[i].term);
+                    ta.push(d[i]);
+                }
+                return ta;
+            } else {
+                var d = response.data.spellcheck.suggestions[3].suggestion;
+                for (var i = 0; i < d.length; i++) {
+                    //console.log(d);
+                    //console.log("pushing:");
+                    //console.log(d[i].term);
+                    ta.push(d[i]);
+                }
+            }
+        })
+
+    };
+
+
 
     //an alternate type ahead using the search history collection and the suggester component
     $scope.typeAheadSearch = function(val) {
