@@ -53,6 +53,8 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
 	if ($routeParams.collection_id) collection_id = $routeParams.collection_id;
 	if ($routeParams.pipeline_id) pipeline_id = $routeParams.pipeline_id;
 
+    $scope.pipeline_id = pipeline_id;
+
 	var request_handler = WFM_DEFAULTS.request_handler;
 	var url = proxy_base+fusion_url+'/api/apollo/query-pipelines/'+pipeline_id+'/collections/'+collection_id+'/'+request_handler;
 	//var url = "http://localhost:9292/ec2-54-160-96-32.compute-1.amazonaws.com:8764/api/apollo/query-pipelines/test1-default/collections/test1/select?json.nl=arrarr&q=*:*&rows=100&wt=json"
@@ -273,7 +275,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
 
         }).then(function (response) {
             var ta = [];
-       
+
             if (val.split(' ').length == 1) {
                 var d = response.data.spellcheck.suggestions[1].suggestion;
                 //console.log(d);

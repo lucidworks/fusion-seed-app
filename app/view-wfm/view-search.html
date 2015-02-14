@@ -65,11 +65,11 @@
 	<div class="col-md-9" style="padding-left:20px;padding-top:10px">
 
 		<div class="col-md-12" align="center">
-            <div class="col-md-2"></div>
+            <div class="col-md-2">
+                Recommendations: <input type="checkbox" ng-model="pipeline_id" ng-true-value="wfm_poc1-default_copy" ng-false-value="wfm_poc1-default" ng-change="$location.search('pipeline_id',pipeline_id)">
+            </div>
             <div class="col-md-6">
-                <solr-auto-complete
-                        placeholder="Product, Recipes and More!"
-                        on-search="$location.search('test')"></solr-auto-complete>
+                <solr-auto-complete></solr-auto-complete>
             </div>
 		</div>
 		<div class="col-md-12" style="padding-top:20px">

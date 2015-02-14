@@ -8,7 +8,7 @@
        placeholder="Products, Recipes and More!"
        typeahead-on-select="$location.path(controller_path+'/'+$routeParams.store).search('q',asyncSelected)"
        typeahead="val for val in typeAheadSearch($viewValue)"
-       typeahead-loading="loadingTypeAhead"
+       typeahead-loading="loading"
        class="form-control">
  <span class="input-group-addon"><a class="search-link" ng-click="$location.path(controller_path+'/'+$routeParams.store).search('q',asyncSelected)">Search</a></span>
 </div>
