@@ -13,7 +13,8 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
 	"filter_separator": "~",
 	"controller_path": "wfm",
 	"multi_select_facets": false,
-	"collapse_field": "attr_identifier_"
+	"collapse_field": "attr_identifier_",
+    "aggr_job_id": "wfmClickAggr"
 })
 
 .config(['$routeProvider', function($routeProvider) {
@@ -238,6 +239,38 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
     }
 
 
+
+    //Signals API
+    //curl -u admin:password123 -X POST -H 'Content-type:application/json' -d '[{"params": {"query": "sushi", "docId": "54c0a3bafdb9b911008b4b2a"}, "type":"click", "timestamp": "2015-02-12T23:44:52.533000Z"}]' http://ec2-54-90-6-131.compute-1.amazonaws.com:8764/api/apollo/signals/wfm_poc1
+    $scope.sendClickSignal = function(solrParams,docId,count) {
+        var url = WFM_DEFAULTS.proxy_url+WFM_DEFAULTS.fusion_url+'/api/apollo/signals/'+collection_id
+        var data = []
+        for (var i= 0;i<count;i++) {
+            var signal = {"params": {"query": solrParams.q, filterQueries: solrParams.fq, "docId": docId}, "type":"click", "timestamp": "2015-02-12T23:44:52.533000Z"};
+            //console.log(solrParams.q);
+            //console.log(solrParams.fq);
+            console.log(signal);
+            data.push(signal);
+        }
+        return $http.post(url, data)
+            .then(function(response) {
+                console.log(response);
+            });
+    }
+
+
+    //http://ec2-54-90-6-131.compute-1.amazonaws.com:8764/api/apollo/aggregator/jobs/wfm_poc1_signals/wfmClickAggr
+    $scope.runAggregations = function() {
+
+        var url = WFM_DEFAULTS.proxy_url+'ec2-54-90-6-131.compute-1.amazonaws.com:8764/api/apollo/aggregator/jobs/'+collection_id+'_signals/'+WFM_DEFAULTS.aggr_job_id;
+
+        console.log("Posting to " + url);
+
+        return $http.post(url)
+            .then(function(response) {
+                console.log(response);
+            });
+    }
 
     //Not being used - uses an Ngram approach for suggestions.
     $scope.typeAheadSearch3 = function(val) {

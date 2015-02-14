@@ -67,6 +67,7 @@
 		<div class="col-md-12" align="center">
             <div class="col-md-2">
                 Recommendations: <input type="checkbox" ng-model="pipeline_id" ng-true-value="wfm_poc1-default_copy" ng-false-value="wfm_poc1-default" ng-change="$location.search('pipeline_id',pipeline_id)">
+                <button class="btn-sm btn-success" ng-click="runAggregations()">Run Aggregations</button>
             </div>
             <div class="col-md-6">
                 <solr-auto-complete></solr-auto-complete>
@@ -89,7 +90,7 @@
             Found {{data.response.numFound}} results.
 			<div ng-repeat="doc in docs">
 					<h3>{{doc.name}}</h3> <br/>
-					{{doc.description}} by <strong>{{doc.brand_s}}</strong><br/>
+					<strong>{{doc.description}}</strong> by {{doc.brand_s}}<br/>
 					<strong>${{doc.price}}</strong>
                     <blockquote>
                         Family: {{doc['attr_merchandiseHierarchy.family_'][0]}}<br />
@@ -101,6 +102,12 @@
                             <pre>{{doc | json}}</pre>
                         </blockquote>
                     </blockquote>
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <input style="width:50px" type="text" ng-model="clickCount" class="form-control" placeholder="1">
+                            <button class="btn-sm btn-success" ng-click="sendClickSignal(solr_params,doc.id,clickCount)">Simulate Clicks</button>
+                        </div>
+                    </form>
 			</div>
 
 
