@@ -93,7 +93,7 @@
 			<div class="col-md-12" ng-repeat="doc in docs">
                 <br />
                 <div class="col-md-2">
-                    <img src="http://lorempixel.com/200/150/food/{{doc.description.replace('/',',')}} by {{doc.brand_s}}" />
+                    <img src="http://lorempixel.com/200/150/food/{{doc.description.replace('/',',')}} by {{doc.brand_s.replace('&','and')}}" />
                 </div>
 
                 <div class="col-md-10">
