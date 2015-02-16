@@ -21,7 +21,7 @@ angular.module('solr.Directives', [])
                 isSelected: '=',
                 showValueFilter: '='
             },
-            templateUrl: 'directives/solr-facet-field-accordian.html'
+            templateUrl: 'solr/directives/solr-facet-field-accordian.html'
         };
     })
     .directive('solrPathHierarchyFacetField', function() {
@@ -35,7 +35,7 @@ angular.module('solr.Directives', [])
                 pathSeparator: '=',
                 createLink: '='
             },
-            templateUrl: 'directives/solr-path-hierarchy-facet-field-accordian.html'
+            templateUrl: 'solr/directives/solr-path-hierarchy-facet-field-accordian.html'
         };
     })
     .directive('solrPathBreadcrumb', function() {
@@ -45,7 +45,7 @@ angular.module('solr.Directives', [])
                 breadcrumb: '=',
                 path: '@',
             },
-            templateUrl: 'directives/solr-path-breadcrumb.html'
+            templateUrl: 'solr/directives/solr-path-breadcrumb.html'
         };
     })
     .directive('solrApiHelper',function() {
@@ -54,7 +54,7 @@ angular.module('solr.Directives', [])
             scope: {
                 solrResponse: '='
             },
-            templateUrl: 'directives/solr-api-helper.html'
+            templateUrl: 'solr/directives/solr-api-helper.html'
         };
     })
     /*
@@ -66,7 +66,7 @@ angular.module('solr.Directives', [])
         return {
             restrict: 'E',
             scope: false,
-            templateUrl: 'directives/solr-auto-complete.html'
+            templateUrl: 'solr/directives/solr-auto-complete.html'
         };
     })
 ;

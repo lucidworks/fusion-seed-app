@@ -54,3 +54,10 @@
     from { transform: scale(1) rotate(0deg);}
     to { transform: scale(1) rotate(360deg);}
 }
+
+.alert-div {
+    border: 1px solid green;
+    border-radius: 10px;
+    padding: 5px;
+    margin: 5px
+}

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Directives'])
+angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Directives', 'fusion.Directives'])
 
 .constant("WFM_DEFAULTS", {
 	"proxy_url": "http://localhost:9292/",
@@ -20,7 +20,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.
   	when('/wfm', {
-    	templateUrl: 'view-wfm/view-store-select.html',
+    	templateUrl: 'wfm/view-store-select.html',
     	controller: 'ViewWfmSearchCtrl'
   	}).
   	//when('/wfm/:store/:category/:filter', {
@@ -32,7 +32,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
     //	controller: 'ViewWfmSearchCtrl'
   	//}).
     when('/wfm/:store?/:category?/:filter?', {
-        templateUrl: 'view-wfm/view-search.html',
+        templateUrl: 'wfm/view-search.html',
         controller: 'ViewWfmSearchCtrl'
     });
 }])
@@ -253,8 +253,9 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
             data.push(signal);
         }
         return $http.post(url, data)
-            .then(function(response) {
+            .success(function(response) {
                 console.log(response);
+                $scope.notification = 'Successfully indexed signals for docid: ' + docId;
             });
     }
 
@@ -267,8 +268,9 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
         console.log("Posting to " + url);
 
         return $http.post(url)
-            .then(function(response) {
-                console.log(response);
+            .success(function(response) {
+                //console.log(response);
+                $scope.notification = 'Started aggregation job: ' + WFM_DEFAULTS.aggr_job_id;
             });
     }
 

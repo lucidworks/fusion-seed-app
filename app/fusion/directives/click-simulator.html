@@ -1,0 +1,6 @@
+<form class="form-inline">
+    <div class="form-group">
+        <input style="width:50px" type="text" ng-model="clickCount" class="form-control" placeholder="1">
+        <button class="btn-sm btn-success" ng-click="sendClickSignal(solr_params,'click',doc.id,clickCount)">Simulate Clicks</button>
+    </div>
+</form>
