@@ -93,11 +93,14 @@
 			<div class="col-md-12" ng-repeat="doc in docs">
                 <br />
                 <div class="col-md-3">
-                    <img src="http://lorempixel.com/200/150/food/{{doc.description.replace('/',',')}} by {{doc.brand_s.replace('&','and')}}" />
+                    <img ng-src="http://lorempixel.com/200/150/food/{{urlSafe(doc.description)}} by {{doc.brand_s.replace('&','and')}}" />
                 </div>
 
                 <div class="col-md-9">
-					<strong>{{doc.description}}</strong> by {{doc.brand_s}}<br/>
+					<strong>
+                        <!-- also pass q to product page -->
+                        <a href="#/wfm/{{$routeParams.store}}/p/{{urlSafe(doc.description)}}/{{doc.id}}?q={{$routeParams.q}}">{{doc.description}}</a>
+                    </strong> by {{doc.brand_s}}<br/>
                     <ul>
                         <li>{{doc.product_type}}</li>
                     </ul>

@@ -139,72 +139,92 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
 
 	//To use JSONP and avoid using a proxy, change method to JSONP, and add 'json.wrf': 'JSON_CALLBACK' to the params.
     $scope.loading = true;
-    /*
- 	$http.defaults.headers.common['Authorization'] = 'Basic ' + btoa('admin:password123');
-	$http(
-		{method: 'GET',
-		 url: url,
-		 params:{
-		 		'q': q,
-		 		'fq': fqs,
-		 		'wt': 'json',
-		 		'rows' : 10,
-		 		'json.nl': 'arrarr'
-		 		}
-		})*/
+
+
+    //get recommendations bq
+    var bq = ''
+    var recFilters = [];
+    recFilters.push('filters_orig_ss:store/'+$routeParams.store.toLowerCase());
+    if ($routeParams.category && $routeParams.category != '*')
+        recFilters.push("filters_orig_ss:cat_tree/"+fusionHttp.getCatCode($routeParams.category));
+        //we want the bq to be filtered based on the current store and the category!!!
+    var bq = [];
+
+    //if ($routeParams.recommendations)
+    $scope.doRecommendations = $routeParams.recommendations;
+    if ($scope.doRecommendations == "true") {
+        fusionHttp.getItemsForQueryRecommendations(proxy_base, fusion_url, collection_id, q, recFilters)
+            .success(function (data) {
+                for (var i = 0; i < data.items.length; i++) {
+                    var item = data.items[i];
+                    //console.log(item);
+                    bq.push("id:"+item.docId + '^' + item.weight);
+                }
+                console.log("Recommendations bq: " + bq);
+                getSearchResults(bq);
+            });
+    } else {
+        getSearchResults();
+    }
+
+
+
+
+    function getSearchResults(bq) {
         fusionHttp.getQueryPipeline(proxy_base,fusion_url,pipeline_id,collection_id, request_handler,
             {
                 'q': q,
                 'fq': fqs,
                 'wt': 'json',
                 'rows' : 10,
-                'json.nl': 'arrarr'
+                'json.nl': 'arrarr',
+                'bq' : bq
             })
-		.success(function(data, status, headers, config) {
-          $scope.loading = false;
-          $scope.data = data;
-          $scope.showData = false;
-          $scope.showDoc = false;
+            .success(function(data, status, headers, config) {
+                $scope.loading = false;
+                $scope.data = data;
+                $scope.showData = false;
+                $scope.showDoc = false;
 
 
-		  var solr_params = data.responseHeader.params;
-		  
-		  //using groups, pass groups instead of docs
-		  //var grouped_field = data.grouped[group_field];
-		  //console.logs(groups);
+                var solr_params = data.responseHeader.params;
 
-		  var facet_fields = data.facet_counts.facet_fields;
-		  var facet_queries = data.facet_counts.facet_queries;
-		  var taxonomy = facet_fields[cat_facet_field];
+                //using groups, pass groups instead of docs
+                //var grouped_field = data.grouped[group_field];
+                //console.logs(groups);
 
-		  //console.logs('solr_params:'+JSON.stringify(solr_params));
+                var facet_fields = data.facet_counts.facet_fields;
+                var facet_queries = data.facet_counts.facet_queries;
+                var taxonomy = facet_fields[cat_facet_field];
 
-		  $scope.solr_params = solr_params;
-		  $scope.showParams = false;
-		  //$scope.split_solr_params = solr_params.split(',');
+                //console.logs('solr_params:'+JSON.stringify(solr_params));
 
-		  //$scope.docs = docs;
-		  //$scope.grouped_field = grouped_field;
-		  $scope.facet_fields = facet_fields;
-		  $scope.facet_queries = facet_queries;
-		  $scope.taxonomy = taxonomy;
+                $scope.solr_params = solr_params;
+                $scope.showParams = false;
+                //$scope.split_solr_params = solr_params.split(',');
 
-		  //FIELD COLLAPSING DISPLAY
-		  var docs = data.response.docs;
-		  $scope.docs = docs;
-		  //console.logs('grouped:'+JSON.stringify(data.grouped));
+                //$scope.docs = docs;
+                //$scope.grouped_field = grouped_field;
+                $scope.facet_fields = facet_fields;
+                $scope.facet_queries = facet_queries;
+                $scope.taxonomy = taxonomy;
 
-		  //console.logs('expanded:' + JSON.stringify(data.expanded));
-		  // /FIELD COLLAPSING
+                //FIELD COLLAPSING DISPLAY
+                var docs = data.response.docs;
+                $scope.docs = docs;
+                //console.logs('grouped:'+JSON.stringify(data.grouped));
+
+                //console.logs('expanded:' + JSON.stringify(data.expanded));
+                // /FIELD COLLAPSING
 
 
-		}).error(function(data, status, headers, config) {
-		  console.log('Search failed!');
-		  console.log(headers);
-		  console.log(data);
-		  console.log(config);
+            }).error(function(data, status, headers, config) {
+                console.log('Search failed!');
+                console.log(headers);
+                console.log(data);
+                console.log(config);
             });
-	
+    }
 	/*$scope.parseCategory = function(path, str_indent) {
 		var arr_path = path.split('/');
 		var length = arr_path.length;
@@ -243,11 +263,18 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
 
     //Signals API
     //curl -u admin:password123 -X POST -H 'Content-type:application/json' -d '[{"params": {"query": "sushi", "docId": "54c0a3bafdb9b911008b4b2a"}, "type":"click", "timestamp": "2015-02-12T23:44:52.533000Z"}]' http://ec2-54-90-6-131.compute-1.amazonaws.com:8764/api/apollo/signals/wfm_poc1
-    $scope.sendClickSignal = function(solrParams,signalType,docId,count) {
-        var url = WFM_DEFAULTS.proxy_url+WFM_DEFAULTS.fusion_url+'/api/apollo/signals/'+collection_id
+    $scope.sendClickSignal = function(signalType,docId,count) {
+
+
+        var filters = [];
+        filters.push("store/" + $routeParams.store);
+        if ($routeParams.category && $routeParams.category != '*')
+            filters.push("cat_tree/" + fusionHttp.getCatCode($routeParams.category));
+        
+
         var data = []
         for (var i= 0;i<count;i++) {
-            var signal = {"params": {"query": solrParams.q, filterQueries: solrParams.fq, "docId": docId}, "type":signalType, "timestamp": "2015-02-12T23:44:52.533000Z"};
+            var signal = {"params": {"query": $routeParams.q, filterQueries: filters, "docId": docId}, "type":signalType, "timestamp": "2015-02-12T23:44:52.533000Z"};
             //console.log(solrParams.q);
             //console.log(solrParams.fq);
             console.log(signal);
@@ -271,6 +298,15 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
             });
     }
 
+
+    $scope.urlSafe = function(text) {
+        text = text.toLowerCase();
+        text = text.replace(/ /g,"-");
+        text = text.replace(/&/g,'and');
+        text = text.replace(/\//g,' ');
+
+        return text;
+    }
 
     //http://ec2-54-90-6-131.compute-1.amazonaws.com:8764/api/apollo/aggregator/jobs/wfm_poc1_signals/wfmClickAggr
     $scope.runAggregations = function() {
@@ -311,6 +347,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
             return ta;
         })
     };
+
 
     //TODO: integrate http://ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/wfm_poc1/suggest2?q=chi
     //It uses the spellcheck component and performs well on the search history index.

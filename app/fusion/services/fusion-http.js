@@ -4,25 +4,21 @@
 var myModule = angular.module('fusionSeed.http', []);
 
 
-myModule.constant("DEFAULTS", {
-    "proxy_url": "http://localhost:9292/",
-    "fusion_url": "ec2-54-90-6-131.compute-1.amazonaws.com:8764",
-    "pipeline_id": "wfm_poc1-default",
-    "collection_id": "wfm_poc1",
-    "request_handler": "select",
-    "taxonomy_field": "cat_tree",
-    "taxonomy_separator": "|",
-    "filter_separator": "~",
-    "controller_path": "wfm",
-    "multi_select_facets": false,
-    "collapse_field": "attr_identifier_",
-    "aggr_job_id": "wfmClickAggr"
-});
 
 myModule.factory('fusionHttp', ['$http', function($http) {
     // factory function body that constructs shinyNewServiceInstance
 
     var fusionHttp = {
+
+        getCatCode: function(cat) {
+            cat = cat.toLowerCase();
+            cat = cat.replace(/~/g,'_');
+            cat = cat.replace(/\|/g,'/');
+            cat = cat.replace(/-/g,'_');
+            console.log(cat);
+            return cat;
+        },
+
         getQueryPipeline: function(proxyBase,fusionUrl,pipelineId,collectionId,reqHandlr,params) {
             var url = proxyBase+fusionUrl+"/api/apollo/query-pipelines/"+pipelineId+"/collections/"+collectionId+"/"+reqHandlr;
             $http.defaults.headers.common['Authorization'] = 'Basic ' + btoa('admin:password123');
@@ -48,6 +44,51 @@ myModule.factory('fusionHttp', ['$http', function($http) {
             console.log("Posting to " + url);
             $http.defaults.headers.common['Authorization'] = 'Basic ' + btoa('admin:password123');
             return $http.post(url);
+        },
+
+        getItemsForItemRecommendations: function(proxyBase,fusionUrl,collectionId,docId,fq) {
+            //http://ec2-54-90-6-131.compute-1.amazonaws.com:8764/api/apollo/recommend/wfm_poc1/itemsForItem?docId=54c0c901bcba6916008b50b0
+            $http.defaults.headers.common['Authorization'] = 'Basic ' + btoa('admin:password123');
+            var url = proxyBase+fusionUrl+"/api/apollo/recommend/"+collectionId+"/itemsForItem" //?docId="+docId+"&fq="+filterString;
+            console.log("Getting itemsForItem recommendations from "+ url);
+            return $http(
+                {method: 'GET',
+                    url: url,
+                    params: {
+                        docId: docId,
+                        fq: fq
+                    }
+            });
+        },
+
+        getItemsForQueryRecommendations: function(proxyBase,fusionUrl,collectionId,q,fq) {
+            //http://ec2-54-90-6-131.compute-1.amazonaws.com:8764/api/apollo/recommend/wfm_poc1/itemsForItem?docId=54c0c901bcba6916008b50b0
+            if (!q) q='*:*';
+
+            console.log("Getting item for Query Recommendations");
+
+            $http.defaults.headers.common['Authorization'] = 'Basic ' + btoa('admin:password123');
+            var url = proxyBase+fusionUrl+"/api/apollo/recommend/"+collectionId+"/itemsForQuery"; //?q="+q+"&fq="+filterString;
+            console.log('query for recommendations: ' + q);
+            console.log('filters for recommendations:');
+            console.log(fq);
+            //return $http.get(url);
+            return $http(
+                {method: 'GET',
+                    url: url,
+                    params: {
+                        q: q,
+                        fq: fq
+                    }
+            });
+        },
+        getQueriesForItemRecommendations: function(proxyBase,fusionUrl,collectionId,docId,filterString) {
+            //http://ec2-54-90-6-131.compute-1.amazonaws.com:8764/api/apollo/recommend/wfm_poc1/itemsForItem?docId=54c0c901bcba6916008b50b0
+            $http.defaults.headers.common['Authorization'] = 'Basic ' + btoa('admin:password123');
+            var url = proxyBase+fusionUrl+"/api/apollo/recommend/"+collectionId+"/queriesForItem?docId="+docId+"&fq="+filterString;
+            console.log("Getting queriesForItem recommendations from "+ url);
+            return $http.get(url);
+
         }
 
 
