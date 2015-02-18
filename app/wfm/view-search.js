@@ -152,7 +152,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
 		 		'json.nl': 'arrarr'
 		 		}
 		})*/
-        fusionHttp.queryPipeline(proxy_base,fusion_url,pipeline_id,collection_id, request_handler,
+        fusionHttp.getQueryPipeline(proxy_base,fusion_url,pipeline_id,collection_id, request_handler,
             {
                 'q': q,
                 'fq': fqs,
@@ -253,7 +253,15 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
             console.log(signal);
             data.push(signal);
         }
-        return $http.post(url, data)
+        /*return $http.post(url, data)
+            .success(function(response) {
+                console.log(response);
+                var msg = 'Successfully indexed signals for docid: ' + docId;
+                console.log(msg)
+                $scope.notification = true;
+                $scope.notificationMsg = msg;
+            });*/
+        return fusionHttp.postSignal(WFM_DEFAULTS.proxy_url,WFM_DEFAULTS.fusion_url,collection_id,data)
             .success(function(response) {
                 console.log(response);
                 var msg = 'Successfully indexed signals for docid: ' + docId;
@@ -269,14 +277,15 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
 
         var url = WFM_DEFAULTS.proxy_url+'ec2-54-90-6-131.compute-1.amazonaws.com:8764/api/apollo/aggregator/jobs/'+collection_id+'_signals/'+WFM_DEFAULTS.aggr_job_id;
 
-        console.log("Posting to " + url);
+        //console.log("Posting to " + url);
 
-        return $http.post(url)
+        //return $http.post(url)
+        return fusionHttp.postRunAggr(WFM_DEFAULTS.proxy_url,WFM_DEFAULTS.fusion_url,collection_id,WFM_DEFAULTS.aggr_job_id)
             .success(function(response) {
                 var msg = 'Started aggregation job: ' + WFM_DEFAULTS.aggr_job_id;
                 console.log(msg);
                 $scope.notification = true;
-                $scope.notification = msg;
+                $scope.notificationMsg = msg;
             });
     }
 
