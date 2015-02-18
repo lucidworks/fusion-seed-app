@@ -6,10 +6,14 @@ angular.module('fusionSeed', [
   'ui.bootstrap',
   'fusionSeed.viewSearch',
   'fusionSeed.viewWfmSearch',
+  'fusionSeed.viewWfmProduct',
+  'fusionSeed.http',
   'fusionSeed.view1',
   'fusionSeed.view2',
   'fusionSeed.version'
 ])
+
+
 .config(['$routeProvider', function($routeProvider) {
   //$routeProvider.otherwise({redirectTo: '/search'});
 }])

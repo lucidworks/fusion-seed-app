@@ -92,16 +92,16 @@
             Found {{data.response.numFound}} results.
 			<div class="col-md-12" ng-repeat="doc in docs">
                 <br />
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <img src="http://lorempixel.com/200/150/food/{{doc.description.replace('/',',')}} by {{doc.brand_s.replace('&','and')}}" />
                 </div>
 
-                <div class="col-md-10">
+                <div class="col-md-9">
 					<strong>{{doc.description}}</strong> by {{doc.brand_s}}<br/>
                     <ul>
                         <li>{{doc.product_type}}</li>
                     </ul>
-                    <strong>${{doc.price}}</strong> <br />
+                    <strong>${{doc.price}}</strong> | Score: {{doc.score}}<br />
                     <a class="small" ng-click="showDoc = !showDoc" href="javascript:void(0);">View Document</a>
                     <blockquote ng-show="showDoc">
                         <pre>{{doc | json}}</pre>

@@ -23,15 +23,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
     	templateUrl: 'wfm/view-store-select.html',
     	controller: 'ViewWfmSearchCtrl'
   	}).
-  	//when('/wfm/:store/:category/:filter', {
-    	//templateUrl: 'view-wfm/view-search.html',
-    	//controller: 'ViewWfmSearchCtrl'
-  	//}).
-  	//when('/wfm/:store/:category', {
-    //	templateUrl: 'view-wfm/view-search.html',
-    //	controller: 'ViewWfmSearchCtrl'
-  	//}).
-    when('/wfm/:store?/:category?/:filter?', {
+    when('/wfm/:store?/:category?', {
         templateUrl: 'wfm/view-search.html',
         controller: 'ViewWfmSearchCtrl'
     });
@@ -41,7 +33,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
 
 }]);*/
 
-.controller('ViewWfmSearchCtrl', function (WFM_DEFAULTS, $scope, $http, $routeParams, $location, $route, $sce) {
+.controller('ViewWfmSearchCtrl', function (WFM_DEFAULTS, $scope, $http, $routeParams, $location, $route, $sce, fusionHttp) {
 
 
     var proxy_base = WFM_DEFAULTS.proxy_url;
@@ -147,6 +139,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
 
 	//To use JSONP and avoid using a proxy, change method to JSONP, and add 'json.wrf': 'JSON_CALLBACK' to the params.
     $scope.loading = true;
+    /*
  	$http.defaults.headers.common['Authorization'] = 'Basic ' + btoa('admin:password123');
 	$http(
 		{method: 'GET',
@@ -158,7 +151,15 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
 		 		'rows' : 10,
 		 		'json.nl': 'arrarr'
 		 		}
-		})
+		})*/
+        fusionHttp.queryPipeline(proxy_base,fusion_url,pipeline_id,collection_id, request_handler,
+            {
+                'q': q,
+                'fq': fqs,
+                'wt': 'json',
+                'rows' : 10,
+                'json.nl': 'arrarr'
+            })
 		.success(function(data, status, headers, config) {
           $scope.loading = false;
           $scope.data = data;
@@ -255,7 +256,10 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
         return $http.post(url, data)
             .success(function(response) {
                 console.log(response);
-                $scope.notification = 'Successfully indexed signals for docid: ' + docId;
+                var msg = 'Successfully indexed signals for docid: ' + docId;
+                console.log(msg)
+                $scope.notification = true;
+                $scope.notificationMsg = msg;
             });
     }
 
@@ -269,8 +273,10 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
 
         return $http.post(url)
             .success(function(response) {
-                //console.log(response);
-                $scope.notification = 'Started aggregation job: ' + WFM_DEFAULTS.aggr_job_id;
+                var msg = 'Started aggregation job: ' + WFM_DEFAULTS.aggr_job_id;
+                console.log(msg);
+                $scope.notification = true;
+                $scope.notification = msg;
             });
     }
 
