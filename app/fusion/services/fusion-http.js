@@ -46,6 +46,12 @@ myModule.factory('fusionHttp', ['$http', function($http) {
             return $http.post(url);
         },
 
+
+        getSpellCheck: function(proxyBase,fusionUrl,pipelineId,collectionId,q) {
+            $http.defaults.headers.common['Authorization'] = 'Basic ' + btoa('admin:password123');
+            return fusionHttp.getQueryPipeline(proxyBase,fusionUrl,pipelineId,collectionId,"spellcheck",{q:q});
+        },
+
         getItemsForItemRecommendations: function(proxyBase,fusionUrl,collectionId,docId,fq) {
             //http://ec2-54-90-6-131.compute-1.amazonaws.com:8764/api/apollo/recommend/wfm_poc1/itemsForItem?docId=54c0c901bcba6916008b50b0
             $http.defaults.headers.common['Authorization'] = 'Basic ' + btoa('admin:password123');
@@ -65,12 +71,10 @@ myModule.factory('fusionHttp', ['$http', function($http) {
             //http://ec2-54-90-6-131.compute-1.amazonaws.com:8764/api/apollo/recommend/wfm_poc1/itemsForItem?docId=54c0c901bcba6916008b50b0
             if (!q) q='*:*';
 
-            console.log("Getting item for Query Recommendations");
-
             $http.defaults.headers.common['Authorization'] = 'Basic ' + btoa('admin:password123');
             var url = proxyBase+fusionUrl+"/api/apollo/recommend/"+collectionId+"/itemsForQuery"; //?q="+q+"&fq="+filterString;
-            console.log('query for recommendations: ' + q);
-            console.log('filters for recommendations:');
+            console.log('Query for recommendations: ' + q);
+            console.log('Filters for recommendations:');
             console.log(fq);
             //return $http.get(url);
             return $http(

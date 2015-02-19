@@ -1,0 +1,40 @@
+"type" : "sub-query",
+"id" : "545cff12-75f7-44f9-8ee3-1044ba1a40cc",
+"key" : "subquery-results",
+"collection" : "production_signals_aggr",
+"handler" : "select",
+"method" : "POST",
+"parentParams" : [ "q" ],
+"params" : [ {
+"key" : "mm",
+"value" : "50%"
+}, {
+"key" : "pf",
+"value" : "query_t^3"
+}, {
+"key" : "fl",
+"value" :
+"id,doc_id_s,count_i,query_s,weight_d,timestamp_dt,newweight:mul(field(count_i),
+if(termfreq(type_s,'add-to-cart'),4,if(termfreq(type_s,'click'),2,1)))"
+}, {
+"key" : "sort",
+"value" : "score desc, count_i desc"
+}, {
+"key" : "qf",
+"value" : "query_t"
+}, {
+"key" : "fq",
+"value" : "aggr_type_s:click@doc_id_s-query_s-filters_s"
+}, {
+"key" : "rows",
+"value" : "100"
+}, {
+"key" : "defType",
+"value" : "edismax"
+}, {
+"key" : "pf",
+"value" : "query_t~0^1"
+}, {
+"key" : "pf",
+"value" : "query_t~2^7"
+} ],

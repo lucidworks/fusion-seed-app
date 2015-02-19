@@ -144,7 +144,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
     //get recommendations bq
     var bq = ''
     var recFilters = [];
-    recFilters.push('filters_orig_ss:store/'+$routeParams.store.toLowerCase());
+    if ($routeParams.store) recFilters.push('filters_orig_ss:store/'+$routeParams.store.toLowerCase());
     if ($routeParams.category && $routeParams.category != '*')
         recFilters.push("filters_orig_ss:cat_tree/"+fusionHttp.getCatCode($routeParams.category));
         //we want the bq to be filtered based on the current store and the category!!!
@@ -217,6 +217,23 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
                 //console.logs('expanded:' + JSON.stringify(data.expanded));
                 // /FIELD COLLAPSING
 
+                //how many docs are there?
+                var docCount = docs.length;
+                //console.log("Doc count:"+ docCount);
+                if (docCount == 0) {
+                    fusionHttp.getSpellCheck(proxy_base,fusion_url,"wfm_poc1-spellcheck",collection_id,q)
+                        .success(function(data2) {
+                            console.log(data2);
+                            if (data2.spellcheck.suggestions.collation) {
+                                console.log("YES");
+                                $scope.spellsuggest = data2.spellcheck.suggestions.collation
+                            } else {
+                                $scope.spellsuggest = data2.spellcheck.suggestions
+                            }
+                            //console.log($scope.spellsuggest);
+                        });
+                }
+
 
             }).error(function(data, status, headers, config) {
                 console.log('Search failed!');
@@ -270,7 +287,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
         filters.push("store/" + $routeParams.store);
         if ($routeParams.category && $routeParams.category != '*')
             filters.push("cat_tree/" + fusionHttp.getCatCode($routeParams.category));
-        
+
 
         var data = []
         for (var i= 0;i<count;i++) {
@@ -304,6 +321,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
         text = text.replace(/ /g,"-");
         text = text.replace(/&/g,'and');
         text = text.replace(/\//g,' ');
+        text = text.replace(/./g,'-');
 
         return text;
     }

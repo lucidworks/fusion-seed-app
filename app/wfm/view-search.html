@@ -90,6 +90,13 @@
 
 
             Found {{data.response.numFound}} results.
+
+            <div class="col-md-12" ng-show="spellsuggest">
+                <br />
+                Did you mean
+                <a ng-href="#/wfm/{{$routeParams.store}}?q={{spellsuggest}}">{{spellsuggest}}</a>? <br/>
+            </div>
+
 			<div class="col-md-12" ng-repeat="doc in docs">
                 <br />
                 <div class="col-md-3">

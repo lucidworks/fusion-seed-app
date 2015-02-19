@@ -89,13 +89,12 @@ angular.module('fusionSeed.viewWfmProduct', ['ngRoute','solr.Directives', 'wfm.D
                 //console.log(data);
                 //$scope.recommendations = data.items;
                 var q = "";
-                console.log("WHAT IS THE DATA");
-                console.log(data);
+                //console.log(data);
                 for (var i=0;i<data.items.length;i++) {
                     var item = data.items[i];
                     q+= 'id:'+item.docId+'^'+item.weight + ' ';
                 }
-                console.log("WAHT IS Q:" + q);
+                //console.log("WAHT IS Q:" + q);
                 fusionHttp.getQueryPipeline(WFM_DEFAULTS.proxy_url,WFM_DEFAULTS.fusion_url,"wfm_poc1-select",WFM_DEFAULTS.collection_id,"select",
                     {
                         q: q,
