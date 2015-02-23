@@ -7,6 +7,7 @@ angular.module('fusionSeed', [
   'fusionSeed.viewSearch',
   'fusionSeed.viewWfmSearch',
   'fusionSeed.viewWfmProduct',
+  'fusionSeed.wfmSettings',
   'fusionSeed.http',
   'fusionSeed.view1',
   'fusionSeed.view2',
