@@ -56,17 +56,4 @@ angular.module('solr.Directives', [])
             },
             templateUrl: 'solr/directives/solr-api-helper.html'
         };
-    })
-    /*
-    PARENT SCOPE DIRECTIVES
-    These directives depend on certain objects/function being present in the
-    parent scope.
-     */
-    .directive('solrAutoComplete',function() {
-        return {
-            restrict: 'E',
-            scope: false,
-            templateUrl: 'solr/directives/solr-auto-complete.html'
-        };
-    })
-;
+    });

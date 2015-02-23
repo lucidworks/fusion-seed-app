@@ -18,4 +18,25 @@ angular.module('wfm.Directives', [])
             scope: true,
             templateUrl: 'wfm/directives/wfm-notification.html'
         };
+    })
+    .directive('wfmProductResult', function() {
+        return {
+            restrict: 'E',
+            scope: true,
+            templateUrl: 'wfm/directives/wfm-product-result.html'
+        };
+    })
+    .directive('wfmSpellSuggest', function() {
+        return {
+            restrict: 'E',
+            scope: true,
+            templateUrl: 'wfm/directives/wfm-spell-suggest.html'
+        };
+    })
+    .directive('wfmAutoComplete', function() {
+        return {
+            restrict: 'E',
+            scope: true,
+            templateUrl: 'wfm/directives/wfm-auto-complete.html'
+        };
     });

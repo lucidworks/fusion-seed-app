@@ -321,7 +321,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
         text = text.replace(/ /g,"-");
         text = text.replace(/&/g,'and');
         text = text.replace(/\//g,' ');
-        text = text.replace(/./g,'-');
+        text = text.replace(/\./g,'-');
 
         return text;
     }
