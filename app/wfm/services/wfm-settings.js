@@ -1,6 +1,9 @@
 var myModule = angular.module('fusionSeed.wfmSettings', []);
 
-myModule.factory('wfmSettings', [function() {
+myModule.factory('wfmSettings', ['$http', function($http) {
+
+    $http.defaults.headers.common['Authorization'] = 'Basic ' + btoa('admin:password123');
+
     var wfmSettings = {
         "proxyUrl": "http://localhost:9292/",
         "fusionUrl": "ec2-54-90-6-131.compute-1.amazonaws.com:8764",
