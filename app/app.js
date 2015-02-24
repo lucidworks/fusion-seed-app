@@ -9,8 +9,6 @@ angular.module('fusionSeed', [
   'fusionSeed.viewWfmProduct',
   'fusionSeed.wfmSettings',
   'fusionSeed.http',
-  'fusionSeed.view1',
-  'fusionSeed.view2',
   'fusionSeed.version'
 ])
 
