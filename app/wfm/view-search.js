@@ -21,8 +21,6 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
 .controller('ViewWfmSearchCtrl', function ($scope, $http, $routeParams, $location, $route, $sce, fusionHttp, wfmSettings) {
 
 
-        console.log("test wfmSettings:" + wfmSettings.proxyUrl);
-
     var proxy_base = wfmSettings.proxyUrl;
 	var fusion_url = wfmSettings.fusionUrl;
 
@@ -110,9 +108,9 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
 	//add category as a filter
 	fqs.push(cpath_fq);
 
-    //WFM only - filter on current store
+    //WFM only - filter on current store code or "ALL" for non products
     if ($routeParams.store)
-        fqs.push("store_code_s:"+$routeParams.store);
+        fqs.push("store_code_s:"+$routeParams.store+" OR store_code_s:ALL");
 
     //WFM only - sale filter
     if ($routeParams.sale) {
@@ -229,18 +227,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
                 console.log(config);
             });
     }
-	/*$scope.parseCategory = function(path, str_indent) {
-		var arr_path = path.split('/');
-		var length = arr_path.length;
-		var catName = arr_path[length-1];
-		var indent = '';
 
-		//catName += '<a href="#/c/'+path+'">'+catName+'</a>';
-
-		for (var i = 0; i <length; i++) indent += str_indent;
-		return [indent,catName];
-		//return path;
-	};*/
 
 	$scope.encodePath =  function(path) { return encodePath(path) };
 	$scope.parseFacetLabel = function(field) {

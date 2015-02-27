@@ -1,16 +1,16 @@
 
 <!-- Facet Display -->
 <accordion>
-    <accordion-group is-open="isFacetFilterOpen"  >
+    <accordion-group is-open="isFacetFilterOpen">
         <accordion-heading>
             {{label}}
             <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isFacetFilterOpen, 'glyphicon-chevron-right': !isFacetFilterOpen}"></i>
         </accordion-heading>
-        <div class="input-group" style="padding:15px;">
+        <div ng-if="shortList == false" class="input-group" style="padding:15px;">
             <input type="text" class="form-control" placeholder="Filter values" ng-model="query">
             <div class="input-group-addon"><span class="glyphicon glyphicon-filter"></span></div>
         </div>
-        <div class="scroll-div">
+        <div ng-class="{'scroll-div': !shortList}">
             <div ng-repeat="value in facetData | filter:query" style="padding-left:20px">
                 <input ng-click="clickFacet(facetName,value[0])" ng-checked="isSelected(facetName,value[0])" type="checkbox" />
                 <span ng-if="value[0] == ''"><i>N/A</i></span>

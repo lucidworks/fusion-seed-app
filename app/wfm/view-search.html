@@ -16,6 +16,21 @@
         </solr-path-hierarchy-facet-field>
 
 
+        <!-- Result Type -->
+        <solr-facet-field
+                label="Result Type"
+                facet-data="facet_fields.doc_type_s"
+                facet-name="doc_type_s"
+                is-facet-filter-open="isFacetFilterOpen"
+                click-facet="clickFacet"
+                is-selected="isSelected"
+                show-value-filter="true"
+                short-list="true"
+                >
+        </solr-facet-field>
+
+
+
         <!-- Sale items -->
         <wfm-sale-filter></wfm-sale-filter>
 
@@ -28,6 +43,7 @@
                 click-facet="clickFacet"
                 is-selected="isSelected"
                 show-value-filter="true"
+                short-list="false"
                 >
         </solr-facet-field>
 
@@ -40,6 +56,7 @@
                 click-facet="clickFacet"
                 is-selected="isSelected"
                 show-value-filter="true"
+                short-list="false"
                 >
         </solr-facet-field>
 
@@ -95,7 +112,8 @@
 
 			<div class="col-md-12" ng-repeat="doc in docs">
                 <br />
-                <wfm-product-result></wfm-product-result>
+                <wfm-product-result-item ng-if="doc.doc_type_s == 'Products'"></wfm-product-result-item>
+                <wfm-recipe-result-item ng-if="doc.doc_type_s == 'Recipes'"></wfm-recipe-result-item>
                 <fusion-click-simulator></fusion-click-simulator>
 			</div>
 

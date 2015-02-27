@@ -19,11 +19,18 @@ angular.module('wfm.Directives', [])
             templateUrl: 'wfm/directives/wfm-notification.html'
         };
     })
-    .directive('wfmProductResult', function() {
+    .directive('wfmProductResultItem', function() {
         return {
             restrict: 'E',
             scope: true,
-            templateUrl: 'wfm/directives/wfm-product-result.html'
+            templateUrl: 'wfm/directives/wfm-product-result-item.html'
+        };
+    })
+    .directive('wfmRecipeResultItem', function() {
+        return {
+            restrict: 'E',
+            scope: true,
+            templateUrl: 'wfm/directives/wfm-recipe-result-item.html'
         };
     })
     .directive('wfmSpellSuggest', function() {

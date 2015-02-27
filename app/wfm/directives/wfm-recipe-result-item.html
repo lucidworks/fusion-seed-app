@@ -1,0 +1,20 @@
+
+    <div class="col-md-3">
+        <img ng-src="http://lorempixel.com/200/150/food/{{urlSafe(doc.description)}}" />
+    </div>
+
+    <div class="col-md-9">
+
+        <strong>
+            <!-- also pass q to product page -->
+            Recipe For <a href="#/wfm/{{$routeParams.store}}/p/{{urlSafe(doc.description)}}/{{doc.id}}?q={{$routeParams.q}}">{{doc.description}}</a>
+        </strong><br/>
+        <ul>
+            <li>{{doc.recipes_description_txt[0]}}</li>
+        </ul>
+       Score: {{doc.score}}<br />
+        <a class="small" ng-click="showDoc = !showDoc" href="javascript:void(0);">View Document</a>
+        <blockquote ng-show="showDoc">
+            <pre>{{doc | json}}</pre>
+        </blockquote>
+    </div>

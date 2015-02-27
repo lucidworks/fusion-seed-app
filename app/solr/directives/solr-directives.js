@@ -19,7 +19,8 @@ angular.module('solr.Directives', [])
                 isFacetFilterOpen: '=',
                 clickFacet: '=',
                 isSelected: '=',
-                showValueFilter: '='
+                showValueFilter: '=',
+                shortList: '='
             },
             templateUrl: 'solr/directives/solr-facet-field-accordian.html'
         };
