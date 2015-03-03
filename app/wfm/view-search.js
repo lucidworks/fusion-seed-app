@@ -33,6 +33,9 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
 
     $scope.pipeline_id = pipeline_id;
 
+
+    if ($routeParams.searchWithin) $scope.searchWithin = $routeParams.searchWithin;
+
 	var request_handler = wfmSettings.requestHandler;
 	var url = proxy_base+fusion_url+'/api/apollo/query-pipelines/'+pipeline_id+'/collections/'+collection_id+'/'+request_handler;
 	//var url = "http://localhost:9292/ec2-54-160-96-32.compute-1.amazonaws.com:8764/api/apollo/query-pipelines/test1-default/collections/test1/select?json.nl=arrarr&q=*:*&rows=100&wt=json"
@@ -107,6 +110,9 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
 
 	//add category as a filter
 	fqs.push(cpath_fq);
+
+    //add searchWithin as a filter
+    if ($scope.searchWithin) fqs.push($scope.searchWithin);
 
     //WFM only - filter on current store code or "ALL" for non products
     if ($routeParams.store)
@@ -238,6 +244,9 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
         return field.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
     };
 
+    $scope.doSearchWithin = function(text) {
+        $location.search('searchWithin', text);
+    }
 
 	$scope.clickSearch = function(query) {
 		$location.search('q', query);

@@ -12,6 +12,13 @@ angular.module('wfm.Directives', [])
             templateUrl: 'wfm/directives/wfm-sale-filter.html'
         };
     })
+    .directive('wfmSearchWithinResultsFilter', function() {
+        return {
+            restrict: 'E',
+            scope: true,
+            templateUrl: 'wfm/directives/wfm-search-within-results.html'
+        };
+    })
     .directive('wfmNotification', function() {
         return {
             restrict: 'E',
