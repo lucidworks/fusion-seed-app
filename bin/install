@@ -1,0 +1,6 @@
+#!/bin/sh
+
+echo Installing dependencies
+npm install -g corsproxy
+npm install -g http-server
+npm install
