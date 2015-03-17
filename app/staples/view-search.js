@@ -1,31 +1,27 @@
 'use strict';
 
-angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Directives', 'fusion.Directives'])
+angular.module('fusionSeed.viewstaplesSearch', ['ngRoute','solr.Directives', 'staples.Directives', 'fusion.Directives'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.
-  	when('/wfm', {
-    	templateUrl: 'wfm/view-store-select.html',
-    	controller: 'ViewWfmSearchCtrl'
-  	}).
-    when('/wfm/:store?/:category?', {
-        templateUrl: 'wfm/view-search.html',
-        controller: 'ViewWfmSearchCtrl'
+    when('/staples/:category?', {
+        templateUrl: 'staples/view-search.html',
+        controller: 'ViewstaplesSearchCtrl'
     });
 }])
 
-/*.controller('ViewWfmSearchCtrl', [function() {
+/*.controller('ViewstaplesSearchCtrl', [function() {
 
 }]);*/
 
-.controller('ViewWfmSearchCtrl', function ($scope, $http, $routeParams, $location, $route, $sce, fusionHttp, wfmSettings) {
+.controller('ViewstaplesSearchCtrl', function ($scope, $http, $routeParams, $location, $route, $sce, fusionHttp, staplesSettings) {
 
 
-    var proxy_base = wfmSettings.proxyUrl;
-	var fusion_url = wfmSettings.fusionUrl;
+    var proxy_base = staplesSettings.proxyUrl;
+	var fusion_url = staplesSettings.fusionUrl;
 
-	var pipeline_id = wfmSettings.pipelineId;
-	var collection_id = wfmSettings.collectionId;
+	var pipeline_id = staplesSettings.pipelineId;
+	var collection_id = staplesSettings.collectionId;
 
 	//override default if passed to URL
 	if ($routeParams.collection_id) collection_id = $routeParams.collection_id;
@@ -36,20 +32,22 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
 
     if ($routeParams.searchWithin) $scope.searchWithin = $routeParams.searchWithin;
 
-	var request_handler = wfmSettings.requestHandler;
+	var request_handler = staplesSettings.requestHandler;
 	var url = proxy_base+fusion_url+'/api/apollo/query-pipelines/'+pipeline_id+'/collections/'+collection_id+'/'+request_handler;
 	//var url = "http://localhost:9292/ec2-54-160-96-32.compute-1.amazonaws.com:8764/api/apollo/query-pipelines/test1-default/collections/test1/select?json.nl=arrarr&q=*:*&rows=100&wt=json"
 	//var url = "http://ec2-54-160-96-32.compute-1.amazonaws.com:8983/solr/test1/select?q=*:*";
 
-	var filter_separator = wfmSettings.filterSeparator;
-	var multi_select_facets = wfmSettings.multiSelectFacets;
-	var cat_facet_field = wfmSettings.taxonomyField;
-	var collapse = "{!collapse field="+wfmSettings.collapseField+"}";
+	var filter_separator = staplesSettings.filterSeparator;
+	var multi_select_facets = staplesSettings.multiSelectFacets;
+	var cat_facet_field = staplesSettings.taxonomyField;
+	var collapse = undefined;
+        if (staplesSettings.collapseField)
+            collapse = "{!collapse field="+staplesSettings.collapseField+"}";
 
-    $scope.controller_path = wfmSettings.controllerPath;
-    $scope.taxonomy_field = wfmSettings.taxonomyField;
-    $scope.taxonomy_separator = wfmSettings.taxonomySeparator;
-	$scope.filter_separator = wfmSettings.filterSeparator;
+    $scope.controller_path = staplesSettings.controllerPath;
+    $scope.taxonomy_field = staplesSettings.taxonomyField;
+    $scope.taxonomy_separator = staplesSettings.taxonomySeparator;
+	$scope.filter_separator = staplesSettings.filterSeparator;
 	$scope.multi_select_facets = multi_select_facets;
 	$scope.$route = $route;
 	$scope.$location = $location;
@@ -61,7 +59,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
 	var q = '*:*';
 	if ($routeParams.q) q = $routeParams.q;
 	//console.log('q = '+$routeParams.q);
-	
+
 	var category = '*';
 	if ($routeParams.category) {
         category = decodePath($routeParams.category);
@@ -99,26 +97,35 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
 	}
 	//convert all fqs to {!term} qparser syntax
 	var new_fqs = []
-	for (var i=0;i<fqs.length;i++) {
-		var kv = fqs[i].split(':');
-		var fname = kv[0];
-		var fvalue = kv[1];
-		new_fq = '{!term f='+fname+'}'+fvalue;
-		new_fqs.push(new_fq);		
-	}
+    //add category as a filter
+    new_fqs.push(cpath_fq);
+    if (Array.isArray(fqs)) {
+        for (var i = 0; i < fqs.length; i++) {
+            var kv = fqs[i].split(':');
+            var fname = kv[0];
+            var fvalue = kv[1];
+            new_fq = '{!term f=' + fname + '}' + fvalue;
+            new_fqs.push(new_fq);
+        }
+    } else {
+        var kv = fqs.split(':');
+        var fname = kv[0];
+        var fvalue = kv[1];
+        new_fq = '{!term f=' + fname + '}' + fvalue;
+        new_fqs.push(new_fq);
+    }
 	fqs = new_fqs;
 
-	//add category as a filter
-	fqs.push(cpath_fq);
+
 
     //add searchWithin as a filter
     if ($scope.searchWithin) fqs.push($scope.searchWithin);
 
-    //WFM only - filter on current store code or "ALL" for non products
+    //staples only - filter on current store code or "ALL" for non products
     if ($routeParams.store)
         fqs.push("store_code_s:"+$routeParams.store+" OR store_code_s:ALL");
 
-    //WFM only - sale filter
+    //staples only - sale filter
     if ($routeParams.sale) {
         fqs.push("saleStart_tdt:[* TO NOW] AND saleEnd_tdt:[NOW TO *]");
     }
@@ -142,7 +149,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
     var bq = [];
 
     //if ($routeParams.recommendations)
-    $scope.doRecommendations = $routeParams.recommendations;
+    $scope.doRecommendations = pipeline_id;
     if ($scope.doRecommendations == "true") {
         fusionHttp.getItemsForQueryRecommendations(proxy_base+fusion_url, collection_id, q, recFilters)
             .success(function (data) {
@@ -212,7 +219,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
                 var docCount = docs.length;
                 //console.log("Doc count:"+ docCount);
                 if (docCount == 0) {
-                    fusionHttp.getSpellCheck(proxy_base+fusion_url,"wfm_poc1-spellcheck",collection_id,q)
+                    fusionHttp.getSpellCheck(proxy_base+fusion_url,"staples_poc1-spellcheck",collection_id,q)
                         .success(function(data2) {
                             console.log(data2);
                             if (data2.spellcheck.suggestions.collation) {
@@ -256,25 +263,28 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
     $scope.current_store;
     $scope.selectStore = function() {
         console.log("Chose store code: " + $scope.current_store[0]);
-        $location.path(wfmSettings.controllerPath +'/'+$scope.current_store[0]+'/*');
+        $location.path(staplesSettings.controllerPath +'/'+$scope.current_store[0]+'/*');
     }
 
 
 
     //Signals API
-    //curl -u admin:password123 -X POST -H 'Content-type:application/json' -d '[{"params": {"query": "sushi", "docId": "54c0a3bafdb9b911008b4b2a"}, "type":"click", "timestamp": "2015-02-12T23:44:52.533000Z"}]' http://ec2-54-90-6-131.compute-1.amazonaws.com:8764/api/apollo/signals/wfm_poc1
-    $scope.sendClickSignal = function(signalType,docId,count) {
+    //curl -u admin:password123 -X POST -H 'Content-type:application/json' -d '[{"params": {"query": "sushi", "docId": "54c0a3bafdb9b911008b4b2a"}, "type":"click", "timestamp": "2015-02-12T23:44:52.533000Z"}]' http://ec2-54-90-6-131.compute-1.amazonaws.com:8764/api/apollo/signals/staples_poc1
+    $scope.sendSignal = function(signalType,docId,count) {
 
 
         var filters = [];
-        filters.push("store/" + $routeParams.store);
+        //filters.push("store/" + $routeParams.store);
         if ($routeParams.category && $routeParams.category != '*')
-            filters.push("cat_tree/" + fusionHttp.getCatCode($routeParams.category));
+            filters.push("department/" + fusionHttp.getCatCode($routeParams.category));
+
+        var d = new Date();
+        var ts = d.toISOString();
 
 
         var data = []
         for (var i= 0;i<count;i++) {
-            var signal = {"params": {"query": $routeParams.q, filterQueries: filters, "docId": docId}, "type":signalType, "timestamp": "2015-02-12T23:44:52.533000Z"};
+            var signal = {"params": {"query": $routeParams.q, filterQueries: filters, "docId": docId}, "type":signalType, "timestamp": ts};
             //console.log(solrParams.q);
             //console.log(solrParams.fq);
             console.log(signal);
@@ -288,7 +298,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
                 $scope.notification = true;
                 $scope.notificationMsg = msg;
             });*/
-        return fusionHttp.postSignal(wfmSettings.proxyUrl+wfmSettings.fusionUrl,collection_id,data)
+        return fusionHttp.postSignal(staplesSettings.proxyUrl+staplesSettings.fusionUrl,collection_id,data)
             .success(function(response) {
                 console.log(response);
                 var msg = 'Successfully indexed signals for docid: ' + docId;
@@ -309,17 +319,17 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
         return text;
     }
 
-    //http://ec2-54-90-6-131.compute-1.amazonaws.com:8764/api/apollo/aggregator/jobs/wfm_poc1_signals/wfmClickAggr
+    //http://ec2-54-90-6-131.compute-1.amazonaws.com:8764/api/apollo/aggregator/jobs/staples_poc1_signals/staplesClickAggr
     $scope.runAggregations = function() {
 
-        //var url = WFM_DEFAULTS.proxy_url+'ec2-54-90-6-131.compute-1.amazonaws.com:8764/api/apollo/aggregator/jobs/'+collection_id+'_signals/'+WFM_DEFAULTS.aggr_job_id;
+        //var url = staples_DEFAULTS.proxy_url+'ec2-54-90-6-131.compute-1.amazonaws.com:8764/api/apollo/aggregator/jobs/'+collection_id+'_signals/'+staples_DEFAULTS.aggr_job_id;
 
         //console.log("Posting to " + url);
 
         //return $http.post(url)
-        return fusionHttp.postRunAggr(wfmSettings.proxyUrl+wfmSettings.fusionUrl,collection_id,wfmSettings.aggrJobId)
+        return fusionHttp.postRunAggr(staplesSettings.proxyUrl+staplesSettings.fusionUrl,collection_id,staplesSettings.aggrJobId)
             .success(function(response) {
-                var msg = 'Started aggregation job: ' + wfmSettings.aggrJobId;
+                var msg = 'Started aggregation job: ' + staplesSettings.aggrJobId;
                 console.log(msg);
                 $scope.notification = true;
                 $scope.notificationMsg = msg;
@@ -328,8 +338,8 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
 
     //Not being used - uses an Ngram approach for suggestions.
     $scope.typeAheadSearch3 = function(val) {
-        //var url = WFM_DEFAULTS.proxy_url+'ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/wfm_poc1/suggest';
-        var url =  wfmSettings.proxyUrl+wfmSettings.fusionUrl+'/api/apollo/query-pipelines/type-ahead/collections/'+collection_id+'/suggest';
+        //var url = staples_DEFAULTS.proxy_url+'ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/staples_poc1/suggest';
+        var url =  staplesSettings.proxyUrl+staplesSettings.fusionUrl+'/api/apollo/query-pipelines/type-ahead/collections/'+collection_id+'/suggest';
         return $http.get(url, {
             params: {
                 q: val,
@@ -350,11 +360,11 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
     };
 
 
-    //TODO: integrate http://ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/wfm_poc1/suggest2?q=chi
+    //TODO: integrate http://ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/staples_poc1/suggest2?q=chi
     //It uses the spellcheck component and performs well on the search history index.
     $scope.typeAheadSearch2 = function(val) {
 
-        var url = wfmSettings.proxyUrl + "ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/wfm_poc1/suggest2?q="+val;
+        var url = staplesSettings.proxyUrl + "ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/staples_poc1/suggest2?q="+val;
 
         return $http.get(url, {
             params: {
@@ -392,7 +402,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
     //an alternate type ahead using the search history collection and the suggester component
     $scope.typeAheadSearch = function(val) {
 
-        var url = wfmSettings.proxyUrl + "ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/wfm_search_history/suggest?suggest=true&suggest.build=true&suggest.dictionary=wfmSuggester&suggest.q="+val;
+        var url = staplesSettings.proxyUrl + "ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/staples_search_history/suggest?suggest=true&suggest.build=true&suggest.dictionary=staplesSuggester&suggest.q="+val;
 
         return $http.get(url, {
             params: {
@@ -401,7 +411,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
 
         }).then(function (response) {
             //console.log(response);
-            var d = response.data.suggest.wfmSuggester[val].suggestions;
+            var d = response.data.suggest.staplesSuggester[val].suggestions;
             //console.log(d.term);
             var ta = [];
             for (var i = 0; i < d.length; i++) {
@@ -446,8 +456,19 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
         var q = "";
         if ($routeParams.q) q = $routeParams.q;
 
-        return "#/"+wfmSettings.controllerPath+"/"+$routeParams.store+"/"+encodePath(cat)+"?q="+q;
+        return "#/"+staplesSettings.controllerPath+"/"+encodePath(cat)+"?q="+q;
     }
+
+
+    $scope.renderSearchResultsBullets = function(data) {
+            var html = '<ul>';
+            for (var i=0;i<data.length;i++) {
+                html += '<li>' + data[i] + '</li>';
+                if (i == 2) break;
+            }
+            html += '</ul>';
+            return $sce.trustAsHtml(html);
+        }
 
 	$scope.clickFacet = function(fname, fvalue) {
 
@@ -517,7 +538,7 @@ angular.module('fusionSeed.viewWfmSearch', ['ngRoute','solr.Directives', 'wfm.Di
 		} else routeParams.filter = fname+":"+fvalue;
 
 
-		var new_url = '/'+WFM_DEFAULTS.controller_path+'/'+routeParams.store+'/'+routeParams.category+'/'+routeParams.filter;
+		var new_url = '/'+staples_DEFAULTS.controller_path+'/'+routeParams.store+'/'+routeParams.category+'/'+routeParams.filter;
 		if (routeParams.q) new_url+= '?q='+routeParams.q;
 		$location.url(new_url).search(search);*/
 

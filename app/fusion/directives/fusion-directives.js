@@ -2,8 +2,8 @@
 angular.module('fusion.Directives', [])
 
     /*
-     WFM DIRECTIVES
-     Directives for the WFM Pilot
+     staples DIRECTIVES
+     Directives for the staples Pilot
      */
     .directive('fusionClickSimulator', function() {
         return {

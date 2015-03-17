@@ -7,20 +7,20 @@
 
         <!-- category nav -->
         <solr-path-hierarchy-facet-field
-                label="Categories"
-                facet-data="facet_fields.cat_tree"
-                facet-name="cat_tree"
+                label="Choose Department"
+                facet-data="facet_fields.DEPARTMENT_NAME_s"
+                facet-name="DEPARTMENT_NAME_s"
                 is-facet-filter-open="isCatFilterOpen"
                 path-separator="taxonomy_separator"
                 create-link="createCatLink">
         </solr-path-hierarchy-facet-field>
 
 
-        <!-- Result Type -->
+        <!-- In_Store_Availability_en_US_s -->
         <solr-facet-field
-                label="Result Type"
-                facet-data="facet_fields.doc_type_s"
-                facet-name="doc_type_s"
+                label="In Store Availability"
+                facet-data="facet_fields.In_Store_Availability_en_US_s"
+                facet-name="In_Store_Availability_en_US_s"
                 is-facet-filter-open="isFacetFilterOpen"
                 click-facet="clickFacet"
                 is-selected="isSelected"
@@ -29,16 +29,27 @@
                 >
         </solr-facet-field>
 
-        <wfm-search-within-results-filter ng-show="$routeParams.q"></wfm-search-within-results-filter>
 
-        <!-- Sale items -->
-        <wfm-sale-filter></wfm-sale-filter>
+        <!-- Result Type -->
+        <solr-facet-field
+                label="Result Type"
+                facet-data="facet_fields.PRODUCTTYPE_NAME_s"
+                facet-name="PRODUCTTYPE_NAME_s"
+                is-facet-filter-open="isFacetFilterOpen"
+                click-facet="clickFacet"
+                is-selected="isSelected"
+                show-value-filter="true"
+                short-list="true"
+                >
+        </solr-facet-field>
+
+        <staples-search-within-results-filter ng-show="$routeParams.q"></staples-search-within-results-filter>
 
         <!-- Brand -->
         <solr-facet-field
                 label="Brand"
-                facet-data="facet_fields.brand_s"
-                facet-name="brand_s"
+                facet-data="facet_fields.Brand_en_US_s"
+                facet-name="Brand_en_US_s"
                 is-facet-filter-open="isFacetFilterOpen"
                 click-facet="clickFacet"
                 is-selected="isSelected"
@@ -47,18 +58,6 @@
                 >
         </solr-facet-field>
 
-        <!-- Product Type -->
-        <solr-facet-field
-                label="Product Type"
-                facet-data="facet_fields.product_type"
-                facet-name="product_type"
-                is-facet-filter-open="isFacetFilterOpen"
-                click-facet="clickFacet"
-                is-selected="isSelected"
-                show-value-filter="true"
-                short-list="false"
-                >
-        </solr-facet-field>
 
 
         <!-- To Auto Render all Facet fields
@@ -84,10 +83,10 @@
 		<div class="col-md-12" align="center">
             <div class="col-md-3">
                 <fusion-run-aggr></fusion-run-aggr>
-                <wfm-notification></wfm-notification>
+                <staples-notification></staples-notification>
             </div>
             <div class="col-md-6">
-                <wfm-auto-complete></wfm-auto-complete>
+                <staples-auto-complete></staples-auto-complete>
             </div>
 		</div>
 		<div class="col-md-12" style="padding-top:20px">
@@ -108,12 +107,11 @@
 
                 <span ng-if="$routeParams.q">for "{{$routeParams.q}}"</span></h3>
 
-            <wfm-spell-suggest></wfm-spell-suggest>
+            <staples-spell-suggest></staples-spell-suggest>
 
 			<div class="col-md-12" ng-repeat="doc in docs">
                 <br />
-                <wfm-product-result-item ng-if="doc.doc_type_s == 'Products'"></wfm-product-result-item>
-                <wfm-recipe-result-item ng-if="doc.doc_type_s == 'Recipes'"></wfm-recipe-result-item>
+                <staples-product-result-item></staples-product-result-item>
                 <fusion-click-simulator></fusion-click-simulator>
 			</div>
 

@@ -6,8 +6,9 @@
             {{label}}
             <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isFacetFilterOpen, 'glyphicon-chevron-right': !isFacetFilterOpen}"></i>
         </accordion-heading>
-        <div ng-if="shortList == false" class="input-group" style="padding:15px;">
-            <input type="text" class="form-control" placeholder="Filter values" ng-model="query">
+        <!--div ng-if="shortList == false" class="input-group" style="padding:15px;"-->
+        <div ng-show="!shortList" class="input-group" style="padding:15px;">
+            <input type="text" class="form-control" placeholder="Filter values" ng-model="query" />
             <div class="input-group-addon"><span class="glyphicon glyphicon-filter"></span></div>
         </div>
         <div ng-class="{'scroll-div': !shortList}">

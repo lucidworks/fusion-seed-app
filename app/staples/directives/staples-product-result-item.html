@@ -1,0 +1,28 @@
+<div class="col-md-3" align="center">
+    <img ng-src="{{doc.attr_IMAGE_TYPE_URL_6_[0]}}{{doc.attr_FILENAME_6_[0]}}_sc7?$search$" /><br />
+    <small>
+        Item {{doc.attr_CATENTRY_ID_[0]}} <br/>
+        Model {{doc.attr_MFPARTNUMBER_[0]}}
+    </small>
+</div>
+
+<div class="col-md-4">
+        <!-- also pass q to product page -->
+        <a href="#/staples/{{urlSafe(doc.PRODUCTNAME_t)}}/{{doc.id}}?q={{$routeParams.q}}">{{doc.PRODUCTNAME_t}}</a>
+        <br /><small>Rating: {{doc.attr_Rating_en_US_10_[0]}} out of 5 ({{doc.total_reviews_i}} reviews)</small>
+    <small>
+        <span ng-bind-html="renderSearchResultsBullets(doc.DESCRIPTION_txt)">
+        </span>
+        <br />
+        <span style="color:red;">{{doc.attr_P_SKUSET_Price25_[0]}}</span>
+    </small>
+</div>
+
+<div class="col-md-5">
+    Score: {{doc.score}}<br />
+    "SEARCHRANK": {{doc.SEARCHRANK_i}} <br />
+    <a class="small" ng-click="showDoc = !showDoc" href="javascript:void(0);">View Document</a>
+    <blockquote ng-show="showDoc">
+        <pre>{{doc | json}}</pre>
+    </blockquote>
+</div>

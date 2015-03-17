@@ -3,21 +3,21 @@
  */
 'use strict';
 
-angular.module('fusionSeed.viewWfmProduct', ['ngRoute','solr.Directives', 'wfm.Directives', 'fusion.Directives'])
+angular.module('fusionSeed.viewstaplesProduct', ['ngRoute','solr.Directives', 'staples.Directives', 'fusion.Directives'])
 
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.
-            when('/wfm/:store/p/:description?/:docId?', {
-                templateUrl: 'wfm/view-product.html',
-                controller: 'ViewWfmProductCtrl'
+            when('/staples/:store/p/:description?/:docId?', {
+                templateUrl: 'staples/view-product.html',
+                controller: 'ViewstaplesProductCtrl'
             });
     }])
 
-    /*.controller('ViewWfmSearchCtrl', [function() {
+    /*.controller('ViewstaplesSearchCtrl', [function() {
 
      }]);*/
 
-    .controller('ViewWfmProductCtrl', function ($scope, $http, $routeParams, $location, $route, $sce, fusionHttp, wfmSettings) {
+    .controller('ViewstaplesProductCtrl', function ($scope, $http, $routeParams, $location, $route, $sce, fusionHttp, staplesSettings) {
 
 
         $scope.q = $routeParams.q;
@@ -26,9 +26,9 @@ angular.module('fusionSeed.viewWfmProduct', ['ngRoute','solr.Directives', 'wfm.D
         //queryPipeline(pipelineId,collectionId,reqHandlr,params)
         //product document
         fusionHttp.getQueryPipeline(
-           wfmSettings.proxyUrl+wfmSettings.fusionUrl,
-            'wfm_poc1-default',
-            'wfm_poc1',
+           staplesSettings.proxyUrl+staplesSettings.fusionUrl,
+            'staples_poc1-default',
+            'staples_poc1',
             'select',
                 {
                     q: 'id:'+$routeParams.docId,
@@ -45,7 +45,7 @@ angular.module('fusionSeed.viewWfmProduct', ['ngRoute','solr.Directives', 'wfm.D
         //limit recommendations to the current store
         var fqs = [];
         fqs.push('filters_orig_ss:store/'+$routeParams.store.toLowerCase());
-        fusionHttp.getItemsForItemRecommendations(wfmSettings.proxyUrl+wfmSettings.fusionUrl,wfmSettings.collectionId,$routeParams.docId,fqs)
+        fusionHttp.getItemsForItemRecommendations(staplesSettings.proxyUrl+staplesSettings.fusionUrl,staplesSettings.collectionId,$routeParams.docId,fqs)
             .success(function(data, status, headers, config) {
                 //console.log(data);
                 //$scope.recommendations = data.items;
@@ -54,7 +54,7 @@ angular.module('fusionSeed.viewWfmProduct', ['ngRoute','solr.Directives', 'wfm.D
                     var item = data.items[i];
                     q+= 'id:'+item.docId+'^'+item.weight + ' ';
                 }
-                fusionHttp.getQueryPipeline(wfmSettings.proxyUrl+wfmSettings.fusionUrl,"wfm_poc1-select",wfmSettings.collectionId,"select",
+                fusionHttp.getQueryPipeline(staplesSettings.proxyUrl+staplesSettings.fusionUrl,"staples_poc1-select",staplesSettings.collectionId,"select",
                     {
                         q: q,
                         wt: 'json',
@@ -68,7 +68,7 @@ angular.module('fusionSeed.viewWfmProduct', ['ngRoute','solr.Directives', 'wfm.D
 
         });
 
-        fusionHttp.getItemsForQueryRecommendations(wfmSettings.proxyUrl+wfmSettings.fusionUrl,wfmSettings.collectionId,$routeParams.q,fqs)
+        fusionHttp.getItemsForQueryRecommendations(staplesSettings.proxyUrl+staplesSettings.fusionUrl,staplesSettings.collectionId,$routeParams.q,fqs)
             .success(function(data, status, headers, config) {
                 //console.log(data);
                 //$scope.recommendations = data.items;
@@ -79,7 +79,7 @@ angular.module('fusionSeed.viewWfmProduct', ['ngRoute','solr.Directives', 'wfm.D
                     q+= 'id:'+item.docId+'^'+item.weight + ' ';
                 }
                 //console.log("WAHT IS Q:" + q);
-                fusionHttp.getQueryPipeline(wfmSettings.proxyUrl+wfmSettings.fusionUrl,"wfm_poc1-select",wfmSettings.collectionId,"select",
+                fusionHttp.getQueryPipeline(staplesSettings.proxyUrl+staplesSettings.fusionUrl,"staples_poc1-select",staplesSettings.collectionId,"select",
                     {
                         q: q,
                         wt: 'json',
@@ -93,7 +93,7 @@ angular.module('fusionSeed.viewWfmProduct', ['ngRoute','solr.Directives', 'wfm.D
 
             });
 
-        fusionHttp.getQueriesForItemRecommendations(wfmSettings.proxyUrl+wfmSettings.fusionUrl,wfmSettings.collectionId,$routeParams.docId,fqs)
+        fusionHttp.getQueriesForItemRecommendations(staplesSettings.proxyUrl+staplesSettings.fusionUrl,staplesSettings.collectionId,$routeParams.docId,fqs)
             .success(function(data, status, headers, config) {
                 //console.log(data);
                 //$scope.recommendations = data.items;

@@ -30,6 +30,7 @@ myModule.factory('fusionHttp', ['$http', function($http) {
 
         },
         postSignal: function(fusionUrl,collectionId,signalData) {
+            //$http.defaults.headers.common['Authorization'] = 'Basic ' + btoa('admin:password123');
 
             var url = fusionUrl+'/api/apollo/signals/'+collectionId;
             return $http.post(url, signalData);
