@@ -119,7 +119,9 @@ angular.module('fusionSeed.viewstaplesSearch', ['ngRoute','solr.Directives', 'st
 
 
     //add searchWithin as a filter
-    if ($scope.searchWithin) fqs.push($scope.searchWithin);
+    if ($scope.searchWithin) {
+        fqs.push('{!edismax}' + $scope.searchWithin);
+    };
 
     //staples only - filter on current store code or "ALL" for non products
     if ($routeParams.store)
