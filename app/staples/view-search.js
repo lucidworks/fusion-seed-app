@@ -28,7 +28,7 @@ angular.module('fusionSeed.viewstaplesSearch', ['ngRoute','solr.Directives', 'st
 	if ($routeParams.pipeline_id) pipeline_id = $routeParams.pipeline_id;
 
     $scope.pipeline_id = pipeline_id;
-
+    $scope.signalType = "click";
 
     if ($routeParams.searchWithin) $scope.searchWithin = $routeParams.searchWithin;
 
@@ -274,6 +274,8 @@ angular.module('fusionSeed.viewstaplesSearch', ['ngRoute','solr.Directives', 'st
     //curl -u admin:password123 -X POST -H 'Content-type:application/json' -d '[{"params": {"query": "sushi", "docId": "54c0a3bafdb9b911008b4b2a"}, "type":"click", "timestamp": "2015-02-12T23:44:52.533000Z"}]' http://ec2-54-90-6-131.compute-1.amazonaws.com:8764/api/apollo/signals/staples_poc1
     $scope.sendSignal = function(signalType,docId,count) {
 
+        //console.log(signalType);
+        //return;
 
         var filters = [];
         //filters.push("store/" + $routeParams.store);
@@ -331,11 +333,21 @@ angular.module('fusionSeed.viewstaplesSearch', ['ngRoute','solr.Directives', 'st
         //return $http.post(url)
         return fusionHttp.postRunAggr(staplesSettings.proxyUrl+staplesSettings.fusionUrl,collection_id,staplesSettings.aggrJobId)
             .success(function(response) {
-                var msg = 'Started aggregation job: ' + staplesSettings.aggrJobId;
+                var msg = 'Started aggregation job';
                 console.log(msg);
                 $scope.notification = true;
                 $scope.notificationMsg = msg;
             });
+
+        return fusionHttp.postRunAggr(staplesSettings.proxyUrl+staplesSettings.fusionUrl,collection_id,"cartAggr")
+            .success(function(response) {
+                var msg = 'Started aggregation job';
+                console.log(msg);
+                $scope.notification = true;
+                $scope.notificationMsg = msg;
+            });
+
+
     }
 
     //Not being used - uses an Ngram approach for suggestions.

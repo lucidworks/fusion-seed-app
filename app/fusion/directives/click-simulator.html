@@ -1,6 +1,10 @@
 <form class="form-inline">
     <div class="form-group">
         <input style="width:50px" type="text" ng-model="clickCount" class="form-control" placeholder="1">
-        <button class="btn-sm btn-danger" ng-click="sendSignal('click',doc.id,clickCount)">Simulate Clicks</button>
+        <select ng-model="signalType" class="form-control">
+            <option value="click" selected>Click</option>
+            <option value="addToCart">Add-To-Cart</option>
+        </select>
+        <button class="btn-sm btn-danger" ng-click="sendSignal(signalType,doc.id,clickCount)">Simulate</button>
     </div>
 </form>

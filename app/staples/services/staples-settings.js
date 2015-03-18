@@ -16,7 +16,7 @@ myModule.factory('staplesSettings', ['$http', function($http) {
         "controllerPath": "staples",
         "multiSelectFacets": false,
         "collapseField": undefined,
-        "aggrJobId": "staplesClickAggr"
+        "aggrJobId": "clickAggr"
     };
 
     return staplesSettings;
