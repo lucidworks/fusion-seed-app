@@ -13,5 +13,5 @@ curl -u admin:password123 -X POST -H 'Content-Type: application/json' http://162
 
 
 
-curl -u admin:password123 -X POST -H 'Content-Type: application/json' -d '{"id":"clickAggr", "signalTypes":["click"], "sourceCatchup": false}' http://162.242.133.12:8764/api/apollo/aggregator/aggregations
-curl -u admin:password123 -X POST -H 'Content-Type: application/json' -d '{"id":"cartAggr", "aggregator": "click", "signalTypes":["addToCart"], "sourceCatchup": false}' http://162.242.133.12:8764/api/apollo/aggregator/aggregations
+curl -u admin:password123 -X POST -H 'Content-Type: application/json' -d '{"id":"clickAggr", "signalTypes":["click"], "sourceCatchup": true}' http://162.242.133.12:8764/api/apollo/aggregator/aggregations
+curl -u admin:password123 -X POST -H 'Content-Type: application/json' -d '{"id":"cartAggr", "aggregator": "click", "signalTypes":["addToCart"], "sourceCatchup": true}' http://162.242.133.12:8764/api/apollo/aggregator/aggregations

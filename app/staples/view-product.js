@@ -7,7 +7,7 @@ angular.module('fusionSeed.viewstaplesProduct', ['ngRoute','solr.Directives', 's
 
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.
-            when('/staples/:store/p/:description?/:docId?', {
+            when('/staples/p/:description?/:docId?', {
                 templateUrl: 'staples/view-product.html',
                 controller: 'ViewstaplesProductCtrl'
             });
@@ -21,14 +21,13 @@ angular.module('fusionSeed.viewstaplesProduct', ['ngRoute','solr.Directives', 's
 
 
         $scope.q = $routeParams.q;
-        $scope.store = $routeParams.store;
 
         //queryPipeline(pipelineId,collectionId,reqHandlr,params)
         //product document
         fusionHttp.getQueryPipeline(
            staplesSettings.proxyUrl+staplesSettings.fusionUrl,
-            'staples_poc1-default',
-            'staples_poc1',
+            'staples1-simple',
+            'staples1',
             'select',
                 {
                     q: 'id:'+$routeParams.docId,
@@ -36,15 +35,45 @@ angular.module('fusionSeed.viewstaplesProduct', ['ngRoute','solr.Directives', 's
                     'wt': 'json'
                 })
             .success(function(data, status, headers, config) {
-                //console.log(data);
                 $scope.product = data.response.docs[0];
 
             });
 
+
+        //item counts
+        /*http://162.242.133.12:8983/solr/staples1_signals/select
+        ?wt=json
+        &rows=0
+        &indent=true
+        &facet=true
+        &facet.field=query_s
+        &stats=true
+        &stats.field=count_i
+        &q=doc_id_s:f84781bf31cb43549abdac9e3125ecc8
+        &stats.facet=type_s
+         */
+        fusionHttp.getQueryPipeline(staplesSettings.proxyUrl+staplesSettings.fusionUrl,"staples1-simple","staples1_signals","select",
+            {
+                q: "doc_id_s:"+$routeParams.docId,
+                'wt': 'json',
+                'rows': 0,
+                'facet': true,
+                'facet.field': ["query_s","query_t"],
+                'facet.limit': 10,
+                'stats': true,
+                'stats.field': "count_i",
+                'stats.facet': "type_s",
+                'facet.mincount': 1,
+                'json.nl':"arrarr"
+            }).success(function(data) {
+
+                console.log(data.stats);
+                $scope.itemStats = data;
+        });
+
         //recommendations
         //limit recommendations to the current store
         var fqs = [];
-        fqs.push('filters_orig_ss:store/'+$routeParams.store.toLowerCase());
         fusionHttp.getItemsForItemRecommendations(staplesSettings.proxyUrl+staplesSettings.fusionUrl,staplesSettings.collectionId,$routeParams.docId,fqs)
             .success(function(data, status, headers, config) {
                 //console.log(data);
@@ -54,14 +83,15 @@ angular.module('fusionSeed.viewstaplesProduct', ['ngRoute','solr.Directives', 's
                     var item = data.items[i];
                     q+= 'id:'+item.docId+'^'+item.weight + ' ';
                 }
-                fusionHttp.getQueryPipeline(staplesSettings.proxyUrl+staplesSettings.fusionUrl,"staples_poc1-select",staplesSettings.collectionId,"select",
+                fusionHttp.getQueryPipeline(staplesSettings.proxyUrl+staplesSettings.fusionUrl,"staples1-simple",staplesSettings.collectionId,"select",
                     {
                         q: q,
                         wt: 'json',
-                        fl: 'id,description,brand_s,price,score',
+                        fl: 'id,PRODUCTNAME_t,attr_IMAGE_TYPE_URL_6_,attr_FILENAME_6_,score',
                         rows: '5'
                     }).success(function(data) {
                        $scope.recommendations = data.response.docs;
+                        //console.log($scope.recommendations);
                     });
 
                 //console.log(q);
@@ -79,11 +109,11 @@ angular.module('fusionSeed.viewstaplesProduct', ['ngRoute','solr.Directives', 's
                     q+= 'id:'+item.docId+'^'+item.weight + ' ';
                 }
                 //console.log("WAHT IS Q:" + q);
-                fusionHttp.getQueryPipeline(staplesSettings.proxyUrl+staplesSettings.fusionUrl,"staples_poc1-select",staplesSettings.collectionId,"select",
+                fusionHttp.getQueryPipeline(staplesSettings.proxyUrl+staplesSettings.fusionUrl,"staples1-simple",staplesSettings.collectionId,"select",
                     {
                         q: q,
                         wt: 'json',
-                        fl: 'id,description,brand_s,price,score',
+                        fl: 'id,PRODUCTNAME_t,attr_IMAGE_TYPE_URL_6_,attr_FILENAME_6_,score',
                         rows: '5'
                     }).success(function(data) {
                         $scope.recommendations2 = data.response.docs;
@@ -107,6 +137,9 @@ angular.module('fusionSeed.viewstaplesProduct', ['ngRoute','solr.Directives', 's
                 //console.log(q);
 
             });
+
+
+
 
 
     });

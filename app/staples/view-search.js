@@ -152,7 +152,7 @@ angular.module('fusionSeed.viewstaplesSearch', ['ngRoute','solr.Directives', 'st
 
     //if ($routeParams.recommendations)
     $scope.doRecommendations = pipeline_id;
-    if ($scope.doRecommendations == "true") {
+    /*if ($scope.doRecommendations == "true") {
         fusionHttp.getItemsForQueryRecommendations(proxy_base+fusion_url, collection_id, q, recFilters)
             .success(function (data) {
                 for (var i = 0; i < data.items.length; i++) {
@@ -163,9 +163,9 @@ angular.module('fusionSeed.viewstaplesSearch', ['ngRoute','solr.Directives', 'st
                 console.log("Recommendations bq: " + bq);
                 getSearchResults(bq);
             });
-    } else {
+    } else {*/
         getSearchResults();
-    }
+    //}
 
 
 
@@ -177,10 +177,20 @@ angular.module('fusionSeed.viewstaplesSearch', ['ngRoute','solr.Directives', 'st
                 'fq': fqs,
                 'wt': 'json',
                 'rows' : 10,
-                'json.nl': 'arrarr',
-                'bq' : bq
+                'json.nl': 'arrarr'
             })
             .success(function(data, status, headers, config) {
+
+
+                //console.log(config);
+
+                //var curl = "curl -X POST "+config.url + " -H 'Content-Type: application/json' -d '" + JSON.stringify(config.params) + "'";
+                //console.log(curl);
+
+                $scope.fusionParams = config.params;
+
+                console.log($scope.fusionParams);
+
                 $scope.loading = false;
                 $scope.data = data;
                 $scope.showData = false;
@@ -331,22 +341,22 @@ angular.module('fusionSeed.viewstaplesSearch', ['ngRoute','solr.Directives', 'st
         //console.log("Posting to " + url);
 
         //return $http.post(url)
-        return fusionHttp.postRunAggr(staplesSettings.proxyUrl+staplesSettings.fusionUrl,collection_id,staplesSettings.aggrJobId)
+        fusionHttp.postRunAggr(staplesSettings.proxyUrl+staplesSettings.fusionUrl,collection_id,staplesSettings.aggrJobId)
             .success(function(response) {
-                var msg = 'Started aggregation job';
+                var msg = 'Started click aggregation job';
                 console.log(msg);
                 $scope.notification = true;
                 $scope.notificationMsg = msg;
             });
 
-        return fusionHttp.postRunAggr(staplesSettings.proxyUrl+staplesSettings.fusionUrl,collection_id,"cartAggr")
+        fusionHttp.postRunAggr(staplesSettings.proxyUrl+staplesSettings.fusionUrl,collection_id,"cartAggr")
             .success(function(response) {
-                var msg = 'Started aggregation job';
+                var msg = 'Started addToCart aggregation job';
                 console.log(msg);
                 $scope.notification = true;
                 $scope.notificationMsg = msg;
             });
-
+        return;
 
     }
 

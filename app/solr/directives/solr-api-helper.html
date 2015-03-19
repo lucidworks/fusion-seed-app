@@ -1,5 +1,6 @@
-<a class="small" ng-click="showParams = !showParams" href="javascript:void(0);">View Query Parameters</a>,
+<a class="small" ng-click="showParams = !showParams" href="javascript:void(0);">View Solr Parameters</a>,
 <a class="small" ng-click="showData = !showData" href="javascript:void(0);">View JSON Response</a>
+
 <blockquote ng-show="showParams">
     <div ng-repeat="(key, data) in solrResponse.responseHeader.params">
         {{key}}={{data}} <br />
@@ -10,3 +11,4 @@
     <pre>{{solrResponse | json}}</pre>
 
 </blockquote>
+

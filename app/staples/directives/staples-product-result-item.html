@@ -8,7 +8,7 @@
 
 <div class="col-md-4">
         <!-- also pass q to product page -->
-        <a href="#/staples/{{urlSafe(doc.PRODUCTNAME_t)}}/{{doc.id}}?q={{$routeParams.q}}">{{doc.PRODUCTNAME_t}}</a>
+        <a href="#/staples/p/{{urlSafe(doc.PRODUCTNAME_t)}}/{{doc.id}}?q={{$routeParams.q}}">{{doc.PRODUCTNAME_t}}</a>
         <br /><small>Rating: {{doc.attr_Rating_en_US_10_[0]}} out of 5 ({{doc.total_reviews_i}} reviews)</small>
     <small>
         <span ng-bind-html="renderSearchResultsBullets(doc.DESCRIPTION_txt)">

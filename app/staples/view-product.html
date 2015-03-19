@@ -4,25 +4,47 @@
 
     <div class="col-md-2"></div>
     <div class="col-md-8">
-        <h1>{{product.description}}</h1> <h2>by {{product.brand_s}}</h2>
 
-        <img src="http://lorempixel.com/600/250/food/" />
-        <br />
-        {{product.price}}
+        <div class="col-md-12">
 
+            <div class="col-md-8">
+                <h1>{{product.PRODUCTNAME_t}}</h1>
 
+                <img ng-src="{{product.attr_IMAGE_TYPE_URL_6_[0]}}{{product.attr_FILENAME_6_[0]}}_sc7" /><br />
+                <br />
+                {{product.price}}
+            </div>
+            <div class="col-md-4" style="padding-top:30px;">
+                <h4>Signal Types</h4>
+                Clicks: {{itemStats.stats.stats_fields.count_i.facets.type_s.click.sum}} <br />
+                Add-to-carts: {{itemStats.stats.stats_fields.count_i.facets.type_s.addToCart.sum}}
+
+                <h4>Queries</h4>
+
+                <span ng-repeat="query in itemStats.facet_counts.facet_fields.query_s">
+                    {{query[0]}}: {{query[1]}} <br/>
+                </span>
+
+                <h4>Terms</h4>
+                <span ng-repeat="query in itemStats.facet_counts.facet_fields.query_t">
+                    {{query[0]}}: {{query[1]}} <br/>
+                </span>
+
+            </div>
+
+        </div>
         <div class="col-md-12" ng-if="recommendations">
-            <h3>Customers Who Viewed This Item Also Viewed</h3>
+            <h3>Customers Who Viewed This Item Also Viewed <small>(<a href="https://docs.lucidworks.com/display/fusion/Recommendations+API#RecommendationsAPI-GetItemsforaKnownItem" target="_blank">itemsForItem</a>)</small></h3>
             <div class="col-md-2" ng-repeat="rec in recommendations">
-                <img ng-src="http://lorempixel.com/150/100/food/{{rec.description.replace('/',' ')}} by {{rec.brand_s}}" />
-                <strong>{{rec.description}}</strong> by {{rec.brand_s}}
+                <img ng-src="{{rec.attr_IMAGE_TYPE_URL_6_[0]}}{{rec.attr_FILENAME_6_[0]}}_sc7?$search$" />
+                <small><a ng-href="#/staples/p/{{urlSafe(rec.PRODUCTNAME_t)}}/{{rec.id}}?q={{$routeParams.q}}">{{rec.PRODUCTNAME_t}}</a></small>
             </div>
         </div>
         <div class="col-md-12" ng-if="recommendations2">
-            <h3>Customers Who Searched For "{{q}}" Also Viewed</h3>
+            <h3>Customers Who Searched For "{{q}}" Also Viewed <small>(<a href="https://docs.lucidworks.com/display/fusion/Recommendations+API#RecommendationsAPI-GetItemsforaQuery" target="_blank">itemsForQuery</a>)</small></h3>
             <div class="col-md-2" ng-repeat="rec in recommendations2">
-                <img ng-src="http://lorempixel.com/150/100/food/{{rec.description.replace('/',' ')}} by {{rec.brand_s}}" />
-                <strong>{{rec.description}}</strong> by {{rec.brand_s}}
+                <img ng-src="{{rec.attr_IMAGE_TYPE_URL_6_[0]}}{{rec.attr_FILENAME_6_[0]}}_sc7?$search$" />
+                <small><a ng-href="#/staples/p/{{urlSafe(rec.PRODUCTNAME_t)}}/{{rec.id}}?q={{$routeParams.q}}">{{rec.PRODUCTNAME_t}}</a></small>
             </div>
         </div>
 
@@ -31,10 +53,10 @@
     </div>
     <div class="col-md-2">
 
-        <h3>Related Searches</h3>
+        <h3>Related Searches <small>(<a href="https://docs.lucidworks.com/display/fusion/Recommendations+API#RecommendationsAPI-GetQueriesforanItem" target="_blank">queriesForItem</a>)</small></h3>
         <div ng-if="queries">
             <div ng-repeat="query in queries">
-                <a ng-href="#/staples/{{store}}/?q={{query}}">{{query}}</a>
+                <a ng-href="#/staples/?q={{query}}">{{query}}</a>
             </div>
         </div>
 
