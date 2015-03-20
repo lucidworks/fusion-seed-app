@@ -67,7 +67,7 @@ angular.module('fusionSeed.viewstaplesProduct', ['ngRoute','solr.Directives', 's
                 'json.nl':"arrarr"
             }).success(function(data) {
 
-                console.log(data.stats);
+                //console.log(data.stats);
                 $scope.itemStats = data;
         });
 

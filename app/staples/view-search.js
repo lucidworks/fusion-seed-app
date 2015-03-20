@@ -174,10 +174,7 @@ angular.module('fusionSeed.viewstaplesSearch', ['ngRoute','solr.Directives', 'st
         fusionHttp.getQueryPipeline(proxy_base+fusion_url,pipeline_id,collection_id, request_handler,
             {
                 'q': q,
-                'fq': fqs,
-                'wt': 'json',
-                'rows' : 10,
-                'json.nl': 'arrarr'
+                'fq': fqs
             })
             .success(function(data, status, headers, config) {
 
@@ -187,15 +184,21 @@ angular.module('fusionSeed.viewstaplesSearch', ['ngRoute','solr.Directives', 'st
                 //var curl = "curl -X POST "+config.url + " -H 'Content-Type: application/json' -d '" + JSON.stringify(config.params) + "'";
                 //console.log(curl);
 
-                $scope.fusionParams = config.params;
+                var fusionUrl = config.url.replace(proxy_base,"http://")+"?q="+q;
+                for (var i=0;i<fqs.length;i++) fusionUrl+="&fq="+fqs[i];
 
-                console.log($scope.fusionParams);
+                $scope.fusionUrl = fusionUrl;
+                console.log(fusionUrl);
+
+
+                //console.log($scope.fusionParams);
 
                 $scope.loading = false;
                 $scope.data = data;
                 $scope.showData = false;
                 $scope.showDoc = false;
 
+                console.log(data);
 
                 var solr_params = data.responseHeader.params;
 

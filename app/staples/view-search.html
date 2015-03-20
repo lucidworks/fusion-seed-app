@@ -91,12 +91,12 @@
 		</div>
 		<div class="col-md-12" style="padding-top:20px">
 
-            <a class="small" ng-click="showFParams = !showFParams" href="javascript:void(0);">View Fusion Request Parameters</a>,
+            <a class="small" ng-click="showFusionUrl = !showFusionUrl" href="javascript:void(0);">View Fusion Request</a>,
             <solr-api-helper solr-response="data">
             </solr-api-helper>
-            <blockquote ng-show="showFParams">
+            <blockquote ng-show="showFusionUrl">
 
-                <pre>{{fusionParams | json}}</pre>
+                <pre><small>{{fusionUrl}}</small></pre>
 
             </blockquote>
 
