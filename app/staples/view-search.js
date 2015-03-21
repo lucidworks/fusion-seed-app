@@ -184,7 +184,7 @@ angular.module('fusionSeed.viewstaplesSearch', ['ngRoute','solr.Directives', 'st
                 //var curl = "curl -X POST "+config.url + " -H 'Content-Type: application/json' -d '" + JSON.stringify(config.params) + "'";
                 //console.log(curl);
 
-                var fusionUrl = config.url.replace(proxy_base,"http://")+"?q="+q;
+                var fusionUrl = config.url+"?q="+q;
                 for (var i=0;i<fqs.length;i++) fusionUrl+="&fq="+fqs[i];
 
                 $scope.fusionUrl = fusionUrl;
