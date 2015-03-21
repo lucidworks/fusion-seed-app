@@ -171,7 +171,7 @@ angular.module('fusionSeed.viewstaplesSearch', ['ngRoute','solr.Directives', 'st
 
 
     function getSearchResults(bq) {
-        fusionHttp.getQueryPipeline(proxy_base+fusion_url,pipeline_id,collection_id, request_handler,
+        fusionHttp.getQueryPipeline(fusion_url,pipeline_id,collection_id, request_handler,
             {
                 'q': q,
                 'fq': fqs
