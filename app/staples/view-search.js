@@ -198,7 +198,7 @@ angular.module('fusionSeed.viewstaplesSearch', ['ngRoute','solr.Directives', 'st
                 $scope.showData = false;
                 $scope.showDoc = false;
 
-                console.log(data);
+                //console.log(data);
 
                 var solr_params = data.responseHeader.params;
 
