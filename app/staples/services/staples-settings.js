@@ -11,12 +11,12 @@ myModule.factory('staplesSettings', ['$http', function($http) {
         "pipelineId": "staples1-default",
         "collectionId": "staples1",
         "requestHandler": "select",
-        "taxonomyField": "DEPARTMENT_NAME_s",
-        "taxonomySeparator": "|",
+        "taxonomyField": "cat_tree",
+        "taxonomySeparator": "/",
         "filterSeparator": "~",
         "controllerPath": "staples",
         "multiSelectFacets": false,
-        "collapseField": undefined,
+        "collapseField": undefined, //defined in pipeline
         "aggrJobId": "clickAggr"
     };
 

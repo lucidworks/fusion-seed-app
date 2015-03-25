@@ -234,7 +234,7 @@ angular.module('fusionSeed.viewstaplesSearch', ['ngRoute','solr.Directives', 'st
                 var docCount = docs.length;
                 //console.log("Doc count:"+ docCount);
                 if (docCount == 0) {
-                    fusionHttp.getSpellCheck(proxy_base+fusion_url,"staples_poc1-spellcheck",collection_id,q)
+                    fusionHttp.getSpellCheck(fusion_url,"staples_poc1-spellcheck",collection_id,q)
                         .success(function(data2) {
                             console.log(data2);
                             if (data2.spellcheck.suggestions.collation) {
@@ -245,6 +245,26 @@ angular.module('fusionSeed.viewstaplesSearch', ['ngRoute','solr.Directives', 'st
                             }
                             //console.log($scope.spellsuggest);
                         });
+                } else {
+                    //choose department facet
+                    if (q != '') {
+                        var query = fusion_url + "/api/apollo/query-pipelines/staples1-department/collections/staples1/select";
+                        $http(
+                            {
+                                method: 'GET',
+                                url: query,
+                                params: {
+                                    q: q,
+                                    fq: fqs
+                                }
+                            })
+                            .success(function (data, status, headers, config) {
+                                //console.log(config);
+                                $scope.departments = data;
+                                //console.log($scope.departments);
+                            });
+                    }
+
                 }
 
 
@@ -273,13 +293,6 @@ angular.module('fusionSeed.viewstaplesSearch', ['ngRoute','solr.Directives', 'st
 	$scope.clickSearch = function(query) {
 		$location.search('q', query);
 	}
-
-
-    $scope.current_store;
-    $scope.selectStore = function() {
-        console.log("Chose store code: " + $scope.current_store[0]);
-        $location.path(staplesSettings.controllerPath +'/'+$scope.current_store[0]+'/*');
-    }
 
 
 

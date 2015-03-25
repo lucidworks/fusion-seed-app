@@ -22,6 +22,7 @@
     ID: {{doc.id}} <br />
     Score: {{doc.score}}<br />
     P_SalesRank: {{doc.P_SalesRank}} <br/>
+    Department: {{doc.DEPARTMENT_NAME_s}}
     <a class="small" ng-click="showDoc = !showDoc" href="javascript:void(0);">View Document</a>
     <blockquote ng-show="showDoc">
         <pre>{{doc | json}}</pre>

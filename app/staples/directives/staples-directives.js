@@ -46,4 +46,11 @@ angular.module('staples.Directives', [])
             scope: true,
             templateUrl: 'staples/directives/staples-auto-complete.html'
         };
+    })
+    .directive('staplesChooseDepartmentFacet', function() {
+        return {
+            restrict: 'E',
+            scope: true,
+            templateUrl: 'staples/directives/staples-choose-department-facet.html'
+        };
     });

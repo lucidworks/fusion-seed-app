@@ -5,11 +5,16 @@
 	<!-- left col div -->
 	<div class="col-md-3" style="padding-left:40px;">
 
+
+        <!-- Choose Department -->
+        <staples-choose-department-facet ng-show="$routeParams.q">
+        </staples-choose-department-facet>
+
         <!-- category nav -->
-        <solr-path-hierarchy-facet-field
-                label="Choose Department"
-                facet-data="facet_fields.DEPARTMENT_NAME_s"
-                facet-name="DEPARTMENT_NAME_s"
+        <solr-path-hierarchy-facet-field ng-show="!$routeParams.q"
+                label="Browse"
+                facet-data="facet_fields.cat_tree"
+                facet-name="cat_tree"
                 is-facet-filter-open="isCatFilterOpen"
                 path-separator="taxonomy_separator"
                 create-link="createCatLink">
