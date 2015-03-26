@@ -442,22 +442,26 @@ angular.module('fusionSeed.viewstaplesSearch', ['ngRoute','solr.Directives', 'st
     //an alternate type ahead using the search history collection and the suggester component
     $scope.typeAheadSearch = function(val) {
 
-        var url = staplesSettings.proxyUrl + "ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/staples_search_history/suggest?suggest=true&suggest.build=true&suggest.dictionary=staplesSuggester&suggest.q="+val;
-
-        return $http.get(url, {
-            params: {
-                wt: 'json'
-            }
+        //var url = staplesSettings.proxyUrl + "ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/staples_search_history/suggest?suggest=true&suggest.build=true&suggest.dictionary=staplesSuggester&suggest.q="+val;
+        //return $http.get(url, {
+        return fusionHttp.getQueryPipeline(staplesSettings.fusionUrl,staplesSettings.simplePipelineId,staplesSettings.typeAheadCollectionId,"select",
+            {
+                wt: 'json',
+                rows: 5,
+                fl: "query_s",
+                sort: "count_i desc",
+                defType: "edismax",
+                qf: "query_s",
+                q: val + '*'
 
         }).then(function (response) {
-            //console.log(response);
-            var d = response.data.suggest.staplesSuggester[val].suggestions;
-            //console.log(d.term);
+            var d = response.data.response.docs;
+            //console.log(d);
             var ta = [];
             for (var i = 0; i < d.length; i++) {
                 //console.log("pushing:");
                 //console.log(d[i].term);
-                ta.push(d[i].term);
+                ta.push(d[i].query_s);
             }
             return ta;
         })
@@ -501,6 +505,8 @@ angular.module('fusionSeed.viewstaplesSearch', ['ngRoute','solr.Directives', 'st
 
 
     $scope.renderSearchResultsBullets = function(data) {
+            if (!data) return '';
+
             var html = '<ul>';
             for (var i=0;i<data.length;i++) {
                 html += '<li>' + data[i] + '</li>';
