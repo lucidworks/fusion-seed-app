@@ -444,24 +444,20 @@ angular.module('fusionSeed.viewstaplesSearch', ['ngRoute','solr.Directives', 'st
 
         //var url = staplesSettings.proxyUrl + "ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/staples_search_history/suggest?suggest=true&suggest.build=true&suggest.dictionary=staplesSuggester&suggest.q="+val;
         //return $http.get(url, {
-        return fusionHttp.getQueryPipeline(staplesSettings.fusionUrl,staplesSettings.simplePipelineId,staplesSettings.typeAheadCollectionId,"select",
+        return fusionHttp.getQueryPipeline(staplesSettings.fusionUrl,staplesSettings.simplePipelineId,staplesSettings.typeAheadCollectionId,"suggest",
             {
                 wt: 'json',
-                rows: 5,
-                fl: "query_s",
-                sort: "count_i desc",
-                defType: "edismax",
-                qf: "query_s",
-                q: val + '*'
+                "suggest.dictionary": "mySuggester",
+                q: val
 
         }).then(function (response) {
-            var d = response.data.response.docs;
+            var d = response.data.suggest.mySuggester[val].suggestions
             //console.log(d);
             var ta = [];
             for (var i = 0; i < d.length; i++) {
                 //console.log("pushing:");
                 //console.log(d[i].term);
-                ta.push(d[i].query_s);
+                ta.push(d[i].term);
             }
             return ta;
         })

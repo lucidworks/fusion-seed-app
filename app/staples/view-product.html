@@ -8,7 +8,7 @@
         <div class="col-md-12">
 
             <div class="col-md-8">
-                <h1>{{product.PRODUCTNAME_t}}</h1>
+                <h1><span ng-bind-html="renderHtml(product.PRODUCTNAME_t)"></span></h1>
 
                 <img ng-src="{{product.attr_IMAGE_TYPE_URL_6_[0]}}{{product.attr_FILENAME_6_[0]}}_sc7" /><br />
                 <br />

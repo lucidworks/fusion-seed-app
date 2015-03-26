@@ -5,7 +5,7 @@
 </span>
     <input type="text"
            ng-model="asyncSelected"
-           placeholder="Fusion Reference UI"
+           placeholder="Search"
            typeahead-on-select="$location.path(controller_path).search('q',asyncSelected)"
            typeahead="val for val in typeAheadSearch($viewValue)"
            typeahead-loading="loading"

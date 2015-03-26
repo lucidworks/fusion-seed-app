@@ -97,6 +97,10 @@ angular.module('fusionSeed.viewstaplesProduct', ['ngRoute','solr.Directives', 's
                 //console.log(q);
 
         });
+        $scope.renderHtml = function(html_code)
+        {
+            return $sce.trustAsHtml(html_code);
+        };
 
         fusionHttp.getItemsForQueryRecommendations(staplesSettings.fusionUrl,staplesSettings.collectionId,$routeParams.q,fqs)
             .success(function(data, status, headers, config) {
