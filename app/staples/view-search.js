@@ -180,7 +180,6 @@ angular.module('fusionSeed.viewstaplesSearch', ['ngRoute','solr.Directives', 'st
 
 
                 //console.log(config);
-
                 //var curl = "curl -X POST "+config.url + " -H 'Content-Type: application/json' -d '" + JSON.stringify(config.params) + "'";
                 //console.log(curl);
 
@@ -219,6 +218,7 @@ angular.module('fusionSeed.viewstaplesSearch', ['ngRoute','solr.Directives', 'st
                 //$scope.docs = docs;
                 //$scope.grouped_field = grouped_field;
                 $scope.facet_fields = facet_fields;
+
                 $scope.facet_queries = facet_queries;
                 $scope.taxonomy = taxonomy;
 
@@ -328,7 +328,7 @@ angular.module('fusionSeed.viewstaplesSearch', ['ngRoute','solr.Directives', 'st
                 $scope.notification = true;
                 $scope.notificationMsg = msg;
             });*/
-        return fusionHttp.postSignal(staplesSettings.proxyUrl+staplesSettings.fusionUrl,collection_id,data)
+        return fusionHttp.postSignal(staplesSettings.fusionUrl,collection_id,data)
             .success(function(response) {
                 console.log(response);
                 var msg = 'Successfully indexed signals for docid: ' + docId;
