@@ -6,7 +6,8 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
   $routeProvider.
     when('/ecomm/:category?', {
         templateUrl: 'ecomm/view-search.html',
-        controller: 'ViewecommSearchCtrl'
+        controller: 'ViewecommSearchCtrl',
+        reloadOnSearch: true
     });
 }])
 
@@ -15,6 +16,7 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
 }]);*/
 
 .controller('ViewecommSearchCtrl', function ($scope, $http, $routeParams, $location, $route, $sce, fusionHttp, ecommSettings) {
+
 
 
     var proxy_base = ecommSettings.proxyUrl;
@@ -496,7 +498,8 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
             search['f'] = f;
         }
         $location.search(search);
-        $location.replace();
+        //$location.replace();
+        $window.location.href = $location;
 
 
 		//console.log('clicked on ' + fname + ':' + fvalue);
