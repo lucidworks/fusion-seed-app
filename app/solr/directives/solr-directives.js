@@ -25,6 +25,19 @@ angular.module('solr.Directives', [])
             templateUrl: 'solr/directives/solr-facet-field-accordian.html'
         };
     })
+    .directive('solrPivotFacet', function() {
+        return {
+            restrict: 'E',
+            scope: {
+                facetData: '=',
+                label: '@',
+                isFacetFilterOpen: '=',
+                clickPivot: '=',
+                showValueFilter: '='
+            },
+            templateUrl: 'solr/directives/solr-pivot-facet.html'
+        };
+    })
     .directive('solrPathHierarchyFacetField', function() {
         return {
             restrict: 'E',

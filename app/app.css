@@ -61,3 +61,16 @@
     padding: 5px;
     margin: 5px
 }
+.fake-link {
+    text-decoration: none;
+    cursor: pointer;
+}
+.fusion-header {
+    background-color: #590025;
+    height:55px;
+    font-family:ProximaNova-Regular;
+    color:white;
+    font-size: x-large;
+    padding-top: 10px;
+    margin-bottom:6px;
+}

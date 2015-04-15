@@ -1,27 +1,27 @@
 'use strict';
 
-angular.module('fusionSeed.viewstaplesSearch', ['ngRoute','solr.Directives', 'staples.Directives', 'fusion.Directives'])
+angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecomm.Directives', 'fusion.Directives'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.
-    when('/staples/:category?', {
-        templateUrl: 'staples/view-search.html',
-        controller: 'ViewstaplesSearchCtrl'
+    when('/ecomm/:category?', {
+        templateUrl: 'ecomm/view-search.html',
+        controller: 'ViewecommSearchCtrl'
     });
 }])
 
-/*.controller('ViewstaplesSearchCtrl', [function() {
+/*.controller('ViewecommSearchCtrl', [function() {
 
 }]);*/
 
-.controller('ViewstaplesSearchCtrl', function ($scope, $http, $routeParams, $location, $route, $sce, fusionHttp, staplesSettings) {
+.controller('ViewecommSearchCtrl', function ($scope, $http, $routeParams, $location, $route, $sce, fusionHttp, ecommSettings) {
 
 
-    var proxy_base = staplesSettings.proxyUrl;
-	var fusion_url = staplesSettings.fusionUrl;
+    var proxy_base = ecommSettings.proxyUrl;
+	var fusion_url = ecommSettings.fusionUrl;
 
-	var pipeline_id = staplesSettings.pipelineId;
-	var collection_id = staplesSettings.collectionId;
+	var pipeline_id = ecommSettings.pipelineId;
+	var collection_id = ecommSettings.collectionId;
 
 	//override default if passed to URL
 	if ($routeParams.collection_id) collection_id = $routeParams.collection_id;
@@ -32,22 +32,22 @@ angular.module('fusionSeed.viewstaplesSearch', ['ngRoute','solr.Directives', 'st
 
     if ($routeParams.searchWithin) $scope.searchWithin = $routeParams.searchWithin;
 
-	var request_handler = staplesSettings.requestHandler;
-	var url = proxy_base+fusion_url+'/api/apollo/query-pipelines/'+pipeline_id+'/collections/'+collection_id+'/'+request_handler;
+	var request_handler = ecommSettings.requestHandler;
+	var url = fusion_url+'/api/apollo/query-pipelines/'+pipeline_id+'/collections/'+collection_id+'/'+request_handler;
 	//var url = "http://localhost:9292/ec2-54-160-96-32.compute-1.amazonaws.com:8764/api/apollo/query-pipelines/test1-default/collections/test1/select?json.nl=arrarr&q=*:*&rows=100&wt=json"
 	//var url = "http://ec2-54-160-96-32.compute-1.amazonaws.com:8983/solr/test1/select?q=*:*";
 
-	var filter_separator = staplesSettings.filterSeparator;
-	var multi_select_facets = staplesSettings.multiSelectFacets;
-	var cat_facet_field = staplesSettings.taxonomyField;
+	var filter_separator = ecommSettings.filterSeparator;
+	var multi_select_facets = ecommSettings.multiSelectFacets;
+	var cat_facet_field = ecommSettings.taxonomyField;
 	var collapse = undefined;
-        if (staplesSettings.collapseField)
-            collapse = "{!collapse field="+staplesSettings.collapseField+"}";
+        if (ecommSettings.collapseField)
+            collapse = "{!collapse field="+ecommSettings.collapseField+"}";
 
-    $scope.controller_path = staplesSettings.controllerPath;
-    $scope.taxonomy_field = staplesSettings.taxonomyField;
-    $scope.taxonomy_separator = staplesSettings.taxonomySeparator;
-	$scope.filter_separator = staplesSettings.filterSeparator;
+    $scope.controller_path = ecommSettings.controllerPath;
+    $scope.taxonomy_field = ecommSettings.taxonomyField;
+    $scope.taxonomy_separator = ecommSettings.taxonomySeparator;
+	$scope.filter_separator = ecommSettings.filterSeparator;
 	$scope.multi_select_facets = multi_select_facets;
 	$scope.$route = $route;
 	$scope.$location = $location;
@@ -68,13 +68,14 @@ angular.module('fusionSeed.viewstaplesSearch', ['ngRoute','solr.Directives', 'st
 	//console.log('category =' + category);
 
 	//use lucene term qparser unless it is a * query
-	var cpath_fq;
-	cpath_fq = "*:*"; //temp until we have a proper category facet
-	if (category == '*')
-	 	cpath_fq = cat_facet_field+':'+category; //'cpath:'+category;
-	else
-	 	cpath_fq = '{!term f='+cat_facet_field+'}'+category;
-
+        if (cat_facet_field) {
+            var cpath_fq;
+            cpath_fq = "*:*"; //temp until we have a proper category facet
+            if (category == '*')
+                cpath_fq = cat_facet_field + ':' + category; //'cpath:'+category;
+            else
+                cpath_fq = '{!term f=' + cat_facet_field + '}' + category;
+        }
 
 	//var filter = $routeParams.filter;
     var filter = $routeParams.f;
@@ -98,7 +99,7 @@ angular.module('fusionSeed.viewstaplesSearch', ['ngRoute','solr.Directives', 'st
 	//convert all fqs to {!term} qparser syntax
 	var new_fqs = []
     //add category as a filter
-    new_fqs.push(cpath_fq);
+    if (cat_facet_field) new_fqs.push(cpath_fq);
     if (Array.isArray(fqs)) {
         for (var i = 0; i < fqs.length; i++) {
             var kv = fqs[i].split(':');
@@ -123,11 +124,11 @@ angular.module('fusionSeed.viewstaplesSearch', ['ngRoute','solr.Directives', 'st
         fqs.push('{!edismax}' + $scope.searchWithin);
     };
 
-    //staples only - filter on current store code or "ALL" for non products
+    //ecomm only - filter on current store code or "ALL" for non products
     if ($routeParams.store)
         fqs.push("store_code_s:"+$routeParams.store+" OR store_code_s:ALL");
 
-    //staples only - sale filter
+    //ecomm only - sale filter
     if ($routeParams.sale) {
         fqs.push("saleStart_tdt:[* TO NOW] AND saleEnd_tdt:[NOW TO *]");
     }
@@ -218,6 +219,10 @@ angular.module('fusionSeed.viewstaplesSearch', ['ngRoute','solr.Directives', 'st
                 //$scope.docs = docs;
                 //$scope.grouped_field = grouped_field;
                 $scope.facet_fields = facet_fields;
+                if (ecommSettings.taxonomyPivot) {
+                    $scope.taxonomy_pivot = data.facet_counts.facet_pivot[ecommSettings.taxonomyPivot];
+                    console.log($scope.taxonomy_pivot);
+                }
 
                 $scope.facet_queries = facet_queries;
                 $scope.taxonomy = taxonomy;
@@ -234,7 +239,7 @@ angular.module('fusionSeed.viewstaplesSearch', ['ngRoute','solr.Directives', 'st
                 var docCount = docs.length;
                 //console.log("Doc count:"+ docCount);
                 if (docCount == 0) {
-                    fusionHttp.getSpellCheck(fusion_url,"staples_poc1-spellcheck",collection_id,q)
+                    fusionHttp.getSpellCheck(fusion_url,"ecomm_poc1-spellcheck",collection_id,q)
                         .success(function(data2) {
                             console.log(data2);
                             if (data2.spellcheck.suggestions.collation) {
@@ -248,7 +253,7 @@ angular.module('fusionSeed.viewstaplesSearch', ['ngRoute','solr.Directives', 'st
                 } else {
                     //choose department facet
                     if (q != '') {
-                        var query = fusion_url + "/api/apollo/query-pipelines/staples1-department/collections/staples1/select";
+                        var query = fusion_url + "/api/apollo/query-pipelines/ecomm1-department/collections/ecomm1/select";
                         $http(
                             {
                                 method: 'GET',
@@ -297,7 +302,7 @@ angular.module('fusionSeed.viewstaplesSearch', ['ngRoute','solr.Directives', 'st
 
 
     //Signals API
-    //curl -u admin:password123 -X POST -H 'Content-type:application/json' -d '[{"params": {"query": "sushi", "docId": "54c0a3bafdb9b911008b4b2a"}, "type":"click", "timestamp": "2015-02-12T23:44:52.533000Z"}]' http://ec2-54-90-6-131.compute-1.amazonaws.com:8764/api/apollo/signals/staples_poc1
+    //curl -u admin:password123 -X POST -H 'Content-type:application/json' -d '[{"params": {"query": "sushi", "docId": "54c0a3bafdb9b911008b4b2a"}, "type":"click", "timestamp": "2015-02-12T23:44:52.533000Z"}]' http://ec2-54-90-6-131.compute-1.amazonaws.com:8764/api/apollo/signals/ecomm_poc1
     $scope.sendSignal = function(signalType,docId,count) {
 
         //console.log(signalType);
@@ -328,7 +333,7 @@ angular.module('fusionSeed.viewstaplesSearch', ['ngRoute','solr.Directives', 'st
                 $scope.notification = true;
                 $scope.notificationMsg = msg;
             });*/
-        return fusionHttp.postSignal(staplesSettings.fusionUrl,collection_id,data)
+        return fusionHttp.postSignal(ecommSettings.fusionUrl,collection_id,data)
             .success(function(response) {
                 console.log(response);
                 var msg = 'Successfully indexed signals for docid: ' + docId;
@@ -349,15 +354,15 @@ angular.module('fusionSeed.viewstaplesSearch', ['ngRoute','solr.Directives', 'st
         return text;
     }
 
-    //http://ec2-54-90-6-131.compute-1.amazonaws.com:8764/api/apollo/aggregator/jobs/staples_poc1_signals/staplesClickAggr
+    //http://ec2-54-90-6-131.compute-1.amazonaws.com:8764/api/apollo/aggregator/jobs/ecomm_poc1_signals/ecommClickAggr
     $scope.runAggregations = function() {
 
-        //var url = staples_DEFAULTS.proxy_url+'ec2-54-90-6-131.compute-1.amazonaws.com:8764/api/apollo/aggregator/jobs/'+collection_id+'_signals/'+staples_DEFAULTS.aggr_job_id;
+        //var url = ecomm_DEFAULTS.proxy_url+'ec2-54-90-6-131.compute-1.amazonaws.com:8764/api/apollo/aggregator/jobs/'+collection_id+'_signals/'+ecomm_DEFAULTS.aggr_job_id;
 
         //console.log("Posting to " + url);
 
         //return $http.post(url)
-        fusionHttp.postRunAggr(staplesSettings.proxyUrl+staplesSettings.fusionUrl,collection_id,staplesSettings.aggrJobId)
+        fusionHttp.postRunAggr(ecommSettings.fusionUrl,collection_id,ecommSettings.aggrJobId)
             .success(function(response) {
                 var msg = 'Started click aggregation job';
                 console.log(msg);
@@ -365,7 +370,7 @@ angular.module('fusionSeed.viewstaplesSearch', ['ngRoute','solr.Directives', 'st
                 $scope.notificationMsg = msg;
             });
 
-        fusionHttp.postRunAggr(staplesSettings.proxyUrl+staplesSettings.fusionUrl,collection_id,"cartAggr")
+        fusionHttp.postRunAggr(ecommSettings.fusionUrl,collection_id,"cartAggr")
             .success(function(response) {
                 var msg = 'Started addToCart aggregation job';
                 console.log(msg);
@@ -376,75 +381,12 @@ angular.module('fusionSeed.viewstaplesSearch', ['ngRoute','solr.Directives', 'st
 
     }
 
-    //Not being used - uses an Ngram approach for suggestions.
-    $scope.typeAheadSearch3 = function(val) {
-        //var url = staples_DEFAULTS.proxy_url+'ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/staples_poc1/suggest';
-        var url =  staplesSettings.proxyUrl+staplesSettings.fusionUrl+'/api/apollo/query-pipelines/type-ahead/collections/'+collection_id+'/suggest';
-        return $http.get(url, {
-            params: {
-                q: val,
-                fq: 'store_code_s:'+$routeParams.store
-            }
-
-        }).then(function(response){
-            //console.log(response);
-            var d = response.data.response.docs;
-
-            var ta = [];
-            for (var i=0;i<d.length;i++) {
-                //console.log(d[i].description_s)
-                ta.push(d[i].description);
-            }
-            return ta;
-        })
-    };
-
-
-    //TODO: integrate http://ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/staples_poc1/suggest2?q=chi
-    //It uses the spellcheck component and performs well on the search history index.
-    $scope.typeAheadSearch2 = function(val) {
-
-        var url = staplesSettings.proxyUrl + "ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/staples_poc1/suggest2?q="+val;
-
-        return $http.get(url, {
-            params: {
-                wt: 'json'
-            }
-
-        }).then(function (response) {
-            var ta = [];
-
-            if (val.split(' ').length == 1) {
-                var d = response.data.spellcheck.suggestions[1].suggestion;
-                //console.log(d);
-                for (var i = 0; i < d.length; i++) {
-                    //console.log(d);
-                    //console.log("pushing:");
-                    //console.log(d[i].term);
-                    ta.push(d[i]);
-                }
-                return ta;
-            } else {
-                var d = response.data.spellcheck.suggestions[3].suggestion;
-                for (var i = 0; i < d.length; i++) {
-                    //console.log(d);
-                    //console.log("pushing:");
-                    //console.log(d[i].term);
-                    ta.push(d[i]);
-                }
-            }
-        })
-
-    };
-
-
-
     //an alternate type ahead using the search history collection and the suggester component
     $scope.typeAheadSearch = function(val) {
 
-        //var url = staplesSettings.proxyUrl + "ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/staples_search_history/suggest?suggest=true&suggest.build=true&suggest.dictionary=staplesSuggester&suggest.q="+val;
+        //var url = ecommSettings.proxyUrl + "ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/ecomm_search_history/suggest?suggest=true&suggest.build=true&suggest.dictionary=ecommSuggester&suggest.q="+val;
         //return $http.get(url, {
-        return fusionHttp.getQueryPipeline(staplesSettings.fusionUrl,staplesSettings.simplePipelineId,staplesSettings.typeAheadCollectionId,"suggest",
+        return fusionHttp.getQueryPipeline(ecommSettings.fusionUrl,ecommSettings.simplePipelineId,ecommSettings.typeAheadCollectionId,"suggest",
             {
                 wt: 'json',
                 "suggest.dictionary": "mySuggester",
@@ -496,7 +438,7 @@ angular.module('fusionSeed.viewstaplesSearch', ['ngRoute','solr.Directives', 'st
         var q = "";
         if ($routeParams.q) q = $routeParams.q;
 
-        return "#/"+staplesSettings.controllerPath+"/"+encodePath(cat)+"?q="+q;
+        return "#/"+ecommSettings.controllerPath+"/"+encodePath(cat)+"?q="+q;
     }
 
 
@@ -580,7 +522,7 @@ angular.module('fusionSeed.viewstaplesSearch', ['ngRoute','solr.Directives', 'st
 		} else routeParams.filter = fname+":"+fvalue;
 
 
-		var new_url = '/'+staples_DEFAULTS.controller_path+'/'+routeParams.store+'/'+routeParams.category+'/'+routeParams.filter;
+		var new_url = '/'+ecomm_DEFAULTS.controller_path+'/'+routeParams.store+'/'+routeParams.category+'/'+routeParams.filter;
 		if (routeParams.q) new_url+= '?q='+routeParams.q;
 		$location.url(new_url).search(search);*/
 

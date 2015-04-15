@@ -1,0 +1,14 @@
+  <!-- Fusion Seed UI -->
+    
+
+  <fieldType name="tree" class="solr.TextField">
+    <analyzer type="index">
+      <tokenizer class="solr.PathHierarchyTokenizerFactory" delimiter="/" />
+    </analyzer>
+    <analyzer type="query">
+      <tokenizer class="solr.KeywordTokenizerFactory" />
+    </analyzer>
+  </fieldType>
+
+  
+  <!-- /Fusion Seed UI -->

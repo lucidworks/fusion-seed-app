@@ -37,14 +37,14 @@
             <h3>Customers Who Viewed This Item Also Viewed <small>(<a href="https://docs.lucidworks.com/display/fusion/Recommendations+API#RecommendationsAPI-GetItemsforaKnownItem" target="_blank">itemsForItem</a>)</small></h3>
             <div class="col-md-2" ng-repeat="rec in recommendations">
                 <img ng-src="{{rec.attr_IMAGE_TYPE_URL_6_[0]}}{{rec.attr_FILENAME_6_[0]}}_sc7?$search$" /><br />
-                <small><a ng-href="#/staples/p/{{urlSafe(rec.PRODUCTNAME_t)}}/{{rec.id}}?q={{q}}">{{rec.PRODUCTNAME_t}}</a></small>
+                <small><a ng-href="#/ecomm/p/{{urlSafe(rec.PRODUCTNAME_t)}}/{{rec.id}}?q={{q}}">{{rec.PRODUCTNAME_t}}</a></small>
             </div>
         </div>
         <div class="col-md-12" ng-if="recommendations2">
             <h3>Customers Who Searched For "{{q}}" Also Viewed <small>(<a href="https://docs.lucidworks.com/display/fusion/Recommendations+API#RecommendationsAPI-GetItemsforaQuery" target="_blank">itemsForQuery</a>)</small></h3>
             <div class="col-md-2" ng-repeat="rec in recommendations2">
                 <img ng-src="{{rec.attr_IMAGE_TYPE_URL_6_[0]}}{{rec.attr_FILENAME_6_[0]}}_sc7?$search$" /><br />
-                <small><a ng-href="#/staples/p/{{urlSafe(rec.PRODUCTNAME_t)}}/{{rec.id}}?q={{q}}">{{rec.PRODUCTNAME_t}}</a></small>
+                <small><a ng-href="#/ecomm/p/{{urlSafe(rec.PRODUCTNAME_t)}}/{{rec.id}}?q={{q}}">{{rec.PRODUCTNAME_t}}</a></small>
             </div>
         </div>
 
@@ -56,7 +56,7 @@
         <h3>Related Searches <small>(<a href="https://docs.lucidworks.com/display/fusion/Recommendations+API#RecommendationsAPI-GetQueriesforanItem" target="_blank">queriesForItem</a>)</small></h3>
         <div ng-if="queries">
             <div ng-repeat="query in queries">
-                <a ng-href="#/staples/?q={{query}}">{{query}}</a>
+                <a ng-href="#/ecomm/?q={{query}}">{{query}}</a>
             </div>
         </div>
 
