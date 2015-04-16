@@ -35,7 +35,7 @@
 }
 
 .search-link {
-    color: red;
+    color: #590025;
     text-decoration: none;
     cursor: pointer;
 }
@@ -66,11 +66,20 @@
     cursor: pointer;
 }
 .fusion-header {
+    position: fixed;
+    z-index: 99;
     background-color: #590025;
     height:55px;
     font-family:ProximaNova-Regular;
     color:white;
     font-size: x-large;
-    padding-top: 10px;
+    padding: 0px;
+    padding: 5px;
     margin-bottom:6px;
+    text-align: left;
+}
+
+.strong-text {
+    font-weight: bold;
+    color: #590025;
 }

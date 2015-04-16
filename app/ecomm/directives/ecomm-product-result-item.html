@@ -1,23 +1,52 @@
 <div class="col-md-3" align="center">
-    <img ng-src="{{doc.attr_IMAGE_TYPE_URL_6_[0]}}{{doc.attr_FILENAME_6_[0]}}_sc7?$search$" /><br />
+    <img ng-src="{{doc.image}}" alt="{{doc.name}}" /><br />
     <small>
-        Item {{doc.attr_CATENTRY_ID_[0]}} <br/>
-        Model {{doc.attr_MFPARTNUMBER_[0]}}
+        Item {{doc.id}}
     </small>
 </div>
 
 <div class="col-md-4">
+
+
         <!-- also pass q to product page -->
-        <a href="#/ecomm/p/{{urlSafe(doc.PRODUCTNAME_t)}}/{{doc.id}}?q={{$routeParams.q}}">
-            <span ng-bind-html="renderHtml(doc.PRODUCTNAME_t)"></span>
+        <a href="#/ecomm/p/{{urlSafe(doc.name)}}/{{doc.id}}?q={{$routeParams.q}}">
+            <span ng-bind-html="renderHtml(doc.name)"></span>
         </a>
-        <br /><small>Rating: {{doc.attr_Rating_en_US_10_[0]}} out of 5 ({{doc.total_reviews_i}} reviews)</small>
-    <small>
-        <span ng-bind-html="renderSearchResultsBullets(doc.DESCRIPTION_txt)">
-        </span>
         <br />
-        <span style="color:red;">{{doc.attr_P_SKUSET_Price25_[0]}}</span>
-    </small>
+        <small ng-if="doc.manufacturer">by {{doc.manufacturer}}</small> <br />
+            <span ng-if="doc.salePrice">
+                <span class="strong-text">${{doc.salePrice}}</span>
+            </span>
+            <span ng-if="doc.regularPrice && doc.regularPrice != doc.salePrice">
+                <strike>{{doc.regularPrice}}</strike>
+            </span>
+            <p>
+            {{doc.shortDescription}}</p>
+
+            <!-- Music -->
+            <span ng-if="doc.type=='Music'">
+                <ul>
+                    <li>Artist: {{doc.artistName}}</li>
+                    <li>Album: {{doc.albumTitle}}</li>
+                    <li>Genre: {{doc.genre}}</li>
+                </ul>
+            </span>
+
+            <!-- Movies -->
+            <span ng-if="doc.type=='Movie'">
+                <ul>
+                    <li>Release Date: {{doc.releaseDate}}</li>
+                    <li>Genre: {{doc.genre}}</li>
+                    <li ng-if="doc.mpaaRating">MPAA Rating: {{doc.mpaaRating}}</li>
+                </ul>
+            </span>
+
+            <!-- Computers -->
+
+
+        <br />
+
+        <small ng-if="doc.customerReviewAverage">Rating: {{doc.customerReviewAverage}} out of 5 ({{doc.customerReviewCount}} reviews)</small>
 </div>
 
 <div class="col-md-5">

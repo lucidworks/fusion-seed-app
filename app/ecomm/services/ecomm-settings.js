@@ -11,11 +11,13 @@ myModule.factory('ecommSettings', ['$http', function($http) {
         "collectionId": "products",
         "typeAheadCollectionId": "products_suggest",
         "requestHandler": "select",
-        "taxonomyField": undefined,
+        "taxonomyField": undefined, //set to undefined if using pivot facet for taxonomy
         "taxonomySeparator": "/",
-        "taxonomyPivot":"department,class",
+        "taxonomyPivot":"department,class", //set to undefined if using PathHierarchyTokenizer field for taxonomy
         "filterSeparator": "~",
         "controllerPath": "ecomm",
+        "aggrJobs": ["clickAggr","cartAggr"],
+        "defaultSignalCount": 1, //default signal count to be displayed in the UI
         "multiSelectFacets": false, //not currently supported
         "collapseField": undefined
     };
