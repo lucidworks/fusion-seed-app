@@ -19,15 +19,14 @@ angular.module('fusionSeed.viewecommProduct', ['ngRoute','solr.Directives', 'eco
 
     .controller('ViewecommProductCtrl', function ($scope, $http, $routeParams, $location, $route, $sce, fusionHttp, ecommSettings) {
 
-
         $scope.q = $routeParams.q;
 
         //queryPipeline(pipelineId,collectionId,reqHandlr,params)
         //product document
         fusionHttp.getQueryPipeline(
            ecommSettings.fusionUrl,
-            'ecomm1-simple',
-            'ecomm1',
+            ecommSettings.simplePipelineId,
+            ecommSettings.collectionId,
             'select',
                 {
                     q: 'id:'+$routeParams.docId,
@@ -36,7 +35,6 @@ angular.module('fusionSeed.viewecommProduct', ['ngRoute','solr.Directives', 'eco
                 })
             .success(function(data, status, headers, config) {
                 $scope.product = data.response.docs[0];
-
             });
 
 
@@ -52,7 +50,7 @@ angular.module('fusionSeed.viewecommProduct', ['ngRoute','solr.Directives', 'eco
         &q=doc_id_s:f84781bf31cb43549abdac9e3125ecc8
         &stats.facet=type_s
          */
-        fusionHttp.getQueryPipeline(ecommSettings.fusionUrl,"ecomm1-simple","ecomm1_signals","select",
+        fusionHttp.getQueryPipeline(ecommSettings.fusionUrl,ecommSettings.simplePipelineId,ecommSettings.signalsCollectionId,"select",
             {
                 q: "doc_id_s:"+$routeParams.docId,
                 'wt': 'json',
@@ -66,7 +64,6 @@ angular.module('fusionSeed.viewecommProduct', ['ngRoute','solr.Directives', 'eco
                 'facet.mincount': 1,
                 'json.nl':"arrarr"
             }).success(function(data) {
-
                 //console.log(data.stats);
                 $scope.itemStats = data;
         });
@@ -83,11 +80,11 @@ angular.module('fusionSeed.viewecommProduct', ['ngRoute','solr.Directives', 'eco
                     var item = data.items[i];
                     q+= 'id:'+item.docId+'^'+item.weight + ' ';
                 }
-                fusionHttp.getQueryPipeline(ecommSettings.fusionUrl,"ecomm1-simple",ecommSettings.collectionId,"select",
+                fusionHttp.getQueryPipeline(ecommSettings.fusionUrl,ecommSettings.simplePipelineId,ecommSettings.collectionId,"select",
                     {
                         q: q,
                         wt: 'json',
-                        fl: 'id,PRODUCTNAME_t,attr_IMAGE_TYPE_URL_6_,attr_FILENAME_6_,score',
+                        fl: 'id,name,image,score',
                         rows: '5'
                     }).success(function(data) {
                        $scope.recommendations = data.response.docs;
@@ -102,6 +99,10 @@ angular.module('fusionSeed.viewecommProduct', ['ngRoute','solr.Directives', 'eco
             return $sce.trustAsHtml(html_code);
         };
 
+        $scope.urlSafe = function(text) {
+            return ecommSettings.urlSafe(text);
+        }
+
         fusionHttp.getItemsForQueryRecommendations(ecommSettings.fusionUrl,ecommSettings.collectionId,$routeParams.q,fqs)
             .success(function(data, status, headers, config) {
                 //console.log(data);
@@ -113,11 +114,11 @@ angular.module('fusionSeed.viewecommProduct', ['ngRoute','solr.Directives', 'eco
                     q+= 'id:'+item.docId+'^'+item.weight + ' ';
                 }
                 //console.log("WAHT IS Q:" + q);
-                fusionHttp.getQueryPipeline(ecommSettings.fusionUrl,"ecomm1-simple",ecommSettings.collectionId,"select",
+                fusionHttp.getQueryPipeline(ecommSettings.fusionUrl,ecommSettings.simplePipelineId,ecommSettings.collectionId,"select",
                     {
                         q: q,
                         wt: 'json',
-                        fl: 'id,PRODUCTNAME_t,attr_IMAGE_TYPE_URL_6_,attr_FILENAME_6_,score',
+                        fl: 'id,name,image,score',
                         rows: '5'
                     }).success(function(data) {
                         $scope.recommendations2 = data.response.docs;
@@ -141,9 +142,6 @@ angular.module('fusionSeed.viewecommProduct', ['ngRoute','solr.Directives', 'eco
                 //console.log(q);
 
             });
-
-
-
 
 
     });

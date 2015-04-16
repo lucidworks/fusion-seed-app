@@ -79,6 +79,19 @@
     text-align: left;
 }
 
+.fusion-footer {
+    position: fixed;
+    z-index: 99;
+    background-color: #590025;
+    height:40px;
+    font-family:ProximaNova-Regular;
+    color:white;
+    padding: 0px;
+    padding: 5px;
+    margin-bottom:6px;
+    text-align: center;
+}
+
 .strong-text {
     font-weight: bold;
     color: #590025;

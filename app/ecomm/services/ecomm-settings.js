@@ -9,6 +9,7 @@ myModule.factory('ecommSettings', ['$http', function($http) {
         "pipelineId": "products-default",
         "simplePipelineId": "products-simple",
         "collectionId": "products",
+        "signalsCollectionId": "products_signals",
         "typeAheadCollectionId": "products_suggest",
         "requestHandler": "select",
         "taxonomyField": undefined, //set to undefined if using pivot facet for taxonomy
@@ -19,8 +20,22 @@ myModule.factory('ecommSettings', ['$http', function($http) {
         "aggrJobs": ["clickAggr","cartAggr"],
         "defaultSignalCount": 1, //default signal count to be displayed in the UI
         "multiSelectFacets": false, //not currently supported
-        "collapseField": undefined
+        "collapseField": undefined,
+
+
+        urlSafe: function(text) {
+            if (text) {
+                text = text.toLowerCase();
+                text = text.replace(/ /g, "-");
+                text = text.replace(/&/g, 'and');
+                text = text.replace(/\//g, ' ');
+                text = text.replace(/\./g, '-');
+            }
+            return text;
+        }
+
     };
+
 
     return ecommSettings;
 

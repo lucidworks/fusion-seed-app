@@ -155,7 +155,7 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
         //var bq = [];
 
         //if ($routeParams.recommendations)
-        //$scope.doRecommendations = pipeline_id;
+        $scope.doRecommendations = pipeline_id;
         /*if ($scope.doRecommendations == "true") {
          fusionHttp.getItemsForQueryRecommendations(proxy_base+fusion_url, collection_id, q, recFilters)
          .success(function (data) {
@@ -366,13 +366,11 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
             for (var i=0;i<ecommSettings.aggrJobs.length;i++) {
                 fusionHttp.postRunAggr(ecommSettings.fusionUrl,collection_id,ecommSettings.aggrJobs[i])
                     .success(function(response) {
-                        msg += 'Started aggregation job ' + ecommSettings.aggrJobs[i] + ". ";
-                        console.log(msg);
+                        msg = 'Started aggregation job.';
                         $scope.notification = true;
                         $scope.notificationMsg = msg;
                     });
             }
-
             //return $http.post(url)
             return;
 

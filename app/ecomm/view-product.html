@@ -8,11 +8,43 @@
         <div class="col-md-12">
 
             <div class="col-md-8">
-                <h1><span ng-bind-html="renderHtml(product.PRODUCTNAME_t)"></span></h1>
+                <h1><span ng-bind-html="renderHtml(product.name)"></span></h1>
 
-                <img ng-src="{{product.attr_IMAGE_TYPE_URL_6_[0]}}{{product.attr_FILENAME_6_[0]}}_sc7" /><br />
-                <br />
-                {{product.price}}
+                <img ng-src="{{product.image}}" /><br/>
+                <p class="strong-text">
+                    {{product.salePrice}} <strike ng-if="product.regularPrice && product.regularPrice != product.salePrice">{{doc.regularPrice}}</strike>
+                </p>
+
+
+                <p ng-if="product.shortDescription"><strong>{{product.shortDescription}}</strong></p>
+
+                <p ng-if="product.longDescription">{{product.longDescription}}</p>
+
+
+
+                <!-- PRODUCT DETAIL TABS -->
+
+                <tabset>
+                    <tab heading="Features" ng-if="product.features">
+                        <p>
+                            <ul>
+                                <li ng-repeat="feature in product.features">{{feature}}</li>
+                            </ul>
+                        </p>
+                    </tab>
+                    <tab heading="Details" ng-if="product.details">
+                        <p>
+                            <ul>
+                                <li ng-repeat="detail in product.details">{{detail}}</li>
+                            </ul>
+                        </p>
+                    </tab>
+                    <tab ng-repeat="tab in tabs" heading="{{tab.title}}" active="tab.active" disabled="tab.disabled">
+                        {{tab.content}}
+                    </tab>
+                </tabset>
+
+
             </div>
             <div class="col-md-4" style="padding-top:30px;">
                 <h4>Signal Types</h4>
@@ -36,15 +68,15 @@
         <div class="col-md-12" ng-if="recommendations">
             <h3>Customers Who Viewed This Item Also Viewed <small>(<a href="https://docs.lucidworks.com/display/fusion/Recommendations+API#RecommendationsAPI-GetItemsforaKnownItem" target="_blank">itemsForItem</a>)</small></h3>
             <div class="col-md-2" ng-repeat="rec in recommendations">
-                <img ng-src="{{rec.attr_IMAGE_TYPE_URL_6_[0]}}{{rec.attr_FILENAME_6_[0]}}_sc7?$search$" /><br />
-                <small><a ng-href="#/ecomm/p/{{urlSafe(rec.PRODUCTNAME_t)}}/{{rec.id}}?q={{q}}">{{rec.PRODUCTNAME_t}}</a></small>
+                <img ng-src="{{rec.image}}" /><br />
+                <small><a ng-href="#/ecomm/p/{{urlSafe(rec.name)}}/{{rec.id}}?q={{q}}">{{rec.name}}</a></small>
             </div>
         </div>
         <div class="col-md-12" ng-if="recommendations2">
             <h3>Customers Who Searched For "{{q}}" Also Viewed <small>(<a href="https://docs.lucidworks.com/display/fusion/Recommendations+API#RecommendationsAPI-GetItemsforaQuery" target="_blank">itemsForQuery</a>)</small></h3>
             <div class="col-md-2" ng-repeat="rec in recommendations2">
-                <img ng-src="{{rec.attr_IMAGE_TYPE_URL_6_[0]}}{{rec.attr_FILENAME_6_[0]}}_sc7?$search$" /><br />
-                <small><a ng-href="#/ecomm/p/{{urlSafe(rec.PRODUCTNAME_t)}}/{{rec.id}}?q={{q}}">{{rec.PRODUCTNAME_t}}</a></small>
+                <img ng-src="{{rec.image}}" /><br />
+                <small><a ng-href="#/ecomm/p/{{urlSafe(rec.name)}}/{{rec.id}}?q={{q}}">{{rec.name}}</a></small>
             </div>
         </div>
 
