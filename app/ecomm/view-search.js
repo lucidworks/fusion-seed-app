@@ -375,14 +375,20 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
         }
 
 
-        $scope.totalAggrSecs = 0;
-        $scope.aggrProgress = 0;
-        $scope.aggrProgressText = "";
+        //$scope.totalAggrSecs = 0;
+        //$scope.aggrProgress = 0;
+        //$scope.aggrProgressText = "";
 
-        $scope.jobStates = [];
+        //$scope.jobStates = [];
         $scope.aggrFinished = true;
 
+        
         $scope.waitThenRunAggregations = function () {
+
+            $scope.totalAggrSecs = 0;
+            $scope.aggrProgress = 0;
+            $scope.aggrProgressText = "";
+            $scope.jobStates = [];
 
             $scope.aggrFinished = false;
             //wait 3 seconds before starting to ensure any signals just added are indexed.
