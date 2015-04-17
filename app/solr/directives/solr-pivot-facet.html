@@ -15,14 +15,16 @@
         </div>
         <div>
             <div ng-repeat="value in facetData | filter:query" style="padding-left:20px">
-
-                <span ng-show="!showClass" ng-click="showClass=true" class="glyphicon-plus"></span>
+                <a href ng-show="!showClass" ng-click="showClass=true" class="glyphicon-plus"></a>
                 <span ng-show="showClass" ng-click="showClass=false" class="glyphicon-minus"></span>
 
-                <span class="fake-link" ng-click="clickPivot(value.field,value.value)">{{value.value}}</span></a>
+                <a href ng-click="clickPivot(value.field,value.value)">{{value.value}}</a>
+                <small>({{value.count}})</small>
 
                 <div ng-show="showClass" ng-repeat="val in value.pivot | filter:query" style="padding-left:20px">
-                    <span class="fake-link" ng-click="clickPivot(val.field,val.value)">{{val.value}}</span></a>
+                    <a href ng-click="clickPivot(val.field,val.value)">{{val.value}}</a>
+                    <small>({{val.count}})</small>
+
                 </div>
             </div>
         </div>

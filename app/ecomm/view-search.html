@@ -7,7 +7,7 @@
 
 
         <solr-pivot-facet
-                label="Browse"
+                label="Choose Department"
                 facet-data="taxonomy_pivot"
                 is-facet-filter-open="isFacetFilterOpen"
                 click-pivot="clickFacet"
@@ -16,8 +16,10 @@
         </solr-pivot-facet>
 
 
+        <ecomm-search-within-results-filter ng-if="$routeParams.q">
+        </ecomm-search-within-results-filter>
 
-        <solr-facet-field
+        <solr-facet-field ng-if="$routeParams.q || $routeParams.f"
                 label="Brand"
                 facet-data="facet_fields.manufacturer"
                 facet-name="manufacturer"
@@ -28,7 +30,6 @@
                 short-list="false"
                 >
         </solr-facet-field>
-
 
 
 
@@ -50,7 +51,7 @@
 
 	<!-- middle col -->
 
-	<div class="col-md-9" style="padding-left:20px;padding-top:10px">
+	<div class="col-md-7" style="padding-left:20px;padding-top:10px">
 
 		<div class="col-md-12" align="center">
             <div class="col-md-3">
@@ -97,7 +98,19 @@
 
 
 		</div>
-	<!-- /middle -->
 	</div>
+    <!-- /middle -->
+
+    <!-- right column -->
+    <div class="col-md-2">
+
+        <!-- Disabling top/related searches until we have an official API for queryForQuery recommendations?
+        Top Searches
+        <ul>
+            <li ng-repeat="query in queries">{{query}}</li>
+        </ul>-->
+
+    </div>
+    <!-- /right column-->
 </div>
 

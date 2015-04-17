@@ -14,8 +14,7 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
 
 }]);*/
 
-    .controller('ViewecommSearchCtrl', function ($scope, $http, $routeParams, $location, $route, $sce, $window, fusionHttp, ecommSettings) {
-
+    .controller('ViewecommSearchCtrl', function ($scope, $http, $routeParams, $location, $route, $sce, $window, $interval, $timeout, fusionHttp, ecommSettings) {
 
 
         var proxy_base = ecommSettings.proxyUrl;
@@ -173,7 +172,6 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
 
 
 
-
         function getSearchResults(bq) {
             fusionHttp.getQueryPipeline(fusion_url,pipeline_id,collection_id, request_handler,
                 {
@@ -253,8 +251,28 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
                                 //console.log($scope.spellsuggest);
                             });
                     } else {
-                        //choose department facet
-                        if (q != '') {
+
+                        var top_item = docs[0].id
+
+                        fusionHttp.getQueriesForItemRecommendations(ecommSettings.fusionUrl,ecommSettings.collectionId,top_item,fqs)
+                            .success(function(data, status, headers, config) {
+                                //console.log(data);
+                                //$scope.recommendations = data.items;
+                                var qs = []
+                                for (var i=0;i<data.items.length;i++) {
+                                    var item = data.items[i];
+                                    if (item.query != '*:*')
+                                        qs.push(item.query);
+                                }
+                                $scope.queries = qs;
+                                //console.log(q);
+                            });
+
+                        console.log(docs[0].id);
+
+                         //choose department facet
+
+                        /*if (q != '') {
                             var query = fusion_url + "/api/apollo/query-pipelines/ecomm1-department/collections/ecomm1/select";
                             $http(
                                 {
@@ -270,7 +288,7 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
                                     $scope.departments = data;
                                     //console.log($scope.departments);
                                 });
-                        }
+                        }*/
 
                     }
 
@@ -356,8 +374,83 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
             return text;
         }
 
+
+        $scope.totalAggrSecs = 0;
+        $scope.aggrProgress = 0;
+        $scope.aggrProgressText = "";
+
+        $scope.jobStates = [];
+        $scope.aggrFinished = true;
+
+        $scope.waitThenRunAggregations = function () {
+
+            $scope.aggrFinished = false;
+            //wait 3 seconds before starting to ensure any signals just added are indexed.
+            $interval($scope.updateAggrProgress, 1000);
+
+        };
+
+
+
+        $scope.updateAggrProgress = function() {
+            $scope.totalAggrSecs++;
+
+            if ($scope.totalAggrSecs < 3) {
+                $scope.aggrProgress = $scope.totalAggrSecs;
+            }
+
+            if ($scope.totalAggrSecs == 3) {
+                $scope.aggrProgressText = "Starting jobs...";
+                $scope.runAggregations();
+            }
+
+            if ($scope.totalAggrSecs == 4) {
+                $scope.aggrProgress = $scope.totalAggrSecs;
+                $scope.aggrProgressText = "Monitoring job status..."
+            }
+
+            //check job status
+            if ($scope.totalAggrSecs > 4) {
+                for (var i=0;i<ecommSettings.aggrJobs.length;i++) {
+                    var jobDone = false;
+                    var url = ecommSettings.fusionUrl+"/api/apollo/aggregator/jobs/products_signals/"+ecommSettings.aggrJobs[i];
+                    $http(
+                        {method: 'GET',
+                            url: url
+                        })
+                        .success(function(response) {
+                            //console.log(response.aggregation.id+ ":" + response.state);
+                            $scope.jobStates[i] = response.state;
+                        }
+                    );
+
+                }
+                //each job needs to be state="finished"
+                var aggrFinished = true;
+                if ($scope.jobStates == 0) {
+                    aggrFinished = false;
+                }
+                for (var i=0;i<$scope.jobStates;i++) {
+                    if ($scope.jobStates[i] != "finished") {
+                        aggrFinished = false;
+                    }
+                }
+                if (aggrFinished) {
+                    $scope.aggrProgressText = "Finished!";
+                    $scope.aggrProgress = 5;
+                }
+                if ($scope.totalAggrSecs > 8 && $scope.aggrProgress == 5) {
+                    $scope.aggrFinished = true;
+                }
+
+            }
+            
+        }
+
+
         //http://ec2-54-90-6-131.compute-1.amazonaws.com:8764/api/apollo/aggregator/jobs/ecomm_poc1_signals/ecommClickAggr
         $scope.runAggregations = function() {
+
 
             //var url = ecomm_DEFAULTS.proxy_url+'ec2-54-90-6-131.compute-1.amazonaws.com:8764/api/apollo/aggregator/jobs/'+collection_id+'_signals/'+ecomm_DEFAULTS.aggr_job_id;
 
@@ -367,14 +460,13 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
                 fusionHttp.postRunAggr(ecommSettings.fusionUrl,collection_id,ecommSettings.aggrJobs[i])
                     .success(function(response) {
                         msg = 'Started aggregation job.';
-                        $scope.notification = true;
-                        $scope.notificationMsg = msg;
+                        $scope.aggrProgressText = "Started aggregation jobs."
                     });
-            }
+            };
             //return $http.post(url)
             return;
 
-        }
+        };
 
         //an alternate type ahead using the search history collection and the suggester component
         $scope.typeAheadSearch = function(val) {

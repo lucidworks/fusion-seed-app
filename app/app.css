@@ -96,3 +96,13 @@
     font-weight: bold;
     color: #590025;
 }
+
+a:link {
+    color: #593d3d;
+}
+a:visited {
+    color: #8c002d;
+}
+a:hover {
+    color:#000000;
+}

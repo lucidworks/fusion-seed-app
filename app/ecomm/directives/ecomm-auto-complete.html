@@ -12,5 +12,5 @@
            typeahead-focus-first="false"
            typeahead-editable="true"
            class="form-control">
-    <span class="input-group-addon"><a class="search-link" ng-click="$location.path(controller_path+'/'+$routeParams.store).search('q',asyncSelected)">Search</a></span>
+    <span class="input-group-addon"><a class="search-link" ng-click="$location.search('f','');$location.path(controller_path).search('q',asyncSelected)">Search</a></span>
 </div>

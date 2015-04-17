@@ -1,3 +1,6 @@
 Recommendations: <input type="checkbox" ng-model="doRecommendations" ng-true-value="products-default" ng-false-value="products-default_copy" ng-change="$location.search('pipeline_id',doRecommendations)">
 <br/>
-<button class="btn-sm btn-danger" ng-click="runAggregations()">Run Aggregations</button>
+
+<button class="btn-sm btn-danger" ng-click="waitThenRunAggregations()">Run Aggregations</button>
+<br /><br/>
+<div ><progressbar class="progress-striped active" max="5" ng-show="!aggrFinished" value="aggrProgress" type="success">{{aggrProgressText}}</progressbar></div>
