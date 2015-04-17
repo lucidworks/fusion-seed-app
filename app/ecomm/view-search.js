@@ -444,7 +444,7 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
                 }
 
             }
-            
+
         }
 
 

@@ -84,7 +84,7 @@
 
             <h3>Found {{data.response.numFound}} results
 
-                <span ng-if="$routeParams.q">for "{{$routeParams.q}}"</span></h3>
+                <span ng-if="$routeParams.q">for "{{$routeParams.q}}" <small><a ng-href="#/{{controller_path}}/">Clear</a></small></span></h3>
 
             <ecomm-spell-suggest></ecomm-spell-suggest>
 
