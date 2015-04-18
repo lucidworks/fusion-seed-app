@@ -17,16 +17,16 @@ angular.module('fusionSeed.viewecommProduct', ['ngRoute','solr.Directives', 'eco
 
      }]);*/
 
-    .controller('ViewecommProductCtrl', function ($scope, $http, $routeParams, $location, $route, $sce, fusionHttp, ecommSettings) {
+    .controller('ViewecommProductCtrl', function ($scope, $http, $routeParams, $location, $route, $sce, fusionHttp, ecommService) {
 
         $scope.q = $routeParams.q;
 
         //queryPipeline(pipelineId,collectionId,reqHandlr,params)
         //product document
         fusionHttp.getQueryPipeline(
-           ecommSettings.fusionUrl,
-            ecommSettings.simplePipelineId,
-            ecommSettings.collectionId,
+           ecommService.fusionUrl,
+            ecommService.simplePipelineId,
+            ecommService.collectionId,
             'select',
                 {
                     q: 'id:'+$routeParams.docId,
@@ -50,7 +50,7 @@ angular.module('fusionSeed.viewecommProduct', ['ngRoute','solr.Directives', 'eco
         &q=doc_id_s:f84781bf31cb43549abdac9e3125ecc8
         &stats.facet=type_s
          */
-        fusionHttp.getQueryPipeline(ecommSettings.fusionUrl,ecommSettings.simplePipelineId,ecommSettings.signalsCollectionId,"select",
+        fusionHttp.getQueryPipeline(ecommService.fusionUrl,ecommService.simplePipelineId,ecommService.signalsCollectionId,"select",
             {
                 q: "doc_id_s:"+$routeParams.docId,
                 'wt': 'json',
@@ -71,7 +71,7 @@ angular.module('fusionSeed.viewecommProduct', ['ngRoute','solr.Directives', 'eco
         //recommendations
         //limit recommendations to the current store
         var fqs = [];
-        fusionHttp.getItemsForItemRecommendations(ecommSettings.fusionUrl,ecommSettings.collectionId,$routeParams.docId,fqs)
+        fusionHttp.getItemsForItemRecommendations(ecommService.fusionUrl,ecommService.collectionId,$routeParams.docId,fqs)
             .success(function(data, status, headers, config) {
                 //console.log(data);
                 //$scope.recommendations = data.items;
@@ -80,7 +80,7 @@ angular.module('fusionSeed.viewecommProduct', ['ngRoute','solr.Directives', 'eco
                     var item = data.items[i];
                     q+= 'id:'+item.docId+'^'+item.weight + ' ';
                 }
-                fusionHttp.getQueryPipeline(ecommSettings.fusionUrl,ecommSettings.simplePipelineId,ecommSettings.collectionId,"select",
+                fusionHttp.getQueryPipeline(ecommService.fusionUrl,ecommService.simplePipelineId,ecommService.collectionId,"select",
                     {
                         q: q,
                         wt: 'json',
@@ -100,10 +100,10 @@ angular.module('fusionSeed.viewecommProduct', ['ngRoute','solr.Directives', 'eco
         };
 
         $scope.urlSafe = function(text) {
-            return ecommSettings.urlSafe(text);
+            return ecommService.urlSafe(text);
         }
 
-        fusionHttp.getItemsForQueryRecommendations(ecommSettings.fusionUrl,ecommSettings.collectionId,$routeParams.q,fqs)
+        fusionHttp.getItemsForQueryRecommendations(ecommService.fusionUrl,ecommService.collectionId,$routeParams.q,fqs)
             .success(function(data, status, headers, config) {
                 //console.log(data);
                 //$scope.recommendations = data.items;
@@ -114,7 +114,7 @@ angular.module('fusionSeed.viewecommProduct', ['ngRoute','solr.Directives', 'eco
                     q+= 'id:'+item.docId+'^'+item.weight + ' ';
                 }
                 //console.log("WAHT IS Q:" + q);
-                fusionHttp.getQueryPipeline(ecommSettings.fusionUrl,ecommSettings.simplePipelineId,ecommSettings.collectionId,"select",
+                fusionHttp.getQueryPipeline(ecommService.fusionUrl,ecommService.simplePipelineId,ecommService.collectionId,"select",
                     {
                         q: q,
                         wt: 'json',
@@ -128,7 +128,7 @@ angular.module('fusionSeed.viewecommProduct', ['ngRoute','solr.Directives', 'eco
 
             });
 
-        fusionHttp.getQueriesForItemRecommendations(ecommSettings.fusionUrl,ecommSettings.collectionId,$routeParams.docId,fqs)
+        fusionHttp.getQueriesForItemRecommendations(ecommService.fusionUrl,ecommService.collectionId,$routeParams.docId,fqs)
             .success(function(data, status, headers, config) {
                 //console.log(data);
                 //$scope.recommendations = data.items;

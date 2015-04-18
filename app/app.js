@@ -7,7 +7,7 @@ angular.module('fusionSeed', [
   'fusionSeed.viewSearch',
   'fusionSeed.viewecommSearch',
   'fusionSeed.viewecommProduct',
-  'fusionSeed.ecommSettings',
+  'fusionSeed.ecommService',
   'fusionSeed.http',
   'fusionSeed.version'
 ])

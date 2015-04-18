@@ -1,3 +1,4 @@
+<form ng-submit="console.log(asyncSelected);$location.search('f','');$location.path(controller_path).search('q',asyncSelected)">
 <div class="input-group">
 <span class="input-group-addon">
     <span ng-show="loading" class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
@@ -12,5 +13,9 @@
            typeahead-focus-first="false"
            typeahead-editable="true"
            class="form-control">
-    <span class="input-group-addon"><a class="search-link" ng-click="$location.search('f','');$location.path(controller_path).search('q',asyncSelected)">Search</a></span>
+    <span class="input-group-addon"><a
+            class="search-link"
+            ng-click="console.log(asyncSelected);$location.search('f','');$location.path(controller_path).search('q',asyncSelected)"
+            >Search</a></span>
 </div>
+</form>

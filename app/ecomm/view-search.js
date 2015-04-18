@@ -14,14 +14,17 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
 
 }]);*/
 
-    .controller('ViewecommSearchCtrl', function ($scope, $http, $routeParams, $location, $route, $sce, $window, $interval, $timeout, fusionHttp, ecommSettings) {
+    .controller('ViewecommSearchCtrl', function ($scope, $http, $routeParams, $location, $route, $sce, $window, $interval, $timeout, fusionHttp, ecommService) {
 
 
-        var proxy_base = ecommSettings.proxyUrl;
-        var fusion_url = ecommSettings.fusionUrl;
+        $scope.loading = true;
 
-        var pipeline_id = ecommSettings.pipelineId;
-        var collection_id = ecommSettings.collectionId;
+        $scope.controller_path = ecommService.controllerPath;
+
+
+        //pipeline_id and colleciton_id can be overriden by passing query params
+        var pipeline_id = ecommService.pipelineId;
+        var collection_id = ecommService.collectionId;
 
         //override default if passed to URL
         if ($routeParams.collection_id) collection_id = $routeParams.collection_id;
@@ -30,27 +33,19 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
         $scope.pipeline_id = pipeline_id;
         $scope.signalType = "click";
 
+
         if ($routeParams.searchWithin) $scope.searchWithin = $routeParams.searchWithin;
 
-        var request_handler = ecommSettings.requestHandler;
-        var url = fusion_url+'/api/apollo/query-pipelines/'+pipeline_id+'/collections/'+collection_id+'/'+request_handler;
-        //var url = "http://localhost:9292/ec2-54-160-96-32.compute-1.amazonaws.com:8764/api/apollo/query-pipelines/test1-default/collections/test1/select?json.nl=arrarr&q=*:*&rows=100&wt=json"
-        //var url = "http://ec2-54-160-96-32.compute-1.amazonaws.com:8983/solr/test1/select?q=*:*";
+        var request_handler = ecommService.requestHandler;
+        var url = ecommService.fusionUrl+'/api/apollo/query-pipelines/'+pipeline_id+'/collections/'+collection_id+'/'+request_handler;
 
-        var filter_separator = ecommSettings.filterSeparator;
-        var multi_select_facets = ecommSettings.multiSelectFacets;
-        var cat_facet_field = ecommSettings.taxonomyField;
         var collapse = undefined;
-        if (ecommSettings.collapseField)
-            collapse = "{!collapse field="+ecommSettings.collapseField+"}";
+        if (ecommService.collapseField)
+            collapse = "{!collapse field="+ecommService.collapseField+"}";
 
 
-        $scope.clickCount = ecommSettings.defaultSignalCount;
-        $scope.controller_path = ecommSettings.controllerPath;
-        $scope.taxonomy_field = ecommSettings.taxonomyField;
-        $scope.taxonomy_separator = ecommSettings.taxonomySeparator;
-        $scope.filter_separator = ecommSettings.filterSeparator;
-        $scope.multi_select_facets = multi_select_facets;
+        $scope.clickCount = ecommService.defaultSignalCount;
+
         $scope.$route = $route;
         $scope.$location = $location;
         $scope.$routeParams = $routeParams;
@@ -60,17 +55,15 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
 
         var q = '*:*';
         if ($routeParams.q) q = $routeParams.q;
-        //console.log('q = '+$routeParams.q);
 
         var category = '*';
         if ($routeParams.category) {
-            category = decodePath($routeParams.category);
+            category = ecommService.decodePath($routeParams.category);
             $scope.breadcrumb = category.split($scope.taxonomy_separator);
         }
-        //console.log('category =' + category);
 
-        //use lucene term qparser unless it is a * query
-        if (cat_facet_field) {
+        //use lucene term parser unless it is a * query
+        if (ecommService.taxonomyField) {
             var cpath_fq;
             cpath_fq = "*:*"; //temp until we have a proper category facet
             if (category == '*')
@@ -79,47 +72,8 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
                 cpath_fq = '{!term f=' + cat_facet_field + '}' + category;
         }
 
-        //var filter = $routeParams.filter;
         var filter = $routeParams.f;
-        //parse filter queries into an array so they can be passed.
-        var fqs = [];
-        //if (filter) fqs = filter.split(filter_separator);
-        if (filter) fqs = filter //$routeParams.f;
-        //if we're using multi_select_facets, change the syntax of the fqs
-        if (multi_select_facets) {
-            var new_fqs = [];
-            for (var i=0;i<fqs.length;i++) {
-                //console.logs('old fq:' + fqs[i]);
-                //&fq={!tag=colortag}color:red
-                var fname = fqs[i].split(':')[0];
-                var new_fq = '{!tag='+fname+'_tag}'+fqs[i];
-                //console.logs('new fq:' + new_fq);
-                new_fqs.push(new_fq);
-            }
-            fqs = new_fqs;
-        }
-        //convert all fqs to {!term} qparser syntax
-        var new_fqs = []
-        //add category as a filter
-        if (cat_facet_field) new_fqs.push(cpath_fq);
-        if (Array.isArray(fqs)) {
-            for (var i = 0; i < fqs.length; i++) {
-                var kv = fqs[i].split(':');
-                var fname = kv[0];
-                var fvalue = kv[1];
-                new_fq = '{!term f=' + fname + '}' + fvalue;
-                new_fqs.push(new_fq);
-            }
-        } else {
-            var kv = fqs.split(':');
-            var fname = kv[0];
-            var fvalue = kv[1];
-            new_fq = '{!term f=' + fname + '}' + fvalue;
-            new_fqs.push(new_fq);
-        }
-        fqs = new_fqs;
-
-
+        var fqs = ecommService.convertFqs(filter);
 
         //add searchWithin as a filter
         if ($scope.searchWithin) {
@@ -140,176 +94,87 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
             fqs.push(collapse);
         }
 
-        //To use JSONP and avoid using a proxy, change method to JSONP, and add 'json.wrf': 'JSON_CALLBACK' to the params.
-        $scope.loading = true;
+
+        //send the search
+        fusionHttp.getQueryPipeline(ecommService.fusionUrl,pipeline_id,collection_id,request_handler,
+            {
+                'q': q,
+                'fq': fqs
+            })
+            .success(function(data, status, headers, config) {
+
+                //render the results
+                renderSearchResults(data, status, headers, config);
+                $scope.loading = false;
+
+            }).error(function(data, status, headers, config) {
+                console.log('Search failed!');
+                console.log(headers);
+                console.log(data);
+                console.log(config);
+            });
 
 
-        //get recommendations bq
-        var bq = ''
-        var recFilters = [];
-        if ($routeParams.store) recFilters.push('filters_orig_ss:store/'+$routeParams.store.toLowerCase());
-        if ($routeParams.category && $routeParams.category != '*')
-            recFilters.push("filters_orig_ss:cat_tree/"+fusionHttp.getCatCode($routeParams.category));
-        //we want the bq to be filtered based on the current store and the category!!!
-        //var bq = [];
 
-        //if ($routeParams.recommendations)
-        $scope.doRecommendations = pipeline_id;
-        /*if ($scope.doRecommendations == "true") {
-         fusionHttp.getItemsForQueryRecommendations(proxy_base+fusion_url, collection_id, q, recFilters)
-         .success(function (data) {
-         for (var i = 0; i < data.items.length; i++) {
-         var item = data.items[i];
-         //console.log(item);
-         bq.push("id:"+item.docId + '^' + item.weight);
-         }
-         console.log("Recommendations bq: " + bq);
-         getSearchResults(bq);
-         });
-         } else {*/
-        getSearchResults();
+        //ecommService.getSearchResults($scope,q,fqs);
         //}
 
 
 
-        function getSearchResults(bq) {
-            fusionHttp.getQueryPipeline(fusion_url,pipeline_id,collection_id, request_handler,
-                {
-                    'q': q,
-                    'fq': fqs
-                })
-                .success(function(data, status, headers, config) {
+
+        function renderSearchResults(data, status, headers, config) {
+            var fusionUrl = config.url+"?q="+q;
+            for (var i=0;i<fqs.length;i++) fusionUrl+="&fq="+fqs[i];
+
+            $scope.fusionUrl = fusionUrl;
+            console.log(fusionUrl);
 
 
-                    //console.log(config);
-                    //var curl = "curl -X POST "+config.url + " -H 'Content-Type: application/json' -d '" + JSON.stringify(config.params) + "'";
-                    //console.log(curl);
+            $scope.data = data;
+            $scope.showData = false;
+            $scope.showDoc = false;
 
-                    var fusionUrl = config.url+"?q="+q;
-                    for (var i=0;i<fqs.length;i++) fusionUrl+="&fq="+fqs[i];
+            var solr_params = data.responseHeader.params;
 
-                    $scope.fusionUrl = fusionUrl;
-                    console.log(fusionUrl);
-
-
-                    //console.log($scope.fusionParams);
-
-                    $scope.loading = false;
-                    $scope.data = data;
-                    $scope.showData = false;
-                    $scope.showDoc = false;
-
-                    //console.log(data);
-
-                    var solr_params = data.responseHeader.params;
-
-                    //using groups, pass groups instead of docs
-                    //var grouped_field = data.grouped[group_field];
-                    //console.logs(groups);
-
-                    var facet_fields = data.facet_counts.facet_fields;
-                    var facet_queries = data.facet_counts.facet_queries;
-                    var taxonomy = facet_fields[cat_facet_field];
-
-                    //console.logs('solr_params:'+JSON.stringify(solr_params));
-
-                    $scope.solr_params = solr_params;
-                    $scope.showParams = false;
-                    //$scope.split_solr_params = solr_params.split(',');
-
-                    //$scope.docs = docs;
-                    //$scope.grouped_field = grouped_field;
-                    $scope.facet_fields = facet_fields;
-                    if (ecommSettings.taxonomyPivot) {
-                        $scope.taxonomy_pivot = data.facet_counts.facet_pivot[ecommSettings.taxonomyPivot];
-                    }
-
-                    $scope.facet_queries = facet_queries;
-                    $scope.taxonomy = taxonomy;
-
-                    //FIELD COLLAPSING DISPLAY
-                    var docs = data.response.docs;
-                    $scope.docs = docs;
-                    //console.logs('grouped:'+JSON.stringify(data.grouped));
-
-                    //console.logs('expanded:' + JSON.stringify(data.expanded));
-                    // /FIELD COLLAPSING
-
-                    //how many docs are there?
-                    var docCount = docs.length;
-                    //console.log("Doc count:"+ docCount);
-                    if (docCount == 0) {
-                        fusionHttp.getSpellCheck(fusion_url,"ecomm_poc1-spellcheck",collection_id,q)
-                            .success(function(data2) {
-                                console.log(data2);
-                                if (data2.spellcheck.suggestions.collation) {
-                                    console.log("YES");
-                                    $scope.spellsuggest = data2.spellcheck.suggestions.collation
-                                } else {
-                                    $scope.spellsuggest = data2.spellcheck.suggestions
-                                }
-                                //console.log($scope.spellsuggest);
-                            });
-                    } else {
-
-                        var top_item = docs[0].id
-
-                        fusionHttp.getQueriesForItemRecommendations(ecommSettings.fusionUrl,ecommSettings.collectionId,top_item,fqs)
-                            .success(function(data, status, headers, config) {
-                                //console.log(data);
-                                //$scope.recommendations = data.items;
-                                var qs = []
-                                for (var i=0;i<data.items.length;i++) {
-                                    var item = data.items[i];
-                                    if (item.query != '*:*')
-                                        qs.push(item.query);
-                                }
-                                $scope.queries = qs;
-                                //console.log(q);
-                            });
-
-                        console.log(docs[0].id);
-
-                         //choose department facet
-
-                        /*if (q != '') {
-                            var query = fusion_url + "/api/apollo/query-pipelines/ecomm1-department/collections/ecomm1/select";
-                            $http(
-                                {
-                                    method: 'GET',
-                                    url: query,
-                                    params: {
-                                        q: q,
-                                        fq: fqs
-                                    }
-                                })
-                                .success(function (data, status, headers, config) {
-                                    //console.log(config);
-                                    $scope.departments = data;
-                                    //console.log($scope.departments);
-                                });
-                        }*/
-
-                    }
+            var facet_fields = data.facet_counts.facet_fields;
+            var facet_queries = data.facet_counts.facet_queries;
+            var taxonomy = facet_fields[ecommService.taxonomyField];
 
 
-                }).error(function(data, status, headers, config) {
-                    console.log('Search failed!');
-                    console.log(headers);
-                    console.log(data);
-                    console.log(config);
-                });
+            $scope.solr_params = solr_params;
+            $scope.showParams = false;
+
+            $scope.facet_fields = facet_fields;
+            if (ecommService.taxonomyPivot) {
+                $scope.taxonomy_pivot = data.facet_counts.facet_pivot[ecommService.taxonomyPivot];
+            }
+
+            $scope.facet_queries = facet_queries;
+            $scope.taxonomy = taxonomy;
+
+            var docs = data.response.docs;
+            $scope.docs = docs;
+
+            //how many docs are there?
+            var docCount = docs.length;
+            //console.log("Doc count:"+ docCount);
+            if (docCount == 0) {
+                fusionHttp.getSpellCheck(fusion_url,"ecomm_poc1-spellcheck",collection_id,q)
+                    .success(function(data2) {
+                        console.log(data2);
+                        if (data2.spellcheck.suggestions.collation) {
+                            $scope.spellsuggest = data2.spellcheck.suggestions.collation
+                        } else {
+                            $scope.spellsuggest = data2.spellcheck.suggestions
+                        }
+                        //console.log($scope.spellsuggest);
+                    });
+            } else {
+
+                //TODO implement top or related searches here
+            }
         }
 
-
-        $scope.encodePath =  function(path) { return encodePath(path) };
-        $scope.parseFacetLabel = function(field) {
-            //console.log("in parse facet label");
-            field = field.replace('_ss', '');
-            field = field.replace('_s','');
-            field = field.replace('_', ' ');
-            return field.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-        };
 
         $scope.doSearchWithin = function(text) {
             $location.search('searchWithin', text);
@@ -321,68 +186,31 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
 
 
 
+
+
         //Signals API
         //curl -u admin:password123 -X POST -H 'Content-type:application/json' -d '[{"params": {"query": "sushi", "docId": "54c0a3bafdb9b911008b4b2a"}, "type":"click", "timestamp": "2015-02-12T23:44:52.533000Z"}]' http://ec2-54-90-6-131.compute-1.amazonaws.com:8764/api/apollo/signals/ecomm_poc1
         $scope.sendSignal = function(signalType,docId,count) {
-
-            //console.log(signalType);
-            //return;
-
-            var filters = [];
-            //filters.push("store/" + $routeParams.store);
-            if ($routeParams.category && $routeParams.category != '*')
-                filters.push("department/" + fusionHttp.getCatCode($routeParams.category));
-
-            var d = new Date();
-            var ts = d.toISOString();
-
-
-            var data = []
-            for (var i= 0;i<count;i++) {
-                var signal = {"params": {"query": $routeParams.q, filterQueries: filters, "docId": docId}, "type":signalType, "timestamp": ts};
-                //console.log(solrParams.q);
-                //console.log(solrParams.fq);
-                console.log(signal);
-                data.push(signal);
-            }
-            /*return $http.post(url, data)
-             .success(function(response) {
-             console.log(response);
-             var msg = 'Successfully indexed signals for docid: ' + docId;
-             console.log(msg)
-             $scope.notification = true;
-             $scope.notificationMsg = msg;
-             });*/
-            return fusionHttp.postSignal(ecommSettings.fusionUrl,collection_id,data)
+            return ecommService.sendSignal(signalType,docId,count,$routeParams.q)
                 .success(function(response) {
-                    console.log(response);
-                    var msg = 'Successfully indexed signals for docid: ' + docId;
-                    console.log(msg)
-                    $scope.notification = true;
-                    $scope.notificationMsg = msg;
-                });
+                console.log(response);
+                var msg = 'Successfully indexed signals for docid: ' + docId;
+                console.log(msg)
+                $scope.notification = true;
+                $scope.notificationMsg = msg;
+            });
         }
-
 
         $scope.urlSafe = function(text) {
-            text = text.toLowerCase();
-            text = text.replace(/ /g,"-");
-            text = text.replace(/&/g,'and');
-            text = text.replace(/\//g,' ');
-            text = text.replace(/\./g,'-');
-
-            return text;
+            return ecommService.urlSafe(text);
         }
 
 
-        //$scope.totalAggrSecs = 0;
-        //$scope.aggrProgress = 0;
-        //$scope.aggrProgressText = "";
 
-        //$scope.jobStates = [];
+
+        //Aggregation Job Progress Bar
         $scope.aggrFinished = true;
 
-        
         $scope.waitThenRunAggregations = function () {
 
             $scope.totalAggrSecs = 0;
@@ -396,30 +224,32 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
 
         };
 
-
-
         $scope.updateAggrProgress = function() {
             $scope.totalAggrSecs++;
 
+            //Wait 3 seconds before starting to make sure any simulated signals
+            //are committed to the index.
             if ($scope.totalAggrSecs < 3) {
                 $scope.aggrProgress = $scope.totalAggrSecs;
             }
 
+            //Start aggregation jobs at 3 seconds
             if ($scope.totalAggrSecs == 3) {
                 $scope.aggrProgressText = "Starting jobs...";
                 $scope.runAggregations();
             }
 
+            //Update status at 4 seconds
             if ($scope.totalAggrSecs == 4) {
                 $scope.aggrProgress = $scope.totalAggrSecs;
                 $scope.aggrProgressText = "Monitoring job status..."
             }
 
-            //check job status
+            //After for seconds, check the job status with each interval
             if ($scope.totalAggrSecs > 4) {
-                for (var i=0;i<ecommSettings.aggrJobs.length;i++) {
+                for (var i=0;i<ecommService.aggrJobs.length;i++) {
                     var jobDone = false;
-                    var url = ecommSettings.fusionUrl+"/api/apollo/aggregator/jobs/products_signals/"+ecommSettings.aggrJobs[i];
+                    var url = ecommService.fusionUrl+"/api/apollo/aggregator/jobs/products_signals/"+ecommService.aggrJobs[i];
                     $http(
                         {method: 'GET',
                             url: url
@@ -433,6 +263,7 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
                 }
                 //each job needs to be state="finished"
                 var aggrFinished = true;
+                //no job states so we can't be finished.
                 if ($scope.jobStates == 0) {
                     aggrFinished = false;
                 }
@@ -445,6 +276,7 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
                     $scope.aggrProgressText = "Finished!";
                     $scope.aggrProgress = 5;
                 }
+                //If we reach 8 seconds and the jobs are done, hide the progress bar.
                 if ($scope.totalAggrSecs > 8 && $scope.aggrProgress == 5) {
                     $scope.aggrFinished = true;
                 }
@@ -452,24 +284,19 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
             }
 
         }
-
+        //End aggregation progress bar
 
         //http://ec2-54-90-6-131.compute-1.amazonaws.com:8764/api/apollo/aggregator/jobs/ecomm_poc1_signals/ecommClickAggr
         $scope.runAggregations = function() {
 
-
-            //var url = ecomm_DEFAULTS.proxy_url+'ec2-54-90-6-131.compute-1.amazonaws.com:8764/api/apollo/aggregator/jobs/'+collection_id+'_signals/'+ecomm_DEFAULTS.aggr_job_id;
-
-            //console.log("Posting to " + url);
             var msg = "";
-            for (var i=0;i<ecommSettings.aggrJobs.length;i++) {
-                fusionHttp.postRunAggr(ecommSettings.fusionUrl,collection_id,ecommSettings.aggrJobs[i])
+            for (var i=0;i<ecommService.aggrJobs.length;i++) {
+                fusionHttp.postRunAggr(ecommService.fusionUrl,collection_id,ecommService.aggrJobs[i])
                     .success(function(response) {
                         msg = 'Started aggregation job.';
                         $scope.aggrProgressText = "Started aggregation jobs."
                     });
             };
-            //return $http.post(url)
             return;
 
         };
@@ -477,9 +304,9 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
         //an alternate type ahead using the search history collection and the suggester component
         $scope.typeAheadSearch = function(val) {
 
-            //var url = ecommSettings.proxyUrl + "ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/ecomm_search_history/suggest?suggest=true&suggest.build=true&suggest.dictionary=ecommSuggester&suggest.q="+val;
+            //var url = ecommService.proxyUrl + "ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/ecomm_search_history/suggest?suggest=true&suggest.build=true&suggest.dictionary=ecommSuggester&suggest.q="+val;
             //return $http.get(url, {
-            return fusionHttp.getQueryPipeline(ecommSettings.fusionUrl,ecommSettings.simplePipelineId,ecommSettings.typeAheadCollectionId,"suggest",
+            return fusionHttp.getQueryPipeline(ecommService.fusionUrl,ecommService.simplePipelineId,ecommService.typeAheadCollectionId,"suggest",
                 {
                     wt: 'json',
                     "suggest.dictionary": "mySuggester",
@@ -499,7 +326,6 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
 
         };
 
-
         $scope.clickSaleFilter = function() {
 
             if ($location.search()['sale'] == 'true') {
@@ -515,36 +341,21 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
         }
 
         $scope.isSalesFilterChecked = function () {
-
             if ($location.search()['sale'] == 'true') {
                 return true;
             }
-
         }
 
 
-
         $scope.createCatLink = function(cat) {
-            //console.log('clickCategory test, here are the routeParams: '+ routeParams);
-            //"#/{{controller_path}}/{{$routeParams.store}}/{{encodePath(cat[0])}}/{{$routeParams.filter}}?q={{$routeParams.q}}"
-            //return "myfakelink"+ cat;
             var q = "";
             if ($routeParams.q) q = $routeParams.q;
-
-            return "#/"+ecommSettings.controllerPath+"/"+encodePath(cat)+"?q="+q;
+            return "#/"+ecommService.controllerPath+"/"+encodePath(cat)+"?q="+q;
         }
 
 
         $scope.renderSearchResultsBullets = function(data) {
-            if (!data) return '';
-
-            var html = '<ul>';
-            for (var i=0;i<data.length;i++) {
-                html += '<li>' + data[i] + '</li>';
-                if (i == 2) break;
-            }
-            html += '</ul>';
-            return $sce.trustAsHtml(html);
+            return ecommService.renderSearchResultsBullets(data);
         }
 
         $scope.clickFacet = function(fname, fvalue) {
@@ -589,40 +400,10 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
                 search['f'] = f;
             }
             $location.search(search);
-            //$location.replace();
-            //$window.location = $location;
-
-
-            //console.log('clicked on ' + fname + ':' + fvalue);
-            /*if (routeParams.filter) {
-             if (routeParams.filter.indexOf(fname+":"+fvalue) > -1) {
-             //console.log("FACET ALREADY CLICKED!");
-             //remove the fname:fvalue from the filter
-             var newf = splitFilter(routeParams.filter, filter_separator);
-             var arr_filter = []
-             for (var i=0;i<newf.length;i++) {
-             if (fname+":"+fvalue == newf[i]) {
-             //console.log("FACET UNSELECT:" + newf[i]); //don't add it
-             } else {
-             //console.log("FACET SELECTION:" + newf[i]);
-             arr_filter.push(newf[i]);
-             }
-             }
-             //console.log('NEW FILTER STRING:' + filterConcat(arr_filter,filter_separator));
-             routeParams.filter = filterConcat(arr_filter,filter_separator);
-             } else {
-             routeParams.filter+=filter_separator+fname+':'+fvalue;
-             }
-             } else routeParams.filter = fname+":"+fvalue;
-
-
-             var new_url = '/'+ecomm_DEFAULTS.controller_path+'/'+routeParams.store+'/'+routeParams.category+'/'+routeParams.filter;
-             if (routeParams.q) new_url+= '?q='+routeParams.q;
-             $location.url(new_url).search(search);*/
 
         }
 
-        function splitFilter(filter, filter_separator) {
+        /*function splitFilter(filter, filter_separator) {
             return filter.split(filter_separator);
         }
 
@@ -635,10 +416,9 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
                 }
             }
             return filter;
-        }
+        }*/
 
         $scope.isSelected = function(fname, fvalue) {
-
             var search = $location.search();
             if (search.f) {
                 if (search.f.indexOf(fname+':'+fvalue) > -1) return true;
@@ -647,22 +427,12 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
             return false;
         }
 
-        $scope.renderHtml = function(html_code)
-        {
-            return $sce.trustAsHtml(html_code);
+        $scope.renderHtml = function(html_code) {
+            return ecommService.renderHtml(html_code);
         };
 
-
         function encodePath(path) {
-            return path.
-                replace(/\//g, '~').
-                replace(/ /g, '-');
-        }
-
-        function decodePath(path) {
-            return path.
-                replace(/~/g, '/').
-                replace(/-/g, ' ');
+            return ecommService.encodePath(path);
         };
 
 
