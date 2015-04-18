@@ -84,7 +84,7 @@
     z-index: 99;
     background-color: #590025;
     height:40px;
-    font-family:ProximaNova-Regular;
+    font-family:ProximaNova-Regular,Helvetica;
     color:white;
     padding: 0px;
     padding: 5px;
@@ -105,4 +105,11 @@ a:visited {
 }
 a:hover {
     color:#000000;
+}
+
+.panel-heading {
+    background-color: #590025 !important;
+    color:white !important;
+    background-image: linear-gradient(to bottom,#590025 0, #8c002d 100%) !important;
+    font-family:ProximaNova-Regular,Helvetica;
 }
