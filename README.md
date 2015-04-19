@@ -1,79 +1,30 @@
 
-
-The idea of this repository is to provide a "barebones" or blank "canvas" UI for PoCs where the built-in Fusion Search UI is not enough (or too much). It can also be used as a tool to demonstrate how to integrate Solr/Fusion with client-side UIs.
+The Fusion seed app is a tool that aims to provide:
+* Customizable demos and proof-of-concepts.
+* A starting point for pilot projects.
+* A reference point for integrating Fusion into web applications.
 
 ## Installation Requirements
+This repository is packaged with install, start and stop scripts for a node HTTP server. If you wish to use these scripts then Node is a requirement.
 * Node
-* Fusion
 
-## Sample Setup
-1. Create a collection called "products". Add the contents of "1-schema-add.txt" to the example schema and reload the core.
-2. Index the sample SolrXml documents in "2-sample-documents.xml".
-3. Run 3-create-pipeline.sh 
+## Installing and Running Against existing Fusion instance
+1. git clone https://github.com/LucidWorks/fusion-seed-app.git
+2. cd fustion-seed-app
+3. bin/install
+4. bin/start
+5. Go to: http://localhost:8000/app/#/ecomm
 
-## UI Installation
-After cloning this repository:
 
-~~~
-cd fusion-seed-ui
-bin/start
-~~~
-This script will ensure all dependencies are installed. Then start an HTTP server on http://localhost:8000 and a CORS-enabled proxy server on http://localhost:9292. To change the hostname and ports, modify bin/start.
-
-* Go to http://localhost:8000/app/#/search/*
-* To see an example of the Query Pipeline adding facets based on the category, click on Men's -> Blazers (or go to http://localhost:8000/app/#/search/Men~Blazers?q=)
-
-## Customizing The View and Controller
-The most important pieces of code are the View and the Controller found in app/view-search. 
-
-view-search.js begins by setting some defaults of interest if customizing:
-
-~~~javascript
-'use strict';
-
-angular.module('fusionSeed.viewSearch', ['ngRoute','solr.Directives'])
-
-.constant("SEARCH_DEFAULTS", {
-	"proxy_url": "http://localhost:9292/",
-	"fusion_url": "localhost:8764",
-	"pipeline_id": "products-demo",
-	"collection_id": "products",
-	"request_handler": "select",
-	"taxonomy_field": "cpath",
-	"filter_separator": "~",
-	"controller_path": "search",
-	"multi_select_facets": false,
-	"collapse_field": "name_exact_s"
-})
-~~~
-
-view-search.html handles the rendering
-
-~~~html
-			Found {{data.response.numFound}} results.
-
-			<div ng-repeat="doc in docs">
-				<div>
-					<h3>{{doc.name}}</h3> <br/>
-					{{doc.short_description}} <br/>
-					<strong>${{doc.price}}</strong>
-
-				</div>
-			</div>
-~~~
-
-## Features
-* Stateful, SEO friendly URLs
-* Auto-renders / filters on facet fields.
-* Supports hierchichal facet / taxonomy navigation.
-
-## Roadmap
-* Facet Query display and filtering
+Features
+* Easy to skin
+* Can run on any server technology that can serve HTML and javascirpt files.
+* Signals, Aggregations and Recommendations (EventMiner coming soon)
+* Product page demonstrating 3 different recommendation types.
+* Dynamic faceting
 * Auto-complete
-* Spell-checking
-* Multi-select faceting
-* Signal API integration and demonstration
-* Recommendations
+* Spell-checking ("did you mean.." suggestions)
+* Developer assistance (shows live requests being sent to Fusion and the JSON responses).
 
-
-
+Roadmap
+* Paging
