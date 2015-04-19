@@ -7,13 +7,14 @@ The Fusion seed app is a tool that aims to provide:
 This repository is packaged with install, start and stop scripts for a node HTTP server. If you wish to use these scripts then Node is a requirement.
 * Node
 
-## Installing and Running Against existing Fusion instance
+## Installing and Running
 1. git clone https://github.com/LucidWorks/fusion-seed-app.git
 2. cd fustion-seed-app
 3. bin/install
 4. bin/start
 5. Go to: http://localhost:8000/app/#/ecomm
 
+By default, this will point to a Fusion server hosted on AWS. To point this to another server and for other application settings see app/ecomm/services/ecommService.js
 
 Features
 * Easy to skin
