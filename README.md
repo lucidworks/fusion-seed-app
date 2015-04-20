@@ -35,21 +35,27 @@ This app uses Bootstrap and AngularJS. It uses Bootstrap's grid system to contro
 * app/index.html - The header and footer.
 * app/ecomm/view-search.html - Everything in-between the header and footer including the 2 column layout.
 * app/app.css - All custom styles.
+* Directives - if you need to change something specific such as the way a facet is displayed, you can modify the custom directives directly. See notes on Project Structure below.
 
-## Notes On Project Structure
+## Project Structure
 This project is made up of several modules. Each module adheres to the following structure:
 * app/_module_name_ - Contains the module, including any controllers and views.
-  * app/_module_name_/directives - Contains custom directive js and html files.
-  * app/_module_name_/services - Contains any custom services.
+  * app/_module_name_/directives - Contains custom directive js and html files for the module.
+  * app/_module_name_/services - Contains any custom services for the module.
 
 ## Module Descriptions
 * app/ecomm - Contains the e-commerce demo.
 * app/solr - Contains any directives, services, controllers, or views that encapsulate Solr-related functionality. For this app, it is just a handful of directives for rendering elements from a Solr response.
 * app/fusion - Contains any directives, services, controllers, or views that encapsulate Fusion-related functionality. This includes a simple wrapper of Fusion's REST API using Angular's $http service.
 
-## Customizing the E-Commerce Demo
-I've created several demos for customers using this codebase. Usually the high level steps are as follows assuming you've already indexed their data in Fusion and created your pipelines. Pretend you need to create a customized demo for "Acme".
-
-1. Do a global 'find and replace', replace all instances of 'ecomm' with 'acme' including file names.
-2. Modify app/acme/services/acme-service.js. Reconfigure the module to point to the correct Fusion instance, pipelines, etc..
+## CORS Proxy
+You may notice that requests to Fusion are being sent to port 9292. This is the address of a proxy server running on the Fusion server. This proxy provides 2 things:
+* CORS enabled - This is required in order to send client-side requests to Fusion.
+* Username/Password Protection - Since the proxy contains the basic auth headers, and it is running on the server, it means credentials are hidden from clients.
+A simple Node proxy server has been packaged with this application in proxy-server. It must be started separately using the following steps:
+*On your Fusion server*
+1. git clone https://github.com/LucidWorks/fusion-seed-app.git
+2. cd fusion-seed-app/proxy-server
+3. bash start.sh
+4. Go to http://_your_server_:9292/
 
