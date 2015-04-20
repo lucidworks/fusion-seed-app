@@ -10,7 +10,7 @@ myModule.factory('ecommService', ['$http', 'fusionHttp', '$sce', function($http,
         "simplePipelineId": "products-simple",
         "collectionId": "products",
         "signalsCollectionId": "products_signals",
-        "typeAheadCollectionId": "products_suggest",
+        "typeAheadCollectionId": "products_signals_aggr",
         "requestHandler": "select",
         "taxonomyField": undefined, //set to undefined if using pivot facet for taxonomy
         "taxonomySeparator": "/",

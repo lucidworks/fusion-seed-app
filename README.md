@@ -4,7 +4,7 @@ The Fusion seed app is a tool that aims to provide:
 * A reference application for integrating Fusion into web applications.
 
 ## Installation Requirements
-This repository is packaged with install, start and stop scripts for a node HTTP server. If you wish to use these scripts then Node is a requirement.
+This repository is packaged with a node http server and install, start and stop scripts. If you wish to use these scripts then node is a requirement.
 * Node
 
 ## Installing and Running
