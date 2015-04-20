@@ -28,6 +28,7 @@ Features
 
 Roadmap
 * Paging
+* EventMiner
 
 ## Notes On Skinning
 This app uses Bootstrap and AngularJS. It uses Bootstrap's grid system to control page layout. Here is a list of files of interest that could be modified in order to customize the skin:
@@ -47,7 +48,7 @@ This project is made up of several modules. Each module adheres to the following
 * app/fusion - Contains any directives, services, controllers, or views that encapsulate Fusion-related functionality. This includes a simple wrapper of Fusion's REST API using Angular's $http service.
 
 ## Customizing the E-Commerce Demo
-I've created several demos for customers using this codebase. Usually the steps are as follows. Pretend you need to create a customized demo for "Acme".
+I've created several demos for customers using this codebase. Usually the high level steps are as follows assuming you've already indexed their data in Fusion and created your pipelines. Pretend you need to create a customized demo for "Acme".
 
 1. Do a global 'find and replace', replace all instances of 'ecomm' with 'acme' including file names.
 2. Modify app/acme/services/acme-service.js. Reconfigure the module to point to the correct Fusion instance, pipelines, etc..

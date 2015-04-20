@@ -17,6 +17,9 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
 
         $scope.controller_path = ecommService.controllerPath;
 
+        $scope.noRecPipeline = ecommService.pipelineNoRecId;
+        $scope.defaultPipeline = ecommService.pipelineId
+
         //pipeline_id and colleciton_id can be overriden by passing query params
         var pipeline_id = ecommService.pipelineId;
         var collection_id = ecommService.collectionId;
@@ -110,6 +113,8 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
             });
 
         function renderSearchResults(data, status, headers, config) {
+
+
             var fusionUrl = config.url+"?q="+q;
             for (var i=0;i<fqs.length;i++) fusionUrl+="&fq="+fqs[i];
 
@@ -122,6 +127,10 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
             $scope.showDoc = false;
 
             var solr_params = data.responseHeader.params;
+
+            //add the boosts for each item to the scope so they can be displayed
+            $scope.recBoosts = ecommService.parseRecommendationBoost(solr_params.bq);
+
 
             var facet_fields = data.facet_counts.facet_fields;
             var facet_queries = data.facet_counts.facet_queries;
@@ -201,7 +210,7 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
             $scope.jobStates = [];
 
             $scope.aggrFinished = false;
-            //wait 3 seconds before starting to ensure any signals just added are indexed.
+            //set an interval for every second
             $interval($scope.updateAggrProgress, 1000);
 
         };

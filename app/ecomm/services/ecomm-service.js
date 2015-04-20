@@ -7,6 +7,7 @@ myModule.factory('ecommService', ['$http', 'fusionHttp', '$sce', function($http,
     var ecommService = {
         "fusionUrl": "http://ec2-54-89-123-52.compute-1.amazonaws.com:9292", //The url where Fusion is hosted.
         "pipelineId": "products-default", //the main pipeline that searches will go through
+        "pipelineNoRecId": "products-default_copy", //the pipeline ID that searchs w/o recommendations should go through
         "simplePipelineId": "products-simple", // a 1 stage "Query Solr" pipeline with /select and /suggest enabled.
         "collectionId": "products", //the main collection
         "signalsCollectionId": "products_signals", //the signals colleciton
@@ -159,6 +160,19 @@ myModule.factory('ecommService', ['$http', 'fusionHttp', '$sce', function($http,
                     return ta;
                 })
 
+        },
+
+        //returns a hash of kvs (id,boost) from Solr's bq param
+        parseRecommendationBoost: function(bq) {
+            if (bq) {
+                var recBoost = {};
+                for (var i = 0; i < bq.length; i++) {
+                    var id = bq[i].split("^")[0].replace("id:", "");
+                    var boost = bq[i].split("^")[1];
+                    recBoost[id] = boost;
+                }
+                return recBoost;
+            } else return undefined;
         }
 
 
