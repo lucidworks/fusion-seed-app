@@ -35,13 +35,19 @@ This app uses Bootstrap and AngularJS. It uses Bootstrap's grid system to contro
 * app/ecomm/view-search.html - Everything in-between the header and footer including the 2 column layout.
 * app/app.css - All custom styles.
 
-## Notes On Project Files
+## Notes On Project Structure
 This project is made up of several modules. Each module adheres to the following structure:
 * app/_module_name_ - Contains the module, including any controllers and views.
   * app/_module_name_/directives - Contains custom directive js and html files.
   * app/_module_name_/services - Contains any custom services.
 
-# Module Descriptions
+## Module Descriptions
 * app/ecomm - Contains the e-commerce demo.
 * app/solr - Contains any directives, services, controllers, or views that encapsulate Solr-related functionality. For this app, it is just a handful of directives for rendering elements from a Solr response.
 * app/fusion - Contains any directives, services, controllers, or views that encapsulate Fusion-related functionality. This includes a simple wrapper of Fusion's REST API using Angular's $http service.
+
+## Customizing the E-Commerce Demo
+I've created several demos for customers using this codebase. Usually the steps are as follows. Pretend you need to create a customized demo for "Acme".
+1. Do a global 'find and replace', replace all instances of 'ecomm' with 'acme' including file names.
+2. Modify app/acme/services/acme-service.js. Reconfigure the module to point to the correct Fusion instance, pipelines, etc..
+
