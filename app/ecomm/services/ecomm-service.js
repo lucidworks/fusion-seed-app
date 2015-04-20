@@ -5,20 +5,20 @@ myModule.factory('ecommService', ['$http', 'fusionHttp', '$sce', function($http,
     //$http.defaults.headers.common['Authorization'] = 'Basic ' + btoa('admin:password123');
 
     var ecommService = {
-        "fusionUrl": "http://ec2-54-89-123-52.compute-1.amazonaws.com:9292",
-        "pipelineId": "products-default",
-        "simplePipelineId": "products-simple",
-        "collectionId": "products",
-        "signalsCollectionId": "products_signals",
-        "typeAheadCollectionId": "products_signals_aggr",
-        "requestHandler": "select",
+        "fusionUrl": "http://ec2-54-89-123-52.compute-1.amazonaws.com:9292", //The url where Fusion is hosted.
+        "pipelineId": "products-default", //the main pipeline that searches will go through
+        "simplePipelineId": "products-simple", // a 1 stage "Query Solr" pipeline with /select and /suggest enabled.
+        "collectionId": "products", //the main collection
+        "signalsCollectionId": "products_signals", //the signals colleciton
+        "typeAheadCollectionId": "products_signals_aggr", //the collection where suggestions should come from
+        "requestHandler": "select", //default request handler for searches
         "taxonomyField": undefined, //set to undefined if using pivot facet for taxonomy
-        "taxonomySeparator": "/",
+        "taxonomySeparator": "/", //if using a path hierarchy field
         "taxonomyPivot":"department,class", //set to undefined if using PathHierarchyTokenizer field for taxonomy
         "filterSeparator": "~",
         "controllerPath": "ecomm",
-        "aggrJobs": ["clickAggr","cartAggr"],
-        "defaultSignalCount": 1, //default signal count to be displayed in the UI
+        "aggrJobs": ["clickAggr","cartAggr"], //aggregation jobs that should run when a user clicks "run aggregations" button.
+        "defaultSignalCount": 1, //default signal count to be displayed in the UI simulation
         "multiSelectFacets": false, //not currently supported
         "collapseField": undefined,
 

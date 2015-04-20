@@ -12,9 +12,9 @@ This repository is packaged with a node http server and install, start and stop 
 2. cd fustion-seed-app
 3. bin/install
 4. bin/start
-5. Go to: http://localhost:8000/app/#/ecomm
+5. Go to http://localhost:8000/app/#/ecomm
 
-By default, this will point to a Fusion server hosted on AWS. To point this to another server and for other application settings see app/ecomm/services/ecommService.js
+By default, this will point to an existing Fusion server hosted on AWS. To point this to another server and for other application settings see app/ecomm/services/ecomm-service.js
 
 Features
 * Easy to skin
@@ -22,7 +22,7 @@ Features
 * Signals, Aggregations and Recommendations (EventMiner coming soon)
 * Product page demonstrating 3 different recommendation types.
 * Dynamic faceting
-* Auto-complete
+* Auto-complete (built on signals_aggr by default)
 * Spell-checking ("did you mean.." suggestions)
 * Developer assistance (shows live requests being sent to Fusion and the JSON responses).
 
