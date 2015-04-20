@@ -303,27 +303,7 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
 
         //an alternate type ahead using the search history collection and the suggester component
         $scope.typeAheadSearch = function(val) {
-
-            //var url = ecommService.proxyUrl + "ec2-54-90-6-131.compute-1.amazonaws.com:8983/solr/ecomm_search_history/suggest?suggest=true&suggest.build=true&suggest.dictionary=ecommSuggester&suggest.q="+val;
-            //return $http.get(url, {
-            return fusionHttp.getQueryPipeline(ecommService.fusionUrl,ecommService.simplePipelineId,ecommService.typeAheadCollectionId,"suggest",
-                {
-                    wt: 'json',
-                    "suggest.dictionary": "mySuggester",
-                    q: val
-
-                }).then(function (response) {
-                    var d = response.data.suggest.mySuggester[val].suggestions
-                    //console.log(d);
-                    var ta = [];
-                    for (var i = 0; i < d.length; i++) {
-                        //console.log("pushing:");
-                        //console.log(d[i].term);
-                        ta.push(d[i].term);
-                    }
-                    return ta;
-                })
-
+            return ecommService.typeAheadSearch(val);
         };
 
         $scope.clickSaleFilter = function() {

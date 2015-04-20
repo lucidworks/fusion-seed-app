@@ -9,7 +9,7 @@ This repository is packaged with a node http server and install, start and stop 
 
 ## Installing and Running
 1. git clone https://github.com/LucidWorks/fusion-seed-app.git
-2. cd fustion-seed-app
+2. cd fusion-seed-app
 3. bin/install
 4. bin/start
 5. Go to http://localhost:8000/app/#/ecomm

@@ -11,6 +11,8 @@ myModule.factory('ecommService', ['$http', 'fusionHttp', '$sce', function($http,
         "collectionId": "products", //the main collection
         "signalsCollectionId": "products_signals", //the signals colleciton
         "typeAheadCollectionId": "products_signals_aggr", //the collection where suggestions should come from
+        "typeAheadDictionary": "mySuggester",
+        "typeAheadReqHandler": "suggest",
         "requestHandler": "select", //default request handler for searches
         "taxonomyField": undefined, //set to undefined if using pivot facet for taxonomy
         "taxonomySeparator": "/", //if using a path hierarchy field
@@ -135,7 +137,30 @@ myModule.factory('ecommService', ['$http', 'fusionHttp', '$sce', function($http,
             }
             fqs = new_fqs;
             return fqs;
+        },
+
+        typeAheadSearch: function(val) {
+            return fusionHttp.getQueryPipeline(ecommService.fusionUrl,ecommService.simplePipelineId,ecommService.typeAheadCollectionId,this.typeAheadReqHandler,
+                {
+                    wt: 'json',
+                    "suggest.dictionary": this.typeAheadDictionary,
+                    q: val
+
+                }).then(function (response) {
+                    var dict = response.config.params["suggest.dictionary"];
+                    var d = response.data.suggest[dict][val].suggestions
+                    //console.log(d);
+                    var ta = [];
+                    for (var i = 0; i < d.length; i++) {
+                        //console.log("pushing:");
+                        //console.log(d[i].term);
+                        ta.push(d[i].term);
+                    }
+                    return ta;
+                })
+
         }
+
 
     };
 
