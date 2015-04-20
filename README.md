@@ -28,3 +28,19 @@ Features
 
 Roadmap
 * Paging
+
+## Notes On Skinning
+This app uses Bootstrap and AngularJS. It uses Bootstrap's grid system to control page layout. Here is a list of files of interest that could be modified in order to customize the skin:
+* app/index.html - The header and footer.
+* app/ecomm/view-search.html - Everything in-between the header and footer including the 2 column layout.
+* app/app.css - All custom styles.
+
+## Notes On Project Files
+This project is made up of several modules. Each module adheres to the following structure:
+* app/<module name> - Contains the module, including any controllers and views.
+** app/<module name>/directives - Contains custom directive js and html files.
+** app/<module name>/services - Contains any custom services.
+# Module Descriptions
+* app/ecomm - Contains the e-commerce demo.
+* app/solr - Contains any directives, services, controllers, or views that encapsulate Solr-related functionality. For this app, it is just a handful of directives for rendering elements from a Solr response.
+* app/fusion - Contains any directives, services, controllers, or views that encapsulate Fusion-related functionality. This includes a simple wrapper of Fusion's REST API using Angular's $http service.
