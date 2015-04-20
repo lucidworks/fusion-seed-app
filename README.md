@@ -40,6 +40,7 @@ This project is made up of several modules. Each module adheres to the following
 * app/<module name> - Contains the module, including any controllers and views.
   * app/<module name>/directives - Contains custom directive js and html files.
   * app/<module name>/services - Contains any custom services.
+
 # Module Descriptions
 * app/ecomm - Contains the e-commerce demo.
 * app/solr - Contains any directives, services, controllers, or views that encapsulate Solr-related functionality. For this app, it is just a handful of directives for rendering elements from a Solr response.
