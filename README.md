@@ -52,7 +52,9 @@ This project is made up of several modules. Each module adheres to the following
 You may notice that requests to Fusion are being sent to port 9292. This is the address of a proxy server running on the Fusion server. This proxy provides 2 things:
 * CORS enabled - This is required in order to send client-side requests to Fusion.
 * Username/Password Protection - Since the proxy contains the basic auth headers, and it is running on the server, it means credentials are hidden from clients.
+
 A simple Node proxy server has been packaged with this application in proxy-server. It must be started separately using the following steps:
+
 *On your Fusion server*
 1. git clone https://github.com/LucidWorks/fusion-seed-app.git
 2. cd fusion-seed-app/proxy-server
