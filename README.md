@@ -56,6 +56,7 @@ You may notice that requests to Fusion are being sent to port 9292. This is the 
 A simple Node proxy server has been packaged with this application in proxy-server. It must be started separately using the following steps:
 
 *On your Fusion server*
+
 1. git clone https://github.com/LucidWorks/fusion-seed-app.git
 2. cd fusion-seed-app/proxy-server
 3. bash start.sh
