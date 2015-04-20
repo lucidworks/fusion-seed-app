@@ -38,8 +38,8 @@ This app uses Bootstrap and AngularJS. It uses Bootstrap's grid system to contro
 ## Notes On Project Files
 This project is made up of several modules. Each module adheres to the following structure:
 * app/_module_name_ - Contains the module, including any controllers and views.
-  * app/<module name>/directives - Contains custom directive js and html files.
-  * app/<module name>/services - Contains any custom services.
+  * app/_module_name_/directives - Contains custom directive js and html files.
+  * app/_module_name_/services - Contains any custom services.
 
 # Module Descriptions
 * app/ecomm - Contains the e-commerce demo.
