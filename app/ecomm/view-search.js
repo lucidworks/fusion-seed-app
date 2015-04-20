@@ -10,17 +10,12 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
             });
     }])
 
-/*.controller('ViewecommSearchCtrl', [function() {
-
-}]);*/
-
     .controller('ViewecommSearchCtrl', function ($scope, $http, $routeParams, $location, $route, $sce, $window, $interval, $timeout, fusionHttp, ecommService) {
 
 
         $scope.loading = true;
 
         $scope.controller_path = ecommService.controllerPath;
-
 
         //pipeline_id and colleciton_id can be overriden by passing query params
         var pipeline_id = ecommService.pipelineId;
@@ -114,14 +109,6 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
                 console.log(config);
             });
 
-
-
-        //ecommService.getSearchResults($scope,q,fqs);
-        //}
-
-
-
-
         function renderSearchResults(data, status, headers, config) {
             var fusionUrl = config.url+"?q="+q;
             for (var i=0;i<fqs.length;i++) fusionUrl+="&fq="+fqs[i];
@@ -175,7 +162,6 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
             }
         }
 
-
         $scope.doSearchWithin = function(text) {
             $location.search('searchWithin', text);
         }
@@ -183,10 +169,6 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
         $scope.clickSearch = function(query) {
             $location.search('q', query);
         }
-
-
-
-
 
         //Signals API
         //curl -u admin:password123 -X POST -H 'Content-type:application/json' -d '[{"params": {"query": "sushi", "docId": "54c0a3bafdb9b911008b4b2a"}, "type":"click", "timestamp": "2015-02-12T23:44:52.533000Z"}]' http://ec2-54-90-6-131.compute-1.amazonaws.com:8764/api/apollo/signals/ecomm_poc1
@@ -382,21 +364,6 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
             $location.search(search);
 
         }
-
-        /*function splitFilter(filter, filter_separator) {
-            return filter.split(filter_separator);
-        }
-
-        function filterConcat(arr_filter, filter_separator) {
-            var filter = '';
-            for (var i=0;i<arr_filter.length;i++) {
-                filter+= arr_filter[i];
-                if (i != arr_filter.length-1) {
-                    filter += filter_separator;
-                }
-            }
-            return filter;
-        }*/
 
         $scope.isSelected = function(fname, fvalue) {
             var search = $location.search();
