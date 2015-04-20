@@ -48,6 +48,7 @@ This project is made up of several modules. Each module adheres to the following
 
 ## Customizing the E-Commerce Demo
 I've created several demos for customers using this codebase. Usually the steps are as follows. Pretend you need to create a customized demo for "Acme".
+
 1. Do a global 'find and replace', replace all instances of 'ecomm' with 'acme' including file names.
 2. Modify app/acme/services/acme-service.js. Reconfigure the module to point to the correct Fusion instance, pipelines, etc..
 
