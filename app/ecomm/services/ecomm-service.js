@@ -16,7 +16,7 @@ myModule.factory('ecommService', ['$http', 'fusionHttp', '$sce', function($http,
         "typeAheadReqHandler": "suggest",
         "requestHandler": "select", //default request handler for searches
         "taxonomyField": undefined, //set to undefined if using pivot facet for taxonomy
-        "taxonomySeparator": "/", //if using a path hierarchy field
+        "taxonomySeparator": "|", //if using a path hierarchy field
         "taxonomyPivot":"department,class", //set to undefined if using PathHierarchyTokenizer field for taxonomy
         "filterSeparator": "~",
         "controllerPath": "ecomm",
@@ -43,12 +43,15 @@ myModule.factory('ecommService', ['$http', 'fusionHttp', '$sce', function($http,
                 replace(/-/g, ' ');
         },
 
-        sendSignal: function(signalType,docId,count,q) {
+        sendSignal: function(signalType,docId,count,q,filters) {
 
             //console.log(signalType);
             //return;
 
-            var filters = [];
+            //var filters = [];
+
+            //we need to change the fqs to simple name/value pairs
+
             //filters.push("store/" + $routeParams.store);
             //if ($routeParams.category && $routeParams.category != '*')
             //    filters.push("department/" + fusionHttp.getCatCode($routeParams.category));
@@ -162,13 +165,31 @@ myModule.factory('ecommService', ['$http', 'fusionHttp', '$sce', function($http,
 
         },
 
+        /*rebuildSuggest: function() {
+            return fusionHttp.getQueryPipeline(ecommService.fusionUrl,ecommService.simplePipelineId,ecommService.typeAheadCollectionId,this.typeAheadReqHandler,
+                {
+                    wt: 'json',
+                    "suggest.dictionary": this.typeAheadDictionary,
+                    "suggest.build": "true",
+                    q: "a"
+
+                });
+        },*/
+
         //returns a hash of kvs (id,boost) from Solr's bq param
         parseRecommendationBoost: function(bq) {
             if (bq) {
                 var recBoost = {};
-                for (var i = 0; i < bq.length; i++) {
-                    var id = bq[i].split("^")[0].replace("id:", "");
-                    var boost = bq[i].split("^")[1];
+                if (Array.isArray(bq)) {
+                    for (var i = 0; i < bq.length; i++) {
+                        var id = bq[i].split("^")[0].replace("id:", "");
+                        var boost = bq[i].split("^")[1];
+                        recBoost[id] = boost;
+                    }
+
+                } else {
+                    var id = bq.split("^")[0].replace("id:", "");
+                    var boost = bq.split("^")[1];
                     recBoost[id] = boost;
                 }
                 return recBoost;

@@ -73,6 +73,27 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
         var filter = $routeParams.f;
         var fqs = ecommService.convertFqs(filter);
 
+
+        var recFilter = "";
+        //CUSTOM FOR ECOMM DEMO
+        if ($routeParams.cat) {
+            var cat = $routeParams.cat;
+            //pass this to the UI to filter recommendations
+            recFilter = cat.toLowerCase();
+            if (cat.indexOf(ecommService.taxonomySeparator) > -1) {
+                var department = cat.split(ecommService.taxonomySeparator)[0];
+                var _class = cat.split(ecommService.taxonomySeparator)[1];
+                fqs.push("{!term f=department}"+department);
+                fqs.push("{!term f=class}"+_class);
+            } else { fqs.push("{!term f=department}"+cat); };
+
+        }
+        //escape spaces for wild card string searches work
+        recFilter = recFilter.replace(/ /g,"\\ ");
+        recFilter += "*";
+        // END CUSTOM
+
+
         //add searchWithin as a filter
         if ($scope.searchWithin) {
             fqs.push('{!edismax}' + $scope.searchWithin);
@@ -93,11 +114,13 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
         }
 
 
+        console.log(recFilter);
         //send the search
         fusionHttp.getQueryPipeline(ecommService.fusionUrl,pipeline_id,collection_id,request_handler,
             {
                 'q': q,
-                'fq': fqs
+                'fq': fqs,
+                'recFilter': recFilter
             })
             .success(function(data, status, headers, config) {
 
@@ -117,10 +140,12 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
 
             var fusionUrl = config.url+"?q="+q;
             for (var i=0;i<fqs.length;i++) fusionUrl+="&fq="+fqs[i];
+            if (recFilter) fusionUrl += "&recFilter="+recFilter;
+
+
 
             $scope.fusionUrl = fusionUrl;
             console.log(fusionUrl);
-
 
             $scope.data = data;
             $scope.showData = false;
@@ -155,7 +180,7 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
             var docCount = docs.length;
             //console.log("Doc count:"+ docCount);
             if (docCount == 0) {
-                fusionHttp.getSpellCheck(fusion_url,"ecomm_poc1-spellcheck",collection_id,q)
+                /*fusionHttp.getSpellCheck(ecommService.fusionUrl,"ecomm_poc1-spellcheck",collection_id,q)
                     .success(function(data2) {
                         console.log(data2);
                         if (data2.spellcheck.suggestions.collation) {
@@ -164,7 +189,7 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
                             $scope.spellsuggest = data2.spellcheck.suggestions
                         }
                         //console.log($scope.spellsuggest);
-                    });
+                    });*/
             } else {
 
                 //TODO implement top or related searches here
@@ -182,7 +207,16 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
         //Signals API
         //curl -u admin:password123 -X POST -H 'Content-type:application/json' -d '[{"params": {"query": "sushi", "docId": "54c0a3bafdb9b911008b4b2a"}, "type":"click", "timestamp": "2015-02-12T23:44:52.533000Z"}]' http://ec2-54-90-6-131.compute-1.amazonaws.com:8764/api/apollo/signals/ecomm_poc1
         $scope.sendSignal = function(signalType,docId,count) {
-            return ecommService.sendSignal(signalType,docId,count,$routeParams.q)
+
+
+            var cat = $routeParams.cat;
+            var signal_filter = undefined;
+
+            if (cat) signal_filter = cat;
+
+            console.log("Signal filter:" + signal_filter);
+
+            return ecommService.sendSignal(signalType,docId,count,$routeParams.q,signal_filter)
                 .success(function(response) {
                 console.log(response);
                 var msg = 'Successfully indexed signals for docid: ' + docId;
@@ -329,6 +363,19 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
             return ecommService.renderSearchResultsBullets(data);
         }
 
+
+        $scope.clickPivot = function(department,_class) {
+            var search = $location.search();
+            var cat;
+            if (department) cat = department;
+            if (_class) cat += ecommService.taxonomySeparator + _class;
+
+            //cat = cat.replace(/ /g,"+");
+
+            search['cat'] = cat;
+            $location.search(search);
+        }
+
         $scope.clickFacet = function(fname, fvalue) {
 
             var search = $location.search();
@@ -340,7 +387,6 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
                 if (Array.isArray(filters)) {
                     for (var i=0;i<filters.length;i++) {
                         if (filters[i] == fname+":"+fvalue) {
-                            //console.log("ALREADY CLICKED (multi filter)");
                             already_clicked = true;
                             filters.splice(i,1);
                             search['f'] = filters;
@@ -348,15 +394,11 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
                     }
                 } else {
                     if (filters == fname+":"+fvalue) {
-                        //console.log ("ALREADY CLICKED (single filter)");
                         already_clicked = true;
-                        //console.log("search f before: "+ search['f'])
                         delete search['f'];
-                        //console.log("search f after: "+ search['f'])
                     }
                 }
             }
-
             if (already_clicked == false) {
                 var f = []; //array of filters
                 if (search['f']) {
@@ -371,7 +413,6 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
                 search['f'] = f;
             }
             $location.search(search);
-
         }
 
         $scope.isSelected = function(fname, fvalue) {

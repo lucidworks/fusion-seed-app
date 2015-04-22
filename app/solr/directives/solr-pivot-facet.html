@@ -15,17 +15,16 @@
             <div class="input-group-addon"><span class="glyphicon glyphicon-filter"></span></div>
         </div>
         <div>
-            <div ng-repeat="value in facetData | filter:query" style="padding-left:20px">
+            <div ng-repeat="department in facetData | filter:query" style="padding-left:20px">
                 <a href ng-show="!showClass" ng-click="showClass=true" class="glyphicon-plus"></a>
                 <span ng-show="showClass" ng-click="showClass=false" class="glyphicon-minus"></span>
 
-                <a href ng-click="clickPivot(value.field,value.value)">{{value.value}}</a>
-                <small>({{value.count}})</small>
+                <a href ng-click="clickPivot(department.value,undefined)">{{department.value}}</a>
+                <small>({{department.count}})</small>
 
-                <div ng-show="showClass" ng-repeat="val in value.pivot | filter:query" style="padding-left:20px">
-                    <a href ng-click="clickPivot(val.field,val.value)">{{val.value}}</a>
-                    <small>({{val.count}})</small>
-
+                <div ng-show="showClass" ng-repeat="_class in department.pivot | filter:query" style="padding-left:20px">
+                    <a href ng-click="clickPivot(department.value,_class.value)">{{_class.value}}</a>
+                    <small>({{_class.count}})</small>
                 </div>
             </div>
         </div>
