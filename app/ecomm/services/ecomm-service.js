@@ -61,17 +61,6 @@ myModule.factory('ecommService', ['$http', 'fusionHttp', '$sce', function($http,
 
         sendSignal: function(signalType,docId,count,q,department,_class,manufacturer) {
 
-            //console.log(signalType);
-            //return;
-
-            //var filters = [];
-
-            //we need to change the fqs to simple name/value pairs
-
-            //filters.push("store/" + $routeParams.store);
-            //if ($routeParams.category && $routeParams.category != '*')
-            //    filters.push("department/" + fusionHttp.getCatCode($routeParams.category));
-
             var params = {};
             params["query"] = q;
             params["docId"] = docId;
@@ -79,11 +68,9 @@ myModule.factory('ecommService', ['$http', 'fusionHttp', '$sce', function($http,
             if (_class) params["class"] = _class;
             if (manufacturer) params["manufacturer"] = manufacturer;
 
-
             var d = new Date();
             var ts = d.toISOString();
-
-
+            
             var data = []
             for (var i= 0;i<count;i++) {
                 //var signal = {"params": {"query": q, filterQueries: undefined, "docId": docId}, "type":signalType, "timestamp": ts};
@@ -93,14 +80,6 @@ myModule.factory('ecommService', ['$http', 'fusionHttp', '$sce', function($http,
                 console.log(signal);
                 data.push(signal);
             }
-            /*return $http.post(url, data)
-             .success(function(response) {
-             console.log(response);
-             var msg = 'Successfully indexed signals for docid: ' + docId;
-             console.log(msg)
-             $scope.notification = true;
-             $scope.notificationMsg = msg;
-             });*/
             return fusionHttp.postSignal(this.fusionUrl,this.collectionId,data);
         },
 
