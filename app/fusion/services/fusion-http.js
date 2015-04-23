@@ -29,10 +29,10 @@ myModule.factory('fusionHttp', ['$http', function($http) {
             //.success(function(data, status, headers, config) {
 
         },
-        postSignal: function(fusionUrl,collectionId,signalData) {
+        postSignal: function(fusionUrl,collectionId,signalData,commit) {
             //$http.defaults.headers.common['Authorization'] = 'Basic ' + btoa('admin:password123');
-
             var url = fusionUrl+'/api/apollo/signals/'+collectionId;
+            if (commit) url+= "?commit=true";
             return $http.post(url, signalData);
         },
 

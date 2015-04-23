@@ -74,7 +74,7 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
         var fqs = ecommService.convertFqs(filter);
 
 
-        var recFilter = "";
+        /*var recFilter = "";
         //CUSTOM FOR ECOMM DEMO
         if ($routeParams.cat) {
             var cat = $routeParams.cat;
@@ -91,7 +91,7 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
         //escape spaces for wild card string searches work
         recFilter = recFilter.replace(/ /g,"\\ ");
         recFilter += "*";
-        // END CUSTOM
+        // END CUSTOM*/
 
 
         //add searchWithin as a filter
@@ -113,14 +113,11 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
             fqs.push(collapse);
         }
 
-
-        console.log(recFilter);
         //send the search
         fusionHttp.getQueryPipeline(ecommService.fusionUrl,pipeline_id,collection_id,request_handler,
             {
                 'q': q,
-                'fq': fqs,
-                'recFilter': recFilter
+                'fq': fqs
             })
             .success(function(data, status, headers, config) {
 
@@ -140,7 +137,7 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
 
             var fusionUrl = config.url+"?q="+q;
             for (var i=0;i<fqs.length;i++) fusionUrl+="&fq="+fqs[i];
-            if (recFilter) fusionUrl += "&recFilter="+recFilter;
+            //if (recFilter) fusionUrl += "&recFilter="+recFilter;
 
 
 

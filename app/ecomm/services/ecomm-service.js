@@ -70,7 +70,7 @@ myModule.factory('ecommService', ['$http', 'fusionHttp', '$sce', function($http,
 
             var d = new Date();
             var ts = d.toISOString();
-            
+
             var data = []
             for (var i= 0;i<count;i++) {
                 //var signal = {"params": {"query": q, filterQueries: undefined, "docId": docId}, "type":signalType, "timestamp": ts};
@@ -80,7 +80,7 @@ myModule.factory('ecommService', ['$http', 'fusionHttp', '$sce', function($http,
                 console.log(signal);
                 data.push(signal);
             }
-            return fusionHttp.postSignal(this.fusionUrl,this.collectionId,data);
+            return fusionHttp.postSignal(this.fusionUrl,this.collectionId,data,true);
         },
 
         renderHtml: function(html_code)
