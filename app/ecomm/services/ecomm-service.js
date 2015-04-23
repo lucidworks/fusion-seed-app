@@ -43,7 +43,23 @@ myModule.factory('ecommService', ['$http', 'fusionHttp', '$sce', function($http,
                 replace(/-/g, ' ');
         },
 
-        sendSignal: function(signalType,docId,count,q,filters) {
+        getFilterHash: function(filters) {
+            var fs = {};
+            if (Array.isArray(filters)) {
+                for (var i=0;i<filters.length;i++) {
+                    if (filters[i].indexOf(":") > -1) {
+                        var fKV = filters[i].split(":");
+                        fs[fKV[0]] = fKV[1];
+                    }
+                }
+            } else if (typeof(filters) == "string") {
+                var fKV = filters.split(":");
+                fs[fKV[0]] = fKV[1];
+            }
+            return fs;
+        },
+
+        sendSignal: function(signalType,docId,count,q,department,_class,manufacturer) {
 
             //console.log(signalType);
             //return;
@@ -56,13 +72,22 @@ myModule.factory('ecommService', ['$http', 'fusionHttp', '$sce', function($http,
             //if ($routeParams.category && $routeParams.category != '*')
             //    filters.push("department/" + fusionHttp.getCatCode($routeParams.category));
 
+            var params = {};
+            params["query"] = q;
+            params["docId"] = docId;
+            if (department) params["department"] = department;
+            if (_class) params["class"] = _class;
+            if (manufacturer) params["manufacturer"] = manufacturer;
+
+
             var d = new Date();
             var ts = d.toISOString();
 
 
             var data = []
             for (var i= 0;i<count;i++) {
-                var signal = {"params": {"query": q, filterQueries: filters, "docId": docId}, "type":signalType, "timestamp": ts};
+                //var signal = {"params": {"query": q, filterQueries: undefined, "docId": docId}, "type":signalType, "timestamp": ts};
+                var signal = {"params": params, "type":signalType, "timestamp": ts};
                 //console.log(solrParams.q);
                 //console.log(solrParams.fq);
                 console.log(signal);
