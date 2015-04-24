@@ -180,6 +180,10 @@ myModule.factory('ecommService', ['$http', 'fusionHttp', '$sce', function($http,
                 });
         },*/
 
+        calculateNumPages: function(numDocs,pageSize) {
+            return Math.ceil(numDocs / pageSize);
+        },
+
         //returns a hash of kvs (id,boost) from Solr's bq param
         parseRecommendationBoost: function(bq) {
             if (bq) {

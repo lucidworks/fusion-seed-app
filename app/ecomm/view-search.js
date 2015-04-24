@@ -113,11 +113,18 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
             fqs.push(collapse);
         }
 
+        //paging
+        var start = 0;
+        if ($routeParams.start) start = $routeParams.start;
+
+
+
         //send the search
         fusionHttp.getQueryPipeline(ecommService.fusionUrl,pipeline_id,collection_id,request_handler,
             {
                 'q': q,
-                'fq': fqs
+                'fq': fqs,
+                'start': start
             })
             .success(function(data, status, headers, config) {
 
@@ -140,7 +147,6 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
             //if (recFilter) fusionUrl += "&recFilter="+recFilter;
 
 
-
             $scope.fusionUrl = fusionUrl;
             console.log(fusionUrl);
 
@@ -149,6 +155,7 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
             $scope.showDoc = false;
 
             var solr_params = data.responseHeader.params;
+
 
             //add the boosts for each item to the scope so they can be displayed
             $scope.recBoosts = ecommService.parseRecommendationBoost(solr_params.bq);
@@ -175,6 +182,22 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
 
             //how many docs are there?
             var docCount = docs.length;
+
+            //paging
+            var pageSize = solr_params.rows;
+            //how many pages are there?
+            $scope.numPages = ecommService.calculateNumPages(data.response.numFound,pageSize);
+            //what page are we on?
+            $scope.currentPage = (start / pageSize) + 1;
+            $scope.pageSize = pageSize;
+            $scope.start = start;
+
+            if ($scope.numPages > 10) {
+                $scope.showPages = new Array(10);
+            } else $scope.showPages = new Array($scope.numPages);
+
+
+
             //console.log("Doc count:"+ docCount);
             if (docCount == 0) {
                 /*fusionHttp.getSpellCheck(ecommService.fusionUrl,"ecomm_poc1-spellcheck",collection_id,q)

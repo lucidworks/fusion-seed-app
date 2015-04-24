@@ -21,11 +21,14 @@
 </head>
 <body id="bdy">
 
-<div class="col-md-12 fusion-header">
+<!--div class="col-md-12 fusion-header">
     <div class="col-md-10">
         <img src="img/lw-logo.png" height="40px"/>
         <b>Lucidworks</b> Fusion <span style="font-size:75%">for <strong>E-Commerce</strong></span>
     </div>
+</div-->
+<div class="col-md-12 fusion-header2">
+    <img src="http://lucidworks.com/wp-content/themes/lucidworks/library/img/structure/lucid-works-white.svg" alt="Lucidworks" width="160" height="27" class="white-logo" />
 </div>
 
 <!--div class="col-md-12" style="padding-left:30px;padding-top:10px;padding-bottom:10px;">
@@ -41,7 +44,9 @@
 <![endif]-->
 
 
-<div ng-view></div>
+<div ng-view style="min-height: 500px"></div>
+
+
 
 <!--div>Angular seed app: v<span app-version></span></div-->
 
@@ -52,6 +57,7 @@
 <div class="col-md-12 fusion-footer">
 &copy;2015 Lucidworks
 </div>
+
 
 <script src="bower_components/angular/angular.js"></script>
 <script src="bower_components/angular-route/angular-route.js"></script>

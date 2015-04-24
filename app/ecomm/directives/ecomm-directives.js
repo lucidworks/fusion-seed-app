@@ -53,4 +53,11 @@ angular.module('ecomm.Directives', [])
             scope: true,
             templateUrl: 'ecomm/directives/ecomm-choose-department-facet.html'
         };
+    })
+    .directive('ecommResultsPaging', function() {
+        return {
+            restrict: 'E',
+            scope: true,
+            templateUrl: 'ecomm/directives/ecomm-results-paging.html'
+        };
     });

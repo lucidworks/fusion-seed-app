@@ -5,6 +5,9 @@
 	<!-- left col div -->
 	<div class="col-md-3 panel-default" style="padding-left:40px;">
 
+        <div class="loading-lightbox" ng-show="loading">
+            <img src="img/loading.gif" />
+        </div>
 
         <solr-pivot-facet
                 label="Choose Department"
@@ -82,11 +85,17 @@
             <br />
 
 
+
             <h3>Found {{data.response.numFound}} results
 
                 <span ng-if="$routeParams.q">for "{{$routeParams.q}}" <small><a ng-href="#/{{controller_path}}/">Clear</a></small></span></h3>
 
+
+
             <ecomm-spell-suggest></ecomm-spell-suggest>
+
+
+            <ecomm-results-paging></ecomm-results-paging>
 
 			<div class="col-md-12" ng-repeat="doc in docs">
                 <br />
