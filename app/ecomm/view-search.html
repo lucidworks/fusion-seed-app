@@ -6,7 +6,7 @@
 	<div class="col-md-3 panel-default" style="padding-left:40px;">
 
         <div class="loading-lightbox" ng-show="loading">
-            <img src="img/loading.gif" />
+            <!--img src="img/loading.gif" /-->
         </div>
 
         <solr-pivot-facet
@@ -65,30 +65,24 @@
                 <ecomm-auto-complete></ecomm-auto-complete>
             </div>
 		</div>
-		<div class="col-md-12" style="padding-top:20px">
+		<div class="col-md-12" style="padding-top:10px">
 
             <a class="small" ng-click="showFusionUrl = !showFusionUrl" href="javascript:void(0);">View Fusion Request</a>,
             <solr-api-helper solr-response="data">
             </solr-api-helper>
             <blockquote ng-show="showFusionUrl">
-
                 <pre><small>{{fusionUrl}}</small></pre>
-
             </blockquote>
-
 		</div>
 
-		<div class="col-md-12" style="padding-top:20px">
+		<div class="col-md-12" style="padding-top:10px">
             <solr-path-breadcrumb
                     path="#/{{controller_path}}/{{$routeParams.store}}/*/{{$routeParams.filter}}"
                     breadcrumb="breadcrumb"></solr-path-breadcrumb>
-            <br />
 
+            <h4>Found {{data.response.numFound}} results
 
-
-            <h3>Found {{data.response.numFound}} results
-
-                <span ng-if="$routeParams.q">for "{{$routeParams.q}}" <small><a ng-href="#/{{controller_path}}/">Clear</a></small></span></h3>
+                <span ng-if="$routeParams.q">for "{{$routeParams.q}}" <small><a ng-href="#/{{controller_path}}/">Clear</a></small></span></h4>
 
 
 

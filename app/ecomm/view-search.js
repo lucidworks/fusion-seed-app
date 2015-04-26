@@ -392,7 +392,10 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
 
             //cat = cat.replace(/ /g,"+");
 
+            //delete searc['start'];
+
             search['cat'] = cat;
+            search['start'] = 0;
             $location.search(search);
         }
 
@@ -432,6 +435,9 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
                 //add our new array of filters to the search object
                 search['f'] = f;
             }
+
+            search['start'] = 0
+
             $location.search(search);
         }
 
