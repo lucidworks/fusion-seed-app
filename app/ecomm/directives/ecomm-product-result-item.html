@@ -10,7 +10,7 @@
 
         <!-- also pass q to product page -->
         <a href="#/ecomm/p/{{urlSafe(doc.name)}}/{{doc.id}}?q={{$routeParams.q}}">
-            <span ng-bind-html="renderHtml(doc.name)"></span>
+            <span ng-bind-html="renderHtml(doc.name_t)"></span>
         </a>
         <br />
         <small ng-if="doc.manufacturer">by {{doc.manufacturer}}</small> <br />

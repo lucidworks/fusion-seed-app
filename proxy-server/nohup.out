@@ -10999,3 +10999,140 @@ serve: /api/apollo/aggregator/jobs/products_signals/cartAggr
 serve: /api/apollo/aggregator/jobs/products_signals/clickAggr
 serve: /api/apollo/aggregator/jobs/products_signals/cartAggr
 serve: /api/apollo/aggregator/jobs/products_signals/clickAggr
+serve: /admin/search/temp1/products-default?query=q%3D%252A%26start%3D0
+serve: /css/app.css
+serve: /js/svgforie.min.js
+serve: /js/vendor.js
+serve: /js/templates.js
+serve: /js/app.js
+serve: /webfonts/proximanova-reg-webfont.woff
+serve: /api/session
+serve: /favicon.ico?v=3
+serve: /api/?_noSessionRefresh=true
+serve: /img/icons.svg
+serve: /data/help-map.json
+serve: /data/help.html
+serve: /webfonts/proximanova-sbold-webfont.woff
+serve: /webfonts/proximanova-light-webfont.woff
+serve: /img/core-spinner.gif
+serve: /api/apollo/collections
+serve: /api/apollo/query-pipelines
+serve: /api/apollo/query-pipelines/products-default/collections/temp1/select?echoParams=all&json.nl=arrarr&q=*&start=0&wt=json
+serve: /api/apollo/collections
+serve: /api/apollo/connectors/datasources
+serve: /admin/collections
+serve: /css/app.css
+serve: /js/svgforie.min.js
+serve: /js/vendor.js
+serve: /js/templates.js
+serve: /js/app.js
+serve: /webfonts/proximanova-reg-webfont.woff
+serve: /api/session
+serve: /favicon.ico?v=3
+serve: /img/core-spinner.gif
+serve: /api/?_noSessionRefresh=true
+serve: /img/icons.svg
+serve: /data/help-map.json
+serve: /data/help.html
+serve: /webfonts/proximanova-sbold-webfont.woff
+serve: /webfonts/proximanova-light-webfont.woff
+serve: /api/apollo/collections
+serve: /api/apollo/connectors/datasources
+events.js:85
+      throw er; // Unhandled 'error' event
+            ^
+Error: listen EADDRINUSE
+    at exports._errnoException (util.js:746:11)
+    at Server._listen2 (net.js:1146:14)
+    at listen (net.js:1172:10)
+    at Server.listen (net.js:1257:5)
+    at Object.<anonymous> (/Users/peaev001/Dev/pcam/fusion-seed-app/proxy-server/fusion-proxy.js:8:43)
+    at Module._compile (module.js:460:26)
+    at Object.Module._extensions..js (module.js:478:10)
+    at Module.load (module.js:355:32)
+    at Function.Module._load (module.js:310:12)
+    at Function.Module.runMain (module.js:501:10)
+serve: /admin/collections
+serve: /css/app.css
+serve: /js/svgforie.min.js
+serve: /js/vendor.js
+serve: /js/templates.js
+serve: /js/app.js
+serve: /webfonts/proximanova-reg-webfont.woff
+serve: /api/session
+serve: /favicon.ico?v=3
+serve: /img/core-spinner.gif
+serve: /api/?_noSessionRefresh=true
+serve: /img/icons.svg
+serve: /data/help-map.json
+serve: /data/help.html
+serve: /webfonts/proximanova-sbold-webfont.woff
+serve: /webfonts/proximanova-light-webfont.woff
+serve: /api/apollo/collections
+serve: /api/apollo/connectors/datasources
+serve: /api/apollo/index-pipelines
+serve: /api/apollo/index-stages/schema
+serve: /api/apollo/index-pipelines
+serve: /api/apollo/index-stages/schema
+serve: /api/apollo/collections
+serve: /api/apollo/query-pipelines
+serve: /admin/search
+serve: /css/app.css
+serve: /js/svgforie.min.js
+serve: /js/vendor.js
+serve: /js/templates.js
+serve: /js/app.js
+serve: /webfonts/proximanova-reg-webfont.woff
+serve: /api/session
+serve: /favicon.ico?v=3
+serve: /img/core-spinner.gif
+serve: /api/?_noSessionRefresh=true
+serve: /img/icons.svg
+serve: /data/help-map.json
+serve: /data/help.html
+serve: /webfonts/proximanova-sbold-webfont.woff
+serve: /webfonts/proximanova-light-webfont.woff
+serve: /api/apollo/collections
+serve: /api/apollo/query-pipelines
+serve: /api/apollo/query-pipelines/products-default/collections/products/select?q=*:*&start=0
+serve: /api/apollo/query-pipelines/products-default/collections/temp1/select?q=*:*&start=0
+serve: /api/apollo/index-pipelines
+serve: /api/apollo/index-stages/schema
+serve: /api/apollo/query-pipelines
+serve: /api/apollo/query-stages/schema
+serve: /api/apollo/query-pipelines/products-default
+serve: /api/apollo/collections
+serve: /img/icons.svg
+serve: /api/apollo/query-stages/schema
+serve: /js/ace/theme-clouds.js
+serve: /js/ace/mode-javascript.js
+serve: /js/ace/worker-javascript.js
+serve: /js/ace/worker-javascript.js
+serve: /js/ace/worker-javascript.js
+serve: /js/ace/worker-javascript.js
+serve: /js/ace/worker-javascript.js
+serve: /js/ace/worker-javascript.js
+serve: /js/ace/worker-javascript.js
+serve: /api/apollo/query-pipelines/products-default/collections/temp1/select?q=*:*&start=0
+serve: /api/apollo/query-pipelines/products-default/collections/temp1/select?q=*:*&start=10
+serve: /api/apollo/query-pipelines/products-default/collections/temp1/select?q=*:*&start=0
+serve: /api/apollo/query-pipelines/products-default/collections/temp1/select?q=*:*&start=0
+serve: /api/apollo/query-pipelines/products-default
+serve: /api/apollo/query-pipelines/products-default/refresh
+serve: /img/icons.svg
+serve: /api/apollo/query-pipelines/products-default/collections/temp1/select?q=*:*&start=0
+serve: /api/apollo/query-pipelines/products-simple/collections/products_signals_aggr/suggest?q=p&suggest.dictionary=mySuggester&wt=json
+serve: /api/apollo/query-pipelines/products-simple/collections/products_signals_aggr/suggest?q=pa&suggest.dictionary=mySuggester&wt=json
+serve: /api/apollo/query-pipelines/products-simple/collections/products_signals_aggr/suggest?q=pap&suggest.dictionary=mySuggester&wt=json
+serve: /api/apollo/query-pipelines/products-simple/collections/products_signals_aggr/suggest?q=pape&suggest.dictionary=mySuggester&wt=json
+serve: /api/apollo/query-pipelines/products-simple/collections/products_signals_aggr/suggest?q=paper&suggest.dictionary=mySuggester&wt=json
+serve: /api/apollo/query-pipelines/products-default/collections/temp1/select?q=paper&start=0
+serve: /api/apollo/query-pipelines/products-default
+serve: /api/apollo/query-pipelines/products-default/refresh
+serve: /img/icons.svg
+serve: /api/apollo/query-pipelines/products-default/collections/temp1/select?q=paper&start=0
+serve: /api/apollo/query-pipelines/products-default/collections/temp1/select?fq=%7B!term+f%3Dsuper_cat_name_s%7DFurniture&q=paper&start=0
+serve: /api/apollo/query-pipelines/products-default/collections/temp1/select?fq=%7B!term+f%3Dsuper_cat_name_s%7DFurniture&q=paper&start=0
+serve: /api/apollo/query-pipelines/products-default/collections/temp1/select?q=paper&start=0
+serve: /api/apollo/query-pipelines/products-default/collections/temp1/select?fq=%7B!term+f%3Dsuper_cat_name_s%7DRetail+Store+Supplies&q=paper&start=0
+serve: /api/apollo/query-pipelines/products-default/collections/temp1/select?fq=%7B!term+f%3Dsuper_cat_name_s%7DRetail+Store+Supplies&q=paper&start=0

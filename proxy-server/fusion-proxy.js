@@ -1,9 +1,9 @@
 var http = require('http');
 
-var fusionHost = "localhost";
+var fusionHost = "lcanqnasv08";
 var fusionPort = 8764;
 var username = "admin";
-var password = "password123";
+var password = "Babba2009KK";
 
 var server = http.createServer(onRequest).listen(9292);
 
