@@ -18,7 +18,7 @@ By default, this will point to an existing Fusion server hosted on AWS. To point
 
 Features
 * Easy to skin
-* Can run on any server technology that can serve HTML and javascirpt files.
+* Can run on any server technology that can serve HTML and javascript files.
 * Signals, Aggregations and Recommendations (EventMiner coming soon)
 * Product page demonstrating 3 different recommendation types.
 * Dynamic faceting
