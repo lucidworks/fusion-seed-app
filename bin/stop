@@ -4,4 +4,8 @@
 #kill -TERM $(cat ./var/proxy.pid)
 echo Sending TERM signal to http-server, PID $(cat ./var/server.pid)
 kill -TERM $(cat ./var/server.pid)
+
+echo Sending TERM signal to Proxy, PID $(cat ./var/proxy-server.pid)
+kill -TERM $(cat ./var/proxy-server.pid)
+
 # killall node

@@ -17,5 +17,13 @@
             class="search-link"
             ng-click="console.log(asyncSelected);$location.search('f','');$location.path(controller_path).search('q',asyncSelected)"
             >Search</a></span>
+
+
 </div>
+ Language: 
+ <select ng-model="selected_lang" ng-change="$location.search('lang',selected_lang)">
+  <option>EN</option>
+  <option>FR</option>
+</select>
+{{selected_lang}}
 </form>

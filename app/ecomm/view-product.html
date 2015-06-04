@@ -8,7 +8,7 @@
         <div class="col-md-12">
 
             <div class="col-md-8">
-                <h1><span ng-bind-html="renderHtml(product.name)"></span></h1>
+                <h1><span ng-bind-html="renderHtml(product.name_t)"></span></h1>
 
                 <img ng-src="{{product.image}}" /><br/>
                 <p class="strong-text">
@@ -69,14 +69,14 @@
             <h3>Customers Who Viewed This Item Also Viewed <small>(<a href="https://docs.lucidworks.com/display/fusion/Recommendations+API#RecommendationsAPI-GetItemsforaKnownItem" target="_blank">itemsForItem</a>)</small></h3>
             <div class="col-md-2" ng-repeat="rec in recommendations">
                 <img ng-src="{{rec.image}}" /><br />
-                <small><a ng-href="#/ecomm/p/{{urlSafe(rec.name)}}/{{rec.id}}?q={{q}}">{{rec.name}}</a></small>
+                <small><a ng-href="#/ecomm/p/{{urlSafe(rec.name_t)}}/{{rec.id}}?q={{q}}">{{rec.name_t}}</a></small>
             </div>
         </div>
         <div class="col-md-12" ng-if="recommendations2">
             <h3>Customers Who Searched For "{{q}}" Also Viewed <small>(<a href="https://docs.lucidworks.com/display/fusion/Recommendations+API#RecommendationsAPI-GetItemsforaQuery" target="_blank">itemsForQuery</a>)</small></h3>
             <div class="col-md-2" ng-repeat="rec in recommendations2">
                 <img ng-src="{{rec.image}}" /><br />
-                <small><a ng-href="#/ecomm/p/{{urlSafe(rec.name)}}/{{rec.id}}?q={{q}}">{{rec.name}}</a></small>
+                <small><a ng-href="#/ecomm/p/{{urlSafe(rec.name_t)}}/{{rec.id}}?q={{q}}">{{rec.name_t}}</a></small>
             </div>
         </div>
 

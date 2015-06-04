@@ -14,3 +14,7 @@ bower install
 echo Starting HTTP Server
 http-server -a 0.0.0.0 -p 8000 -c-1 > ./logs/server.log 2>&1 &
 echo $! > ./var/server.pid
+
+echo Starting Proxy Server
+nohup node ./bin/fusion-proxy.js proxy-server.log 2>&1 &
+echo $! > ./var/proxy-server.pid

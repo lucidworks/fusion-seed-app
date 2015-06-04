@@ -1,7 +1,7 @@
 <div class="col-md-3" align="center">
-    <img ng-src="{{doc.image}}" alt="{{doc.name}}" /><br />
+    <img ng-src="/app/img/No_image_available.jpg" alt="{{doc.name_t}}" width="100px" /><br />
     <small>
-        Item {{doc.id}}
+        SKU {{doc.attr_productId_[0]}}
     </small>
 </div>
 
@@ -13,12 +13,9 @@
             <span ng-bind-html="renderHtml(doc.name_t)"></span>
         </a>
         <br />
-        <small ng-if="doc.manufacturer">by {{doc.manufacturer}}</small> <br />
-            <span ng-if="doc.salePrice">
-                <span class="strong-text">${{doc.salePrice}}</span>
-            </span>
-            <span ng-if="doc.regularPrice && doc.regularPrice != doc.salePrice">
-                <strike>{{doc.regularPrice}}</strike>
+        <small ng-if="doc.Brand_EN_s">by {{doc.Brand_EN_s}}</small> <br />
+            <span ng-if="doc.price_c">
+                <span class="strong-text">${{doc.price_c}}</span>
             </span>
             <p>
             {{doc.shortDescription}}</p>

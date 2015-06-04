@@ -6,12 +6,12 @@ myModule.factory('ecommService', ['$http', 'fusionHttp', '$sce', function($http,
 
     var ecommService = {
         "fusionUrl": "http://localhost:9292", //The url where Fusion is hosted.
-        "pipelineId": "products-default", //the main pipeline that searches will go through
+        "pipelineId": "en-search-default", //the main pipeline that searches will go through
         "pipelineNoRecId": "products-default_copy", //the pipeline ID that searchs w/o recommendations should go through
         "simplePipelineId": "products-simple", // a 1 stage "Query Solr" pipeline with /select and /suggest enabled.
-        "collectionId": "temp1", //the main collection
-        "signalsCollectionId": "temp1_signals", //the signals colleciton
-        "typeAheadCollectionId": "temp1_signals_aggr", //the collection where suggestions should come from
+        "collectionId": "en-search", //the main collection
+        "signalsCollectionId": "en-search_signals", //the signals colleciton
+        "typeAheadCollectionId": "en-search-autocomplete", //the collection where suggestions should come from
         "typeAheadDictionary": "mySuggester",
         "typeAheadReqHandler": "suggest",
         "requestHandler": "select", //default request handler for searches
@@ -24,6 +24,7 @@ myModule.factory('ecommService', ['$http', 'fusionHttp', '$sce', function($http,
         "defaultSignalCount": 1, //default signal count to be displayed in the UI simulation
         "multiSelectFacets": false, //not currently supported
         "collapseField": undefined,
+        "defaultLanguage": "EN",
 
 
         urlSafe: function(text) {
@@ -59,14 +60,11 @@ myModule.factory('ecommService', ['$http', 'fusionHttp', '$sce', function($http,
             return fs;
         },
 
-        sendSignal: function(signalType,docId,count,q,department,_class,manufacturer) {
+        sendSignal: function(signalType,docId,count,q) {
 
             var params = {};
             params["query"] = q;
             params["docId"] = docId;
-            if (department) params["department"] = department;
-            if (_class) params["class"] = _class;
-            if (manufacturer) params["manufacturer"] = manufacturer;
 
             var d = new Date();
             var ts = d.toISOString();

@@ -15,6 +15,13 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
 
         $scope.loading = true;
 
+
+        $scope.selected_lang = ecommService.defaultLanguage;
+
+        if ($routeParams.lang) {
+            $scope.selected_lang = $routeParams.lang;
+        }
+
         $scope.controller_path = ecommService.controllerPath;
 
         $scope.noRecPipeline = ecommService.pipelineNoRecId;
@@ -93,6 +100,11 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
         recFilter += "*";
         // END CUSTOM*/
 
+
+        //language 
+        if ($scope.selected_lang) {
+            fqs.push("language_s:"+$scope.selected_lang);
+        }
 
         //add searchWithin as a filter
         if ($scope.searchWithin) {
@@ -226,7 +238,7 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
 
         //Signals API
         //curl -u admin:password123 -X POST -H 'Content-type:application/json' -d '[{"params": {"query": "sushi", "docId": "54c0a3bafdb9b911008b4b2a"}, "type":"click", "timestamp": "2015-02-12T23:44:52.533000Z"}]' http://ec2-54-90-6-131.compute-1.amazonaws.com:8764/api/apollo/signals/ecomm_poc1
-        $scope.sendSignal = function(signalType,docId,count,department,_class,manufacturer) {
+        $scope.sendSignal = function(signalType,docId,count) {
 
 
             var filters = $routeParams.f;
@@ -236,7 +248,7 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
 
 
             //return ecommService.sendSignal(signalType,docId,count,$routeParams.q,filterHash.department,filterHash.class,filterHash.manufacturer)
-            return ecommService.sendSignal(signalType,docId,count,$routeParams.q,department,_class,manufacturer)
+            return ecommService.sendSignal(signalType,docId,count,$routeParams.q)
                 .success(function(response) {
                 console.log(response);
                 var msg = 'Successfully indexed signals for docid: ' + docId;

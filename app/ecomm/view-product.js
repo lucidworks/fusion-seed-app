@@ -84,7 +84,7 @@ angular.module('fusionSeed.viewecommProduct', ['ngRoute','solr.Directives', 'eco
                     {
                         q: q,
                         wt: 'json',
-                        fl: 'id,name,image,score',
+                        fl: 'id,name_t,image,score',
                         rows: '5'
                     }).success(function(data) {
                        $scope.recommendations = data.response.docs;
@@ -118,7 +118,7 @@ angular.module('fusionSeed.viewecommProduct', ['ngRoute','solr.Directives', 'eco
                     {
                         q: q,
                         wt: 'json',
-                        fl: 'id,name,image,score',
+                        fl: 'id,name_t,image,score',
                         rows: '5'
                     }).success(function(data) {
                         $scope.recommendations2 = data.response.docs;
