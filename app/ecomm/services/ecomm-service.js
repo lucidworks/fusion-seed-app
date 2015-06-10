@@ -5,7 +5,8 @@ myModule.factory('ecommService', ['$http', 'fusionHttp', '$sce', function($http,
     //$http.defaults.headers.common['Authorization'] = 'Basic ' + btoa('admin:password123');
 
     var ecommService = {
-        "fusionUrl": "http://localhost:9292", //The url where Fusion is hosted.
+        //"fusionUrl": "http://localhost:9292", //The url where Fusion is hosted.
+        "fusionUrl": "http://thor-dev-fusion-ned.staples.com/fusion",
         "pipelineId": "en-search-default", //the main pipeline that searches will go through
         "pipelineNoRecId": "products-default_copy", //the pipeline ID that searchs w/o recommendations should go through
         "simplePipelineId": "products-simple", // a 1 stage "Query Solr" pipeline with /select and /suggest enabled.
@@ -149,6 +150,7 @@ myModule.factory('ecommService', ['$http', 'fusionHttp', '$sce', function($http,
             return fusionHttp.getQueryPipeline(ecommService.fusionUrl,ecommService.simplePipelineId,ecommService.typeAheadCollectionId,this.typeAheadReqHandler,
                 {
                     wt: 'json',
+                    "shards.qt": '/suggest',
                     "suggest.dictionary": this.typeAheadDictionary,
                     q: val
 
