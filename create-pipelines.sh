@@ -72,7 +72,7 @@ curl -X PUT -u admin:password123 -H 'Content-Type: application/json' -d '{
     }, {
       "field": "shortDescription",
       "boost" : 5.0
-}
+},
  {
       "field" : "name",
       "boost" : 10.0
@@ -149,3 +149,83 @@ curl -X PUT -u admin:password123 -H 'Content-Type: application/json' -d '{
     "type" : "solr-query"
   } ]
 }' http://$1/api/apollo/query-pipelines/demo-default
+
+curl -X PUT -u admin:password123 -H 'Content-Type: application/json' -d '{
+  "id" : "demo-default_copy",
+  "stages" : [ {
+    "type" : "set-params",
+    "id" : "fclq5mi",
+    "params" : [ {
+      "key" : "wt",
+      "value" : "json",
+      "policy" : "default"
+    }, {
+      "key" : "json.nl",
+      "value" : "arrarr",
+      "policy" : "default"
+    },
+        {
+          "key": "facet.pivot",
+          "value": "department,class",
+          "policy": "append"
+        }
+ ],
+    "skip" : false,
+    "label" : "set-params",
+    "type" : "set-params"
+  },
+    {
+      "type": "facet",
+      "id": "700824ba-3faf-43c0-9d16-7ab9c34581f1",
+      "fieldFacets": [
+        {
+          "field": "manufacturer",
+          "minCount": 1,
+          "missing": false
+        },
+        {
+          "field": "condition",
+          "minCount": 1,
+          "missing": false
+        }
+      ],
+      "skip": false,
+      "label": "facet"
+    },
+
+ {
+    "type" : "search-fields",
+    "id" : "941c10af-3cf4-469e-85a8-fce43fa9437d",
+    "rows" : 10,
+    "start" : 0,
+    "queryFields" : [ {
+      "field" : "categoryNames",
+      "boost" : 1.0
+    }, {
+      "field" : "details",
+      "boost" : 2.0
+    }, {                                                                                                                                                                                                                                 
+      "field" : "longDescription",                                                                                                                                                                                                       
+      "boost" : 2.0                                                                                                                                                                                                                      
+    }, {
+      "field": "shortDescription",
+      "boost" : 5.0
+},
+ {
+      "field" : "name",
+      "boost" : 10.0
+    } ],
+    "returnFields" : [ "* score" ],
+    "minimumMatch" : "50%",
+    "skip" : false,
+    "label" : "search-fields",
+    "type" : "search-fields"
+  }, 
+  {
+    "type" : "solr-query",
+    "id" : "a900f123-e7a3-4dd1-bcdc-6a07c997bab8",
+    "skip" : false,
+    "label" : "solr-query",
+    "type" : "solr-query"
+  } ]
+}' http://$1/api/apollo/query-pipelines/demo-default_copy
