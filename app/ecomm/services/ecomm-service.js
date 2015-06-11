@@ -5,13 +5,13 @@ myModule.factory('ecommService', ['$http', 'fusionHttp', '$sce', function($http,
     //$http.defaults.headers.common['Authorization'] = 'Basic ' + btoa('admin:password123');
 
     var ecommService = {
-        "fusionUrl": "http://ec2-54-89-123-52.compute-1.amazonaws.com:9292", //The url where Fusion is hosted.
-        "pipelineId": "products-default", //the main pipeline that searches will go through
-        "pipelineNoRecId": "products-default_copy", //the pipeline ID that searchs w/o recommendations should go through
-        "simplePipelineId": "products-simple", // a 1 stage "Query Solr" pipeline with /select and /suggest enabled.
-        "collectionId": "products", //the main collection
-        "signalsCollectionId": "products_signals", //the signals colleciton
-        "typeAheadCollectionId": "products_signals_aggr", //the collection where suggestions should come from
+        "fusionUrl": "http://192.168.1.243:9292", //The url where Fusion is hosted.
+        "pipelineId": "demo-default", //the main pipeline that searches will go through
+        "pipelineNoRecId": "demo-default_copy", //the pipeline ID that searchs w/o recommendations should go through
+        "simplePipelineId": "demo-simple", // a 1 stage "Query Solr" pipeline with /select and /suggest enabled.
+        "collectionId": "demo", //the main collection
+        "signalsCollectionId": "demo_signals", //the signals colleciton
+        "typeAheadCollectionId": "demo_signals_aggr", //the collection where suggestions should come from
         "typeAheadDictionary": "mySuggester",
         "typeAheadReqHandler": "suggest",
         "requestHandler": "select", //default request handler for searches

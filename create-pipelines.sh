@@ -1,8 +1,8 @@
 #!/bin/sh
 
 
-curl -X POST -u admin:password123 -H 'Content-Type: application/json' -d '{
-  "id" : "products-simple",
+curl -X PUT -u admin:password123 -H 'Content-Type: application/json' -d '{
+  "id" : "demo-simple",
   "stages" : [ {
     "type" : "solr-query",
     "id" : "a1h2rzfr",
@@ -10,10 +10,10 @@ curl -X POST -u admin:password123 -H 'Content-Type: application/json' -d '{
     "label" : "solr-query",
     "type" : "solr-query"
   } ]
-}' http://$1/api/apollo/query-pipelines
+}' http://$1/api/apollo/query-pipelines/demo-simple
 
-curl -X POST -u admin:password123 -H 'Content-Type: application/json' -d '{
-  "id" : "products-default",
+curl -X PUT -u admin:password123 -H 'Content-Type: application/json' -d '{
+  "id" : "demo-default",
   "stages" : [ {
     "type" : "set-params",
     "id" : "fclq5mi",
@@ -25,24 +25,57 @@ curl -X POST -u admin:password123 -H 'Content-Type: application/json' -d '{
       "key" : "json.nl",
       "value" : "arrarr",
       "policy" : "default"
-    } ],
+    },
+        {
+          "key": "facet.pivot",
+          "value": "department,class",
+          "policy": "append"
+        }
+ ],
     "skip" : false,
     "label" : "set-params",
     "type" : "set-params"
-  }, {
+  },
+    {
+      "type": "facet",
+      "id": "700824ba-3faf-43c0-9d16-7ab9c34581f1",
+      "fieldFacets": [
+        {
+          "field": "manufacturer",
+          "minCount": 1,
+          "missing": false
+        },
+        {
+          "field": "condition",
+          "minCount": 1,
+          "missing": false
+        }
+      ],
+      "skip": false,
+      "label": "facet"
+    },
+
+ {
     "type" : "search-fields",
     "id" : "941c10af-3cf4-469e-85a8-fce43fa9437d",
     "rows" : 10,
     "start" : 0,
     "queryFields" : [ {
-      "field" : "CategoryPaths_t",
+      "field" : "categoryNames",
       "boost" : 1.0
     }, {
-      "field" : "tags_t",
+      "field" : "details",
       "boost" : 2.0
+    }, {                                                                                                                                                                                                                                 
+      "field" : "longDescription",                                                                                                                                                                                                       
+      "boost" : 2.0                                                                                                                                                                                                                      
     }, {
-      "field" : "Name",
-      "boost" : 3.0
+      "field": "shortDescription",
+      "boost" : 5.0
+}
+ {
+      "field" : "name",
+      "boost" : 10.0
     } ],
     "returnFields" : [ "* score" ],
     "minimumMatch" : "50%",
@@ -53,7 +86,7 @@ curl -X POST -u admin:password123 -H 'Content-Type: application/json' -d '{
     "type" : "sub-query",
     "id" : "95vfs9k9",
     "key" : "subquery-results",
-    "collection" : "products_signals_aggr",
+    "collection" : "demo_signals_aggr",
     "handler" : "select",
     "method" : "GET",
     "parentParams" : [ "q" ],
@@ -115,4 +148,4 @@ curl -X POST -u admin:password123 -H 'Content-Type: application/json' -d '{
     "label" : "solr-query",
     "type" : "solr-query"
   } ]
-}' http://$1/api/apollo/query-pipelines 
+}' http://$1/api/apollo/query-pipelines/demo-default
