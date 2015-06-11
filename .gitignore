@@ -6,3 +6,4 @@ tmp
 .idea
 *.log
 *.pid
+nohup.out
