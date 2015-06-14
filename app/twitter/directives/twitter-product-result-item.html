@@ -1,0 +1,30 @@
+<div class="col-md-3" align="center">
+    <img ng-src="{{doc.image}}" alt="{{doc.name}}" /><br />
+    <div ng-if="doc.author_s">{{doc.author_s}}</div>
+	<img ng-if="doc.mediaUrl_ss" width="100px" ng-src="{{doc.mediaUrl_ss[0]}}"/><br />
+	<small>{{doc.mediaUrl_ss[0]}}</small>
+</div>
+<div class="col-md-4">
+        <!-- also pass q to product page -->
+        <a href="#/twitter/p/{{urlSafe(doc.name)}}/{{doc.id}}?q={{$routeParams.q}}">
+            <span ng-bind-html="renderHtml(doc.name)"></span>
+        </a>
+        <br />
+            <p>
+            {{doc.tweet_t}}</p>
+
+
+        <br />
+</div>
+
+<div class="col-md-5">
+    ID: {{doc.id}} <br />
+    Score: {{doc.score}}<br />
+    <span ng-if="recBoosts[doc.id]" class="strong-text">Recommendation Boost: {{recBoosts[doc.id].substring(0,6)}}<br /></span>
+
+    Type: {{doc.type}}
+    <a class="small" ng-click="showDoc = !showDoc" href="javascript:void(0);">View Document</a>
+    <blockquote ng-show="showDoc">
+        <pre>{{doc | json}}</pre>
+    </blockquote>
+</div>

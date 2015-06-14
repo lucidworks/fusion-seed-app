@@ -1,0 +1,18 @@
+
+<div class="col-md-12" style="text-align: center;">
+    <nav>
+        <ul class="pagination">
+            <li ng-show="currentPage > 1">
+                <a href ng-click="$location.search('start',start-pageSize)">
+                  &laquo;
+                </a>
+            </li>
+            <li ng-repeat="pageNum in showPages track by $index" ng-class="{active: $index+1==currentPage}">
+                <a href ng-click="$location.search('start',pageSize*$index)">{{$index+1}}</a>
+            </li>
+            <li ng-show="!loading">
+                <a href ng-click="$location.search('start',currentPage*pageSize)">&raquo;</a>
+            </li>
+        </ul>
+    </nav>
+</div>

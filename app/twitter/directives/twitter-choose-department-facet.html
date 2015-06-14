@@ -1,0 +1,22 @@
+<!-- Facet Display -->
+<accordion>
+    <accordion-group is-open="isFacetFilterOpen">
+        <accordion-heading>
+            Choose Department
+            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isFacetFilterOpen, 'glyphicon-chevron-right': !isFacetFilterOpen}"></i>
+        </accordion-heading>
+        <!--div ng-if="shortList == false" class="input-group" style="padding:15px;"-->
+        <div class="input-group" style="padding:15px;">
+            <input type="text" class="form-control" placeholder="Filter values" ng-model="query" />
+            <div class="input-group-addon"><span class="glyphicon glyphicon-filter"></span></div>
+        </div>
+        <div class="scroll-div">
+            <div ng-repeat="value in departments.grouped.DEPARTMENT_NAME_s.groups | filter:query" style="padding-left:20px">
+                <input ng-click="clickFacet('DEPARTMENT_NAME_s',value.groupValue)" ng-checked="isSelected('DEPARTMENT_NAME_s',value.groupValue)" type="checkbox" />
+                <span ng-if="value.groupValue == null"><i>No Department</i></span>
+                <span ng-if="value.groupValue != ''" ng-bind-html="renderHtml(value.groupValue)"></span>
+                ({{value.doclist.numFound}})
+            </div>
+        </div>
+    </accordion-group>
+</accordion>

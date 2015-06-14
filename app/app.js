@@ -8,6 +8,9 @@ angular.module('fusionSeed', [
   'fusionSeed.viewecommSearch',
   'fusionSeed.viewecommProduct',
   'fusionSeed.ecommService',
+  'fusionSeed.viewTwitterSearch',
+  'fusionSeed.viewTwitterProduct',
+  'fusionSeed.twitterService',  
   'fusionSeed.http',
   'fusionSeed.version'
 ])

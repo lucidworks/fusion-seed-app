@@ -1,0 +1,91 @@
+
+
+<div class="col-md-12">
+
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+
+        <div class="col-md-12">
+
+            <div class="col-md-8">
+                <h1><span ng-bind-html="renderHtml(product.name)"></span></h1>
+
+                <img ng-src="{{product.mediaUrl_ss}}" /><br/>
+
+                <p ng-if="product.tweet_t"><strong>{{product.tweet_t}}</strong></p>
+
+
+
+                <!-- PRODUCT DETAIL TABS -->
+
+                <tabset>
+                    <tab heading="Features" ng-if="product.features">
+                        <p>
+                            <ul>
+                                <li ng-repeat="feature in product.features">{{feature}}</li>
+                            </ul>
+                        </p>
+                    </tab>
+                    <tab heading="Details" ng-if="product.details">
+                        <p>
+                            <ul>
+                                <li ng-repeat="detail in product.details">{{detail}}</li>
+                            </ul>
+                        </p>
+                    </tab>
+                    <tab ng-repeat="tab in tabs" heading="{{tab.title}}" active="tab.active" disabled="tab.disabled">
+                        {{tab.content}}
+                    </tab>
+                </tabset>
+
+
+            </div>
+            <div class="col-md-4" style="padding-top:30px;">
+                <h4>Signal Types</h4>
+                Clicks: {{itemStats.stats.stats_fields.count_i.facets.type_s.click.sum}} <br />
+                Add-to-carts: {{itemStats.stats.stats_fields.count_i.facets.type_s.addToCart.sum}}
+
+                <h4>Queries</h4>
+
+                <span ng-repeat="query in itemStats.facet_counts.facet_fields.query_s">
+                    {{query[0]}}: {{query[1]}} <br/>
+                </span>
+
+                <h4>Terms</h4>
+                <span ng-repeat="query in itemStats.facet_counts.facet_fields.query_t">
+                    {{query[0]}}: {{query[1]}} <br/>
+                </span>
+
+            </div>
+
+        </div>
+        <div class="col-md-12" ng-if="recommendations">
+            <h3>Customers Who Viewed This Item Also Viewed <small>(<a href="https://docs.lucidworks.com/display/fusion/Recommendations+API#RecommendationsAPI-GetItemsforaKnownItem" target="_blank">itemsForItem</a>)</small></h3>
+            <div class="col-md-2" ng-repeat="rec in recommendations">
+                <img ng-src="{{rec.image}}" /><br />
+                <small><a ng-href="#/ecomm/p/{{urlSafe(rec.name)}}/{{rec.id}}?q={{q}}">{{rec.name}}</a></small>
+            </div>
+        </div>
+        <div class="col-md-12" ng-if="recommendations2">
+            <h3>Customers Who Searched For "{{q}}" Also Viewed <small>(<a href="https://docs.lucidworks.com/display/fusion/Recommendations+API#RecommendationsAPI-GetItemsforaQuery" target="_blank">itemsForQuery</a>)</small></h3>
+            <div class="col-md-2" ng-repeat="rec in recommendations2">
+                <img ng-src="{{rec.image}}" /><br />
+                <small><a ng-href="#/ecomm/p/{{urlSafe(rec.name)}}/{{rec.id}}?q={{q}}">{{rec.name}}</a></small>
+            </div>
+        </div>
+
+
+
+    </div>
+    <div class="col-md-2">
+
+        <h3>Related Searches <small>(<a href="https://docs.lucidworks.com/display/fusion/Recommendations+API#RecommendationsAPI-GetQueriesforanItem" target="_blank">queriesForItem</a>)</small></h3>
+        <div ng-if="queries">
+            <div ng-repeat="query in queries">
+                <a ng-href="#/ecomm/?q={{query}}">{{query}}</a>
+            </div>
+        </div>
+
+    </div>
+
+</div>
