@@ -77,7 +77,7 @@ myModule.factory('ecommService', ['$http', 'fusionHttp', '$sce', function($http,
                 var signal = {"params": params, "type":signalType, "timestamp": ts};
                 //console.log(solrParams.q);
                 //console.log(solrParams.fq);
-                console.log(signal);
+                //console.log(signal);
                 data.push(signal);
             }
             return fusionHttp.postSignal(this.fusionUrl,this.collectionId,data,true);

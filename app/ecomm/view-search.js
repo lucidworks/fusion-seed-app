@@ -145,7 +145,7 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
             var fusionUrl = config.url+"?q="+q;
             for (var i=0;i<fqs.length;i++) fusionUrl+="&fq="+fqs[i];
             //if (recFilter) fusionUrl += "&recFilter="+recFilter;
-
+	    $scope.the_query = q;
 
             $scope.fusionUrl = fusionUrl;
             console.log(fusionUrl);
@@ -232,15 +232,15 @@ angular.module('fusionSeed.viewecommSearch', ['ngRoute','solr.Directives', 'ecom
             var filters = $routeParams.f;
 
             var filterHash = ecommService.getFilterHash(filters);
-            console.log(filterHash);
+            //console.log(filterHash);
 
 
             //return ecommService.sendSignal(signalType,docId,count,$routeParams.q,filterHash.department,filterHash.class,filterHash.manufacturer)
             return ecommService.sendSignal(signalType,docId,count,$routeParams.q,department,_class,manufacturer)
                 .success(function(response) {
-                console.log(response);
+                //console.log(response);
                 var msg = 'Successfully indexed signals for docid: ' + docId;
-                console.log(msg)
+                //console.log(msg)
                 $scope.notification = true;
                 $scope.notificationMsg = msg;
             });

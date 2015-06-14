@@ -1,5 +1,6 @@
 #!/bin/sh
 
+# First param is host:port, 2nd command is the name of the main collection to run the aggregations against.  Note, this is not the signals collection
 echo Create and run aggregation jobs for click and addToCart.
 
 echo Creating click and addToCart aggregation Jobs

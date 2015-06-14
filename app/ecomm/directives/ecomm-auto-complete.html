@@ -6,7 +6,7 @@
 </span>
     <input type="text"
            ng-model="asyncSelected"
-           placeholder="Search"
+           placeholder="{{the_query}}"
            typeahead-on-select="$location.path(controller_path).search('q',asyncSelected)"
            typeahead="val for val in typeAheadSearch($viewValue)"
            typeahead-loading="loading"
