@@ -1,0 +1,10 @@
+<div class="col-md-12" style="padding-left:40px;">
+    <div class="col-md-3" style="text-align:right">
+
+    </div>
+    <div class="col-md-9">
+        <h3>Select Store</h3>
+        <select class="form-control" style="width:200px;" ng-model="current_store" ng-options="value[0] for (key, value) in facet_fields.store_code_s" ng-change="selectStore($routeParams,filter_separator)">
+        </select>
+    </div>
+</div>

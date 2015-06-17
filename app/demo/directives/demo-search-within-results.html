@@ -1,0 +1,15 @@
+<accordion close-others="oneAtATime">
+    <accordion-group is-open="true">
+        <accordion-heading>
+            Search Within Results
+        </accordion-heading>
+
+        <div style="padding-left:20px">
+            <div>
+                <!--a ng-href="#/c/{{cat.replace('/','-')}}">{{cat.split('/')[cat.split('/').length-1]}}</a> ({{count}})-->
+                <input ng-model="searchWithin"/> <button ng-click="doSearchWithin(searchWithin)">Filter</button><br />
+                <a ng-show="$routeParams.searchWithin" class="search-link" ng-click="doSearchWithin(undefined)">Clear</a>
+            </div>
+        </div>
+    </accordion-group>
+</accordion>

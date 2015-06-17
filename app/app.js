@@ -11,6 +11,9 @@ angular.module('fusionSeed', [
   'fusionSeed.viewTwitterSearch',
   'fusionSeed.viewTwitterProduct',
   'fusionSeed.twitterService',  
+  'fusionSeed.viewDemoSearch',
+  'fusionSeed.viewDemoProduct',
+  'fusionSeed.demoService', 
   'fusionSeed.http',
   'fusionSeed.version'
 ])

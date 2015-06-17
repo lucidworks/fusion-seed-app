@@ -1,0 +1,63 @@
+<div class="col-md-3" align="center">
+    <img ng-src="{{doc.image}}" alt="{{doc.name}}" /><br />
+    <small>
+        Item {{doc.id}}
+    </small>
+</div>
+
+<div class="col-md-4">
+
+
+        <!-- also pass q to product page -->
+        <a href="#/ecomm/p/{{urlSafe(doc.name)}}/{{doc.id}}?q={{$routeParams.q}}">
+            <span ng-bind-html="renderHtml(doc.name)"></span>
+        </a>
+        <br />
+        <small ng-if="doc.manufacturer">by {{doc.manufacturer}}</small> <br />
+            <span ng-if="doc.salePrice">
+                <span class="strong-text">${{doc.salePrice}}</span>
+            </span>
+            <span ng-if="doc.regularPrice && doc.regularPrice != doc.salePrice">
+                <strike>{{doc.regularPrice}}</strike>
+            </span>
+            <p>
+            {{doc.shortDescription}}</p>
+            <p>
+            {{doc.image}}</p>
+            <!-- Music -->
+            <span ng-if="doc.type=='Music'">
+                <ul>
+                    <li>Artist: {{doc.artistName}}</li>
+                    <li>Album: {{doc.albumTitle}}</li>
+                    <li>Genre: {{doc.genre}}</li>
+                </ul>
+            </span>
+
+            <!-- Movies -->
+            <span ng-if="doc.type=='Movie'">
+                <ul>
+                    <li>Release Date: {{doc.releaseDate}}</li>
+                    <li>Genre: {{doc.genre}}</li>
+                    <li ng-if="doc.mpaaRating">MPAA Rating: {{doc.mpaaRating}}</li>
+                </ul>
+            </span>
+
+            <!-- Computers -->
+
+
+        <br />
+
+        <small ng-if="doc.customerReviewAverage">Rating: {{doc.customerReviewAverage}} out of 5 ({{doc.customerReviewCount}} reviews)</small>
+</div>
+
+<div class="col-md-5">
+    ID: {{doc.id}} <br />
+    Score: {{doc.score}}<br />
+    <span ng-if="recBoosts[doc.id]" class="strong-text">Recommendation Boost: {{recBoosts[doc.id].substring(0,6)}}<br /></span>
+
+    Type: {{doc.type}}
+    <a class="small" ng-click="showDoc = !showDoc" href="javascript:void(0);">View Document</a>
+    <blockquote ng-show="showDoc">
+        <pre>{{doc | json}}</pre>
+    </blockquote>
+</div>

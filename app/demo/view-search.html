@@ -1,0 +1,120 @@
+
+
+<div class="row">
+
+	<!-- left col div -->
+	<div class="col-md-3 panel-default" style="padding-left:40px;">
+
+        <div class="loading-lightbox" ng-show="loading">
+            <!--img src="img/loading.gif" /-->
+        </div>
+
+        <solr-pivot-facet
+                label="Author, Retweet"
+                facet-data="taxonomy_pivot"
+                is-facet-filter-open="isFacetFilterOpen"
+                click-pivot="clickFacet"
+                show-value-filter="true"
+                >
+        </solr-pivot-facet>
+
+
+        <demo-search-within-results-filter ng-if="$routeParams.q">
+        </demo-search-within-results-filter>
+
+        <solr-facet-field ng-if="$routeParams.q || $routeParams.f"
+                label="Author"
+                facet-data="facet_fields.author_s"
+                facet-name="author_s"
+                is-facet-filter-open="isFacetFilterOpen"
+                click-facet="clickFacet"
+                is-selected="isSelected"
+                show-value-filter="true"
+                short-list="false"
+                >
+        </solr-facet-field>
+        <solr-facet-field ng-if="$routeParams.q || $routeParams.f"
+                label="Retweet"
+                facet-data="facet_fields.isRetweet_b"
+                facet-name="isRetweet_b"
+                is-facet-filter-open="isFacetFilterOpen"
+                click-facet="clickFacet"
+                is-selected="isSelected"
+                show-value-filter="true"
+                short-list="false"
+                >
+        </solr-facet-field>
+
+
+
+        <!-- To Auto Render all Facet fields
+        <solr-facet-field ng-repeat="(facet, values) in facet_fields" close-others="oneAtATime" ng-if="facet !=taxonomy_field"
+                          label="{{parseFacetLabel(facet)}}"
+                          facet-name="{{facet}}"
+                          facet-data="values"
+                          is-facet-filter-open="isFacetFilterOpen"
+                          click-facet="clickFacet"
+                          is-selected="isSelected"
+                ></solr-facet-field>
+        -->
+
+
+
+    </div>
+	<!-- /left col -->
+
+	<!-- middle col -->
+
+	<div class="col-md-9" style="padding-left:20px;padding-top:10px;">
+
+		<div class="col-md-12" align="center">
+            <div class="col-md-3">
+                <fusion-run-aggr></fusion-run-aggr>
+                <demo-notification></demo-notification>
+            </div>
+            <div class="col-md-6">
+                <demo-auto-complete></demo-auto-complete>
+            </div>
+		</div>
+		<div class="col-md-12" style="padding-top:10px">
+
+            <a class="small" ng-click="showFusionUrl = !showFusionUrl" href="javascript:void(0);">View Fusion Request</a>,
+            <solr-api-helper solr-response="data">
+            </solr-api-helper>
+            <blockquote ng-show="showFusionUrl">
+                <pre><small>{{fusionUrl}}</small></pre>
+            </blockquote>
+			Query Image: <img ng-src="{{mediaUrl}}" ng-if="mediaUrl" width="50px"/>
+		</div>
+
+		<div class="col-md-12" style="padding-top:10px">
+            <solr-path-breadcrumb
+                    path="#/{{controller_path}}/{{$routeParams.store}}/*/{{$routeParams.filter}}"
+                    breadcrumb="breadcrumb"></solr-path-breadcrumb>
+
+            <h4>Found {{data.response.numFound}} results
+
+                <span ng-if="$routeParams.q">for "{{$routeParams.q}}" <small><a ng-href="#/{{controller_path}}/">Clear</a></small></span></h4>
+
+
+
+            <demo-spell-suggest></demo-spell-suggest>
+
+
+            <demo-results-paging></demo-results-paging>
+
+			<div class="col-md-12" ng-repeat="doc in docs">
+                <br />
+                <demo-product-result-item></demo-product-result-item>
+                <fusion-click-simulator></fusion-click-simulator>
+			</div>
+
+
+
+
+		</div>
+	</div>
+    <!-- /middle -->
+
+</div>
+
