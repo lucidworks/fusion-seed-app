@@ -10,7 +10,7 @@
         </div>
 
         <solr-pivot-facet
-                label="Author, Retweet"
+                label="Department, Class"
                 facet-data="taxonomy_pivot"
                 is-facet-filter-open="isFacetFilterOpen"
                 click-pivot="clickFacet"
@@ -24,8 +24,8 @@
 
         <solr-facet-field ng-if="$routeParams.q || $routeParams.f"
                 label="Author"
-                facet-data="facet_fields.author_s"
-                facet-name="author_s"
+                facet-data="facet_fields.manufacturer"
+                facet-name="manufacturer"
                 is-facet-filter-open="isFacetFilterOpen"
                 click-facet="clickFacet"
                 is-selected="isSelected"
