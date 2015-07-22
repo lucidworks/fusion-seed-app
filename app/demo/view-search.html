@@ -10,7 +10,7 @@
         </div>
 
         <solr-pivot-facet
-                label="Department, Class"
+                label="Choose Department"
                 facet-data="taxonomy_pivot"
                 is-facet-filter-open="isFacetFilterOpen"
                 click-pivot="clickFacet"
@@ -23,20 +23,9 @@
         </demo-search-within-results-filter>
 
         <solr-facet-field ng-if="$routeParams.q || $routeParams.f"
-                label="Author"
+                label="Brand"
                 facet-data="facet_fields.manufacturer"
                 facet-name="manufacturer"
-                is-facet-filter-open="isFacetFilterOpen"
-                click-facet="clickFacet"
-                is-selected="isSelected"
-                show-value-filter="true"
-                short-list="false"
-                >
-        </solr-facet-field>
-        <solr-facet-field ng-if="$routeParams.q || $routeParams.f"
-                label="Retweet"
-                facet-data="facet_fields.isRetweet_b"
-                facet-name="isRetweet_b"
                 is-facet-filter-open="isFacetFilterOpen"
                 click-facet="clickFacet"
                 is-selected="isSelected"
@@ -84,7 +73,6 @@
             <blockquote ng-show="showFusionUrl">
                 <pre><small>{{fusionUrl}}</small></pre>
             </blockquote>
-			Query Image: <img ng-src="{{mediaUrl}}" ng-if="mediaUrl" width="50px"/>
 		</div>
 
 		<div class="col-md-12" style="padding-top:10px">

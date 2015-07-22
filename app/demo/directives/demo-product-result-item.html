@@ -1,5 +1,6 @@
 <div class="col-md-3" align="center">
     <img ng-src="{{doc.image}}" alt="{{doc.name}}" /><br />
+
     <small>
         Item {{doc.id}}
     </small>
@@ -12,7 +13,7 @@
         <a href="#/ecomm/p/{{urlSafe(doc.name)}}/{{doc.id}}?q={{$routeParams.q}}">
             <span ng-bind-html="renderHtml(doc.name)"></span>
         </a>
-        <br />
+        <br /> 
         <small ng-if="doc.manufacturer">by {{doc.manufacturer}}</small> <br />
             <span ng-if="doc.salePrice">
                 <span class="strong-text">${{doc.salePrice}}</span>
@@ -21,9 +22,7 @@
                 <strike>{{doc.regularPrice}}</strike>
             </span>
             <p>
-            {{doc.shortDescription}}</p>
-            <p>
-            {{doc.image}}</p>
+            {{doc.shortDescription}}</p>>
             <!-- Music -->
             <span ng-if="doc.type=='Music'">
                 <ul>
@@ -43,7 +42,8 @@
             </span>
 
             <!-- Computers -->
-
+            <small>
+            {{doc.image}}</small>
 
         <br />
 

@@ -1,4 +1,4 @@
-<form ng-submit="console.log(asyncSelected);$location.search('f','');$location.path(controller_path).search('q',asyncSelected)">
+<form ng-submit="submitSearch(asyncSelected, mediaUrl, controller_path)">
 <div class="input-group">
 <span class="input-group-addon">
     <span ng-show="loading" class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
@@ -7,15 +7,20 @@
     <input type="text"
            ng-model="asyncSelected"
            placeholder="Search"
-           typeahead-on-select="$location.path(controller_path).search('q',asyncSelected)"
+           typeahead-on-select="submitSearch(asyncSelected, mediaUrl, controller_path)"
            typeahead="val for val in typeAheadSearch($viewValue)"
            typeahead-loading="loading"
            typeahead-focus-first="false"
            typeahead-editable="true"
-           class="form-control">
+           class="form-control">  <input type="text"
+		           ng-model="mediaUrl"
+		           placeholder="Image URL"
+		           class="form-control">
     <span class="input-group-addon"><a
             class="search-link"
-            ng-click="console.log(asyncSelected);$location.search('f','');$location.path(controller_path).search('q',asyncSelected)"
+ 	ng-click="submitSearch(asyncSelected, mediaUrl, controller_path)"
             >Search</a></span>
+
+		    
 </div>
 </form>

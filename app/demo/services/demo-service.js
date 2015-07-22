@@ -17,7 +17,7 @@ myModule.factory('demoService', ['$http', 'fusionHttp', '$sce', function($http,f
         "requestHandler": "select", //default request handler for searches
         "taxonomyField": undefined, //set to undefined if using pivot facet for taxonomy
         "taxonomySeparator": "|", //if using a path hierarchy field
-        //"taxonomyPivot":"author_s,isRetweet_b", //set to undefined if using PathHierarchyTokenizer field for taxonomy
+        "taxonomyPivot":"department,class", //set to undefined if using PathHierarchyTokenizer field for taxonomy
         "filterSeparator": "~",
         "controllerPath": "demo",
         "aggrJobs": ["clickAggr","cartAggr"], //aggregation jobs that should run when a user clicks "run aggregations" button.
