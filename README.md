@@ -10,8 +10,8 @@ This repository is packaged with a node http server and install, start and stop 
 ## Installing and Running
 1. git clone https://github.com/LucidWorks/fusion-seed-app.git
 2. cd fusion-seed-app
-3. bin/install
-4. bin/start
+3. npm install
+4. npm run start
 5. Go to http://localhost:8000/app/#/ecomm
 
 By default, this will point to an existing Fusion server hosted on AWS. To point this to another server and for other application settings see app/ecomm/services/ecomm-service.js
@@ -61,4 +61,3 @@ A simple Node proxy server has been packaged with this application in proxy-serv
 2. cd fusion-seed-app/proxy-server
 3. bash start.sh
 4. Go to http://_your_server_:9292/
-
