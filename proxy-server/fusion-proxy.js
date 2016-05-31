@@ -32,6 +32,7 @@ function onRequest(client_req, client_res) {
 
 
     var proxy = http.request(options, function (res) {
+        client_res.setHeader('Content-Type', res.headers['content-type']);
         res.pipe(client_res, {
             end: true
         });
